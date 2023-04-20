@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-
-const Schema = mongoose.Schema;
+import { Schema, model } from 'mongoose';
 
 const messageSchema = new Schema({
   user: { type: Object, required: true },
@@ -8,4 +6,4 @@ const messageSchema = new Schema({
   dateTime: { type: Date, required: true },
 });
 
-module.exports = mongoose.model("Message", messageSchema);
+export const MessageSchema = model("Message", messageSchema);

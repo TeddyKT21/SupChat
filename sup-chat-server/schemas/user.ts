@@ -1,6 +1,5 @@
-const mongoose = require("mongoose");
+import { Schema, model } from 'mongoose';
 
-const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   friends: [{ friend: { type: Object, required: true } }],
@@ -11,4 +10,4 @@ const userSchema = new Schema({
   password: { type: String, required: true, unique: true },
 });
 
-module.exports = mongoose.model("User", userSchema);
+export const UserSchema = model("User", userSchema);

@@ -2,17 +2,21 @@
   "name": "sup-chat-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/app.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon ./dist/app.js",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/socket.io": "^3.0.2",
     "express": "^4.18.2",
     "mongoose": "^7.0.4",
     "nodemon": "^2.0.22",
-    "socket.io": "^4.6.1"
+    "typescript": "^5.0.4"
   }
 }

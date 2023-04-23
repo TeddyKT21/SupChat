@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "module": "NodeNext",
+      "moduleResolution": "Nodenext",
+      "target": "ES2022",
+      "sourceMap": true,
+      "outDir": "dist",
+      "baseUrl": ".",
+      "esModuleInterop": true,
+      "paths": {
+        "socket.io-client": ["./node_modules/socket.io-client"],
+        "socket.io": ["./node_modules/@types/socket.io"]
+      }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

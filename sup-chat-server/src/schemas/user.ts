@@ -1,7 +1,17 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
+// Define interface for the document
+export interface IUser extends Document {
+  friends: [];
+  chats: [];
+  messages: [];
+  username: string;
+  email: string;
+  password: string;
+}
 
-const userSchema = new Schema({
+// Define the schema
+const UserSchema: Schema = new Schema({
   friends: [{ friend: { type: Object, required: true } }],
   chats: [{ chat: { type: Object, required: true } }],
   messages: [{ message: { type: Object, required: true } }],
@@ -10,4 +20,5 @@ const userSchema = new Schema({
   password: { type: String, required: true, unique: true },
 });
 
-export const UserSchema = model("User", userSchema);
+// Define and export the model
+export const User = mongoose.model<IUser>('User', UserSchema);

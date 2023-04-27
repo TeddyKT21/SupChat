@@ -4,5 +4,4 @@ export class MessageRepository extends Repository {
         super(model);
     }
 }
-module.exports = { MessageRepository };
 //# sourceMappingURL=messageRepository.js.map

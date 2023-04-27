@@ -1,5 +1,6 @@
-import { Schema, model } from 'mongoose';
-const userSchema = new Schema({
+import mongoose, { Schema } from 'mongoose';
+// Define the schema
+const UserSchema = new Schema({
     friends: [{ friend: { type: Object, required: true } }],
     chats: [{ chat: { type: Object, required: true } }],
     messages: [{ message: { type: Object, required: true } }],
@@ -7,5 +8,6 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, unique: true },
 });
-export const UserSchema = model("User", userSchema);
+// Define and export the model
+export const User = mongoose.model('User', UserSchema);
 //# sourceMappingURL=user.js.map

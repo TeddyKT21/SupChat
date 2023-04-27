@@ -1,7 +1,8 @@
 import { Chat } from "./chat.js";
 import { Message } from "./message.js";
+import { Document } from "mongoose";
+import { IUser } from "../schemas/user.js";
 
-console.log("this is user model full path:",__dirname);
 export class User {
   constructor(public friends: User[],
     public chats: Chat[],
@@ -9,6 +10,6 @@ export class User {
     public username: string,
     public email: string, 
     public password: String){
-  
+      
   }
 }

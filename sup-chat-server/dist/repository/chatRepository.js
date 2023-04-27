@@ -4,5 +4,4 @@ export class ChatRepository extends Repository {
         super(model);
     }
 }
-module.exports = { ChatRepository };
 //# sourceMappingURL=chatRepository.js.map

@@ -1,6 +1,8 @@
 import express from "express";
-const router = express.Router();
-import { login } from "../controllers/user.js";
-router.route("/login").get(login);
-module.exports = router;
+import { login, signUp } from "../controllers/user.js";
+const UserRouter = express.Router();
+UserRouter.route("/login")
+    .get(login)
+    .post(signUp);
+export default UserRouter;
 //# sourceMappingURL=user.js.map

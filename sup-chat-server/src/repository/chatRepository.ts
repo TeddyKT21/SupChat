@@ -1,12 +1,11 @@
-import {Chat} from '../models/chat.js';
+import { Chat, IChat } from '../schemas/chat.js';
 import { IChatRepository } from './interfaces/IChatRepository.js'
 import { Repository } from './repository.js';
 import { Model } from "mongoose";
 
-export class ChatRepository extends Repository<Chat> implements IChatRepository {
-  constructor(model: Model<Chat>) {
+export class ChatRepository extends Repository<IChat> implements IChatRepository {
+  constructor(model: Model<IChat>) {
     super(model);
   }
 }
 
-module.exports = { ChatRepository };

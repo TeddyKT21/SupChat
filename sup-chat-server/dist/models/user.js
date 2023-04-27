@@ -1,4 +1,3 @@
-console.log("this is user model full path:", __dirname);
 export class User {
     friends;
     chats;

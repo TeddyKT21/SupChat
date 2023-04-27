@@ -1,9 +1,11 @@
-import { Model, Document } from "mongoose";
-import mongoose from "mongoose";
+import mongoose, { Model, Document } from "mongoose";
 import { IRepository } from "./interfaces/IRepository.js";
 
 export class Repository<T> implements IRepository<T> {
-  constructor(public model: Model<T>) {}
+  private model: Model<T>
+  constructor(model: Model<T>) {
+    this.model = model;
+  }
 
   async add(obj: T): Promise<void> {
     await this.model.create(obj);

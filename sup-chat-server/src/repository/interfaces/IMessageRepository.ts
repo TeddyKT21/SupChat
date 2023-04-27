@@ -1,5 +1,5 @@
 import { IRepository } from "./IRepository.js";
-import { Message } from "../../models/message.js";
-export interface IMessageRepository extends IRepository<Message> {
+import { IMessage } from "../../schemas/message.js";
+export interface IMessageRepository extends IRepository<IMessage> {
 
 }

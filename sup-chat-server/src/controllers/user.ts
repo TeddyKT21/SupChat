@@ -3,8 +3,16 @@ import { IUser,User } from "../schemas/user.js";
 
 const Dal = new Sup()
 
-export function login (request, response) {
-  response.render("hello world");
+export async function login (request, response) {
+ try {
+  const { email, password } = request.body; 
+  const foundUser = await Dal.userRep.findByEmail(email)
+  const IsValid = !(foundUser == null || foundUser.password != password)
+  IsValid ? response.sendStatus(200) : response.sendStatus(404);
+ } catch (error) {
+  console.log("Login error:", error);
+  response.redirect('login');
+ }
 };
 
 export async function signUp(request, response){

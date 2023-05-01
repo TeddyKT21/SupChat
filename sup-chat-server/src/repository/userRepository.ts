@@ -8,4 +8,9 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
   constructor(model: Model<IUser>) {
     super(model);
   }
+
+  async findByEmail(email: string){
+    const user = await User.findOne({email}).exec();
+    return user;
+  }
 }

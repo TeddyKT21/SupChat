@@ -17,7 +17,7 @@ const UserSchema: Schema = new Schema({
   messages: [{ message: { type: Object, required: true } }],
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
 });
 
 // Define and export the model

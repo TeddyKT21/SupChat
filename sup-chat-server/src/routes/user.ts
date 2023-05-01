@@ -4,8 +4,9 @@ import { login, signUp } from "../controllers/user.js"
 const UserRouter = express.Router();
 
 UserRouter.route("/login")
-.get(login)
-.post(signUp);
+.post(login);
 
+UserRouter.route("/signUp")
+.post(signUp);
 
 export default UserRouter;

@@ -1,7 +1,7 @@
 import s from "./input.css";
 import { useState } from "react";
 
-export function Input({ type, onTextChange, placeholder }) {
+export function Input({ type, onTextChange = (v) => {}, placeholder, name }) {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : type || "text";
 
@@ -12,6 +12,7 @@ export function Input({ type, onTextChange, placeholder }) {
         className={s.input}
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={placeholder}
+        name={name}
       />
       {type === "password" && (
         <label className={s.checkboxLabel}>

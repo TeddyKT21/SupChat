@@ -1,12 +1,12 @@
-.SearchMenu{
+.searchBar{
     width: fit-content;
     
 }
-.SearchMenu>.Line.Saparate{
+.searchBar>.Line.Saparate{
     display: flex;
     gap: 40px;
 }
-.SearchMenu>.Line.Saparate>.Line{
+.searchBar>.Line.Saparate>.Line{
     display: flex;
     gap: 10px;
 }

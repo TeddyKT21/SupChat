@@ -3,6 +3,7 @@ import bodyparser from 'body-parser';
 import cors from "cors";
 import UserRouter from "./routes/user.js";
 import mongoose from "mongoose";
+import DataRouter from "./routes/data.js";
 const app = express();
 const port = 8080;
 const MONGODB_URI = "mongodb://127.0.0.1:27017/supChat";
@@ -22,6 +23,7 @@ app.use("/projects", projectRoutes);
 const file = "./db/db.json";
 const filePath = path.join(__dirname, file); */
 app.use("/", UserRouter);
+app.use("/data", DataRouter);
 app.get("/", (req, res) => {
     res.render("home");
 });

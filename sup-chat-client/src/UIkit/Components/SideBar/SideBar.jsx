@@ -4,11 +4,13 @@ import { CardList } from "../Cards/CardList/CardList"
 import { UseFetch } from "../../../CustomHooks/useFetch"
 import { useState } from "react"
 import { ChatCard } from "../Cards/ChatCard/ChatCard"
+import { UserCard } from "../Cards/UserCard/UserCard"
 
 export const SideBar = () => {
     const text = '';
     const [doSearch, setDoSearch] = useState(false)
-    const [resp,isLoading, error] = UseFetch('users','get',{text},[doSearch]);
+    const [resp,isLoading, error] = UseFetch('data/users','get',{text},[doSearch]);
+    console.log(resp?.data);
     if (doSearch){
         setDoSearch(false);
     }
@@ -20,7 +22,7 @@ export const SideBar = () => {
         <div className="sideBar">
             <Rows>
                 <SearchBar onSearch={onBtnClick}/>
-                <CardList items={resp?.users} cardType={ChatCard}/>
+                <CardList items={resp?.data} cardType={UserCard}/>
             </Rows>
         </div>
     )

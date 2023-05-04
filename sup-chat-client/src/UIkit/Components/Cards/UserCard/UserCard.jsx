@@ -1,5 +1,6 @@
 import { Line, Saparate,Rows } from "../../../Layouts/Line/Line"
 export const UserCard = (user) => {
+    console.log(user);
     return (
         <div className="UserCard">
             <Rows>

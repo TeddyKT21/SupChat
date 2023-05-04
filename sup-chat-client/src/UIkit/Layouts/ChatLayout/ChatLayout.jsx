@@ -7,7 +7,7 @@ export const ChatLayout = () => {
     return (
         <div className="ChatLayout">
             <Line>
-                <SideBar items={[]} cardType={ChatCard}/>
+                <SideBar/>
                 <ChatArea messages={[]}/>
             </Line>
         </div>

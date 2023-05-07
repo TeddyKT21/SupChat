@@ -10,7 +10,9 @@ export const fetchAllMessages = async (req, res) => {
     res.send(JSON.stringify(messages));
 };
 export const fetchAllChats = async (req, res) => {
-    const chats = await Chat.find({});
+    const chats = await Chat.find({}).populate("participants.participant")
+        .populate("messages.message")
+        .populate("admins");
     res.send(JSON.stringify(chats));
 };
 //# sourceMappingURL=data.js.map

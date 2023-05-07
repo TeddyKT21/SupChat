@@ -1,5 +1,9 @@
+import {ChatLayout} from "../UIkit/Layouts/ChatLayout/ChatLayout";
+
 export const Chats = () => {
     return (
-        <div className="chats">Chats</div>
+        <div className="chats">
+            <ChatLayout>Chats</ChatLayout>
+        </div>
     )
 }

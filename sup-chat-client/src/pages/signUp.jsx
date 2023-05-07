@@ -5,6 +5,7 @@ import { Chats } from "./chats";
 import { UseFetch } from "../CustomHooks/useFetch";
 import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
+import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
 
 export const SignUp = () => {
     const [inputData, setInputData] = useState(null);
@@ -24,7 +25,8 @@ export const SignUp = () => {
                 setInputData({email, password, username})
                 await toast("success","sign up successful");
             } else {
-                console.log('passwords do not match !')    
+                console.log('passwords do not match !')  
+                toast("error", 'passwords do not match !');
             }   
         } catch (error) {
             console.log(error);
@@ -34,18 +36,18 @@ export const SignUp = () => {
 
    const form = (<div className="signUp">
             <h1>Sign Up</h1>
-            <form onSubmit={submit} className="">
+            <form onSubmit={submit} className="signUpForm">
                 <Rows>
                 <Input placeholder={"Email"} name="email"/>
                 <Input placeholder={"username"} name="username"/>
                 <Input type={"password"} placeholder={"Password"} name="password"/>
                 <Input type={"password"} placeholder={"Confirm Password"} name="confirmPassword"/>
-                <Button type={"submit"} className="">Sign Up</Button>
                 {/* <span>Already have an account? <NavLink to={"/login"}> Login </NavLink> </span> */}
                 <span style={{color:"red"}}>{error && "invalid fields"}</span>
                 </Rows>
+                <Button type={"submit"} className="btn">Sign Up</Button>
             </form>
         </div>)
 
-    return !isSignedUp && form || <Chats/>
+    return !isSignedUp && <AuthLayout>{form}</AuthLayout> || <Chats/>
 }

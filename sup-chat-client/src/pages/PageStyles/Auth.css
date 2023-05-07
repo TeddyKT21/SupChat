@@ -1,0 +1,24 @@
+.logIn,
+.signUp{
+    background-color: var(--primary);
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.signUpForm>* , .loginForm>* {
+    margin: 20px;
+}
+
+.btn{
+    width: 50%;
+    align-items: center;
+    background-color: var(--secondary);
+}
+
+.logIn>.input, .signUp>.input{
+    background-color: aqua;
+}

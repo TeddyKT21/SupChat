@@ -8,6 +8,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  imageUrl: String;
 }
 
 // Define the schema
@@ -18,6 +19,7 @@ const UserSchema: Schema = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  imageUrl: {type: String},
 });
 
 // Define and export the model

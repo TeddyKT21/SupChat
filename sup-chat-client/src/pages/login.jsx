@@ -6,6 +6,7 @@ import { Chats } from "./chats";
 import { UseFetch } from "../CustomHooks/useFetch";
 import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
+import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
 
 export const Login = () => {
     const [inputData, setInputData] = useState(null);
@@ -20,7 +21,8 @@ export const Login = () => {
             const email = formData.get('email');
             const password = formData.get('password');
             setInputData({email, password});
-            await toast("success","login successful");
+            if (isLoggedIn) await toast("success","login successful");
+            else await toast("error", "login failed");
         } catch (error) {
             toast("error", error.message);
         }
@@ -29,16 +31,16 @@ export const Login = () => {
 
    const form = (<div className="logIn">
             <h1>Login</h1>
-            <form onSubmit={submit} className="">
+            <form onSubmit={submit} className="loginForm">
             <Rows>
                 <Input placeholder={"Email"} name="email"/>
                 <Input type={"password"} placeholder={"Password"} name="password"/>
-                <Button type={"submit"} className="">Log In</Button>
+                <Button type={"submit"} className="btn">Log In</Button>
                 {/* <span>Don't have an account yet? <NavLink to={"/signUp"}>Sign Up</NavLink> </span> */}
                 <span style={{color:"red"}}>{error && "invalid fields"}</span>
             </Rows>
             </form>
         </div>)
 
-    return !isLoggedIn && form || <Chats/>
+    return !isLoggedIn && <AuthLayout>{form}</AuthLayout> || <Chats/>
 }

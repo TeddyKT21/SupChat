@@ -1,12 +1,11 @@
 .searchBar{
     width: fit-content;
-    
 }
-.searchBar>.Line.Saparate{
+.searchBar>.Line{
     display: flex;
-    gap: 40px;
+    gap: 100px;
 }
-.searchBar>.Line.Saparate>.Line{
+.searchBar>.Line>.Line{
     display: flex;
     gap: 10px;
 }

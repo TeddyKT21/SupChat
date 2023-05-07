@@ -1,0 +1,12 @@
+.UserCard{
+    border: 1px solid black;
+    padding: 10px;
+
+}
+
+.image{
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    border: 1px solid black;
+}

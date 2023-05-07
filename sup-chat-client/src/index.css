@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+:root {
+  --gap: 10px;
+  --primary: rgb(0, 68, 255);
+  --secondary: rgb(32, 136, 0);
+  --light-gray: #f1f1f1;
+}
+
+html,
+body,
+#root,
+.App ,
+:root{
+  height: 100%;
+}

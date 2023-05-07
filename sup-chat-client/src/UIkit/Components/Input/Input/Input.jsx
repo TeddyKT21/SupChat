@@ -1,24 +1,24 @@
-import s from "./input.css";
+import "./input.css";
 import { useState } from "react";
 
-export function Input({ type, onTextChange = (v) => {}, placeholder, name }) {
+export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, className }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : type || "text";
 
   return (
-    <div className={s.inputContainer}>
+    <div className={`inputContainer ${className}`}>
       <input
         type={inputType}
-        className={s.input}
+        className={"input"}
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={placeholder}
         name={name}
       />
       {type === "password" && (
-        <label className={s.checkboxLabel}>
+        <label className="checkboxLabel">
           <input
             type="checkbox"
-            className={s.checkbox}
+            className="checkbox"
             onChange={() => setShowPassword(!showPassword)}
           />
           Show Password

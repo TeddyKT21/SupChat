@@ -4,9 +4,9 @@ import { ChatArea } from "../../Components/ChatArea/ChatArea"
 import { ChatCard } from "../../Components/Cards/ChatCard/ChatCard"
 
 
-export const ChatLayout = () => {
+export const MainLayout = ({url,cardType,}) => {
     return (
-        <div className="ChatLayout">
+        <div className="MainLayout">
             <Line>
                 <SideBar url="data/chats" cardType={ChatCard}/>
                 <ChatArea messages={[]}/>

@@ -7,10 +7,15 @@ import { UseFetch } from "../CustomHooks/useFetch";
 import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn , logOut } from "../store/authSlice";
 
 export const Login = () => {
+    const dispatch = useDispatch();    
     const [inputData, setInputData] = useState(null);
+    console.log(useSelector(state => state));
     const [resp, isLoading, fetchError] = UseFetch('login', 'post',inputData,[inputData]);
+    dispatch(logIn(resp?.data));
     const isLoggedIn = !isLoading && resp?.status === 200;
     const error = fetchError;
 

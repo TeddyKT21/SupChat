@@ -10,9 +10,16 @@ export class Repository {
         const items = await this.model.find().exec();
         return items;
     }
-    async update(obj) {
+    async getById(id) {
+        const item = await this.model.findById(id);
+        return item;
+    }
+    async update(id, obj) {
+        await this.model.findByIdAndUpdate(id, obj);
+        await new this.model(obj).save();
     }
     async delete(id) {
+        await this.model.findByIdAndDelete(id);
     }
 }
 //# sourceMappingURL=repository.js.map

@@ -6,7 +6,7 @@ export async function login(request, response) {
         const { email, password } = request.body;
         const foundUser = await Dal.userRep.findByEmail(email);
         const IsValid = !(foundUser == null || foundUser.password != password);
-        IsValid ? response.sendStatus(200) : response.sendStatus(404);
+        IsValid ? response.send(foundUser) : response.sendStatus(404);
     }
     catch (error) {
         console.log("Login error:", error);
@@ -27,5 +27,14 @@ export async function signUp(request, response) {
         console.log("signUp error:", error);
         response.redirect('signUp');
     }
+}
+export async function addContact(request, response) {
+    console.log('adding a contact...');
+    console.log("body:", request.body);
+    const updatedUserData = request.body;
+    const updatedUser = await Dal.userRep.getById(updatedUserData._id);
+    updatedUser.friends = updatedUserData.friends;
+    await Dal.userRep.update(updatedUser._id, updatedUser);
+    response.status(202).send('user updated');
 }
 //# sourceMappingURL=user.js.map

@@ -1,3 +1,4 @@
 .chatArea{
     background-color: var(--primary);
+    height: 100%;
 }

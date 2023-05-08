@@ -23,10 +23,16 @@ export const UseFetch = (url, method, data, dependecies = []) => {
             setIsLoading(false);
         }
     }
+    const reset = () =>{
+        setIsLoading(false);
+        setError('');
+        setResp(null);
+    }
     return [
         resp,
         isLoading,
-        error
+        error,
+        reset
     ];
 }
 

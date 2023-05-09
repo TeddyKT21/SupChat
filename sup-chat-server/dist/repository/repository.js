@@ -5,6 +5,7 @@ export class Repository {
     }
     async add(obj) {
         await this.model.create(obj);
+        await new this.model(obj).save();
     }
     async getAll() {
         const items = await this.model.find().exec();

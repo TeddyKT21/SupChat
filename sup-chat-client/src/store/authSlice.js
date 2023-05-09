@@ -18,10 +18,14 @@ export const authSlice = createSlice({
     addContact(state, action) {
       state.user.friends.push(action.payload);
       // console.log("adding a contact... ", action.payload);
-      // console.log("state:", state.user);
+      // console.log("state friends:", state.user.friends);
+    },
+    addNewChat(state, action) {
+      console.log("added chat:", action.payload);
+      state.user.chats.push(action.payload);
     },
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const { logIn, logOut, addContact } = authSlice.actions;
+export const { logIn, logOut, addContact, addNewChat } = authSlice.actions;

@@ -4,7 +4,7 @@ import { User } from "../schemas/user.js";
 
 export const fetchAllUsers = async (req,res) => {
     try {
-      const users = await User.find().populate('friends chats messages');
+      const users = await User.find().populate('friends chats');
       res.send(JSON.stringify(users));
   
     } catch (error) {

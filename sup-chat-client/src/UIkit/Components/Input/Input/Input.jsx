@@ -1,7 +1,7 @@
 import "./input.css";
 import { useState } from "react";
 
-export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, className }) => {
+export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, className}) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : type || "text";
 

@@ -1,12 +1,12 @@
 import { Sup } from "../repository/Sup.js";
 import { IUser,User } from "../schemas/user.js";
-
+import { Chat } from "../schemas/chat.js";
 const Dal = new Sup()
 
 export async function login (request, response) {
  try {
   const { email, password } = request.body; 
-  const foundUser = await Dal.userRep.findByEmail(email)
+  const foundUser = await Dal.userRep.findByEmail(email);
   const IsValid = !(foundUser == null || foundUser.password != password)
   IsValid ? response.send(foundUser) : response.sendStatus(404);
  } catch (error) {
@@ -30,11 +30,26 @@ export async function signUp(request, response){
 }
 
 export async function addContact(request, response) {
-  console.log('adding a contact...')
-  console.log( "body:",request.body)
+  console.log('adding a contact...');
+  console.log( "body:",request.body);
   const updatedUserData = request.body;
   const updatedUser = await Dal.userRep.getById(updatedUserData._id);
   updatedUser.friends = updatedUserData.friends;
   await Dal.userRep.update(updatedUser._id,updatedUser);
   response.status(202).send('user updated');
+}
+
+export async function addChat(request, response) {
+  console.log('adding a Chat...');
+  console.log( "body:",request.body);
+  const newChatData = request.body;
+  const newChat = new Chat({...newChatData});
+  await Dal.chatRep.add(newChat)
+  
+  newChatData.participants.forEach( async (pData) => {
+    const user = await Dal.userRep.getById(pData._id);
+    user.chats.push(newChat);
+    await Dal.userRep.update(user._id,user);
+  });
+  response.status(202).send('chat updated');
 }

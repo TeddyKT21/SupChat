@@ -1,8 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { IUser } from './user.js';
 
 // Define interface for the document
 export interface IMessage extends Document {
-  user: object;
+  user: IUser;
   text: string;
   dateTime: Date;
 }

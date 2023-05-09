@@ -10,7 +10,7 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
   }
 
   async findByEmail(email: string){
-    const user = await User.findOne({email}).exec();
+    const user = await User.findOne({email}).populate('friends chats').exec();
     return user;
   }
 }

@@ -1,5 +1,8 @@
 .sideBar{
     padding: 5px;
     border-right: 0.5px solid black;
-    height: 100%;
+    /* position: fixed; */
+    top: 0;
+    bottom: 0;
+    overflow-y: scroll;
 }

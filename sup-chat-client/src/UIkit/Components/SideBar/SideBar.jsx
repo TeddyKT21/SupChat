@@ -16,8 +16,7 @@ export const SideBar = () => {
     const method = useSelector(store => store.SideBarFetchSlice.method);
     const text = '';
     const [doSearch, setDoSearch] = useState(false)
-    const [resp,isLoading, error, reset] = UseFetch(url,method,{text},[doSearch,cardType]);
-    useEffect(()=> reset(),[doSearch,cardType]);
+    const [resp,isLoading, error] = UseFetch(url,method,{text},[doSearch,cardType]);
 
     console.log(resp?.data); 
     if (doSearch){

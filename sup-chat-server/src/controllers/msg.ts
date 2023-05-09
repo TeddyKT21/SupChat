@@ -1,0 +1,24 @@
+import { Sup } from "../repository/Sup.js";
+import { User } from "../schemas/user.js";
+import { Chat } from "../schemas/chat.js";
+import { Message } from "../schemas/message.js";
+const Dal = new Sup()
+
+export async function addMessage(request, response) {
+  console.log('adding a message...');
+  const newMessageData = request.body;
+  newMessageData.text = 'bla bla';
+  console.log( "newMessageData:",request.body);
+  const newMessage = new Message({
+    text: newMessageData.text,
+    dateTime: newMessageData.dateTime,
+    user: newMessageData.user._id
+    });
+  await Dal.messageRep.add(newMessage);
+
+  const Chat = await Dal.chatRep.getById(newMessageData.chat._id);
+  Chat.messages.push(newMessage);
+  Dal.chatRep.update(Chat._id, Chat);
+  
+  response.status(201).send('message sent to server');
+}

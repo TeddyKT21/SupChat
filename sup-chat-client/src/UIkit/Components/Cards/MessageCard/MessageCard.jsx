@@ -1,17 +1,22 @@
-import { Line, Saparate,Rows } from "../../../Layouts/Line/Line"
-export const MessageCard = (message, group) => {
-    
+import { Line, Saparate,Rows } from "../../../Layouts/Line/Line";
+import "./MessageCard.css";
+
+export const MessageCard = (message) => {
+    console.log('rendeing message card ', message);
+
+    message = message.message;
+    const date =  new Date(message.dateTime)
+    const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: false});
     return (
-        <div>
-            <Rows>
-                {group && 
+        <div className="messageCard">
+            <Rows>  
                 <Line>
-                    {message.user.username}
-                    {message.user.email} 
-                </Line>}
+                    <div>{message.user?.username}</div>
+                    <div>{message.user?.email} </div>
+                </Line>
                 <Saparate>
-                    {message.text}
-                    {message.dateTime}
+                    <div>{message.text}</div>
+                    <div>{timeStr}</div>
                 </Saparate>
             </Rows>
         </div>

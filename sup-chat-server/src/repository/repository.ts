@@ -9,6 +9,7 @@ export class Repository<T> implements IRepository<T> {
 
   async add(obj: T): Promise<void> {
     await this.model.create(obj);
+    await new this.model(obj).save();
   }
 
   async getAll(): Promise<T[]> {

@@ -6,7 +6,6 @@ import { IMessage } from './message.js';
 export interface IUser extends Document {
   friends: IUser[];
   chats: IChat[];
-  messages: IMessage[];
   username: string;
   email: string;
   password: string;
@@ -17,7 +16,6 @@ export interface IUser extends Document {
 const UserSchema: Schema = new Schema({
   friends: [{ type: Schema.Types.ObjectId, ref: 'User', required: true } ],
   chats: [{ type: Schema.Types.ObjectId, ref: 'Chat', required: true } ],
-  messages: [{ type: Schema.Types.ObjectId, ref: 'Message', required: true } ],
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },

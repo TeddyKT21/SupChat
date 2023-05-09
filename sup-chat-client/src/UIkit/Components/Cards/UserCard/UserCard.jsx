@@ -4,24 +4,39 @@ import PersonIcon from '@mui/icons-material/Person';
 import "./UserCard.css"
 import { useSelector, useDispatch } from "react-redux";
 import { UseFetch } from "../../../../CustomHooks/useFetch";
-import { useState } from "react";
-import { addContact } from "../../../../store/authSlice";
+import { useState, useRef } from "react";
+import { addContact, addNewChat } from "../../../../store/authSlice";
 
 export const UserCard = (user) => {
     //console.log(user);
-    const logeedInUser = useSelector(state => state.autlice.user);
+    const loggedInUser = useSelector(state => state.authSlice.user);
     //console.log("state:",logeedInUser)
     const dispatch = useDispatch()
     const options = ['message', 'add contact', 'add to chat'];
+
     const [isAddContact,setIsAddContact] = useState(false);
-    // UseFetch('addContact', 'put',logeedInUser,[isAddContact]);
+    const [isAddChat, setIsAddChat] = useState(false);
+
+    const newChat = useRef({});
+
+    UseFetch('addContact', 'put',loggedInUser,[isAddContact],isAddContact);
+    UseFetch('addNewChat', 'post', newChat.current,[isAddChat],isAddChat);
     const messageAction = ()=>{
-        console.log('menu pressed')
+        console.log('message action pressed');
+         newChat.current = {
+            participants: [loggedInUser, user],
+            messages: [],
+            admins:[loggedInUser],
+            name:`chat with ${user.username}`,
+            description: ""
+        };
+        dispatch(addNewChat(newChat.current));
+        setIsAddChat(true);
+
     };
     const addContactAction = () =>{
         dispatch(addContact(user));
         setIsAddContact(true);
-        console.log("add contact action, friends:",logeedInUser);
     };
     const addToChatAction = () =>{
         console.log('menu pressed')

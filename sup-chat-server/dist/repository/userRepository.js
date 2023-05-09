@@ -6,7 +6,7 @@ export class UserRepository extends Repository {
         super(model);
     }
     async findByEmail(email) {
-        const user = await User.findOne({ email }).exec();
+        const user = await User.findOne({ email }).populate('friends chats').exec();
         return user;
     }
 }

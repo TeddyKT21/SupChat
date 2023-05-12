@@ -7,7 +7,6 @@ const Dal = new Sup()
 export async function addMessage(request, response) {
   console.log('adding a message...');
   const newMessageData = request.body;
-  newMessageData.text = 'bla bla';
   console.log( "newMessageData:",request.body);
   const newMessage = new Message({
     text: newMessageData.text,
@@ -16,6 +15,7 @@ export async function addMessage(request, response) {
     });
   await Dal.messageRep.add(newMessage);
 
+  console.log("New Message Data:", newMessageData);
   const Chat = await Dal.chatRep.getById(newMessageData.chat._id);
   Chat.messages.push(newMessage);
   Dal.chatRep.update(Chat._id, Chat);

@@ -1,5 +1,5 @@
 import { useSelector,useDispatch } from 'react-redux';
-import { useRef, useState } from "react";
+import { useRef, useState, Fragment } from "react";
 import { Rows } from "../../Layouts/Line/Line";
 import { MessageCard } from "../Cards/MessageCard/MessageCard";
 import { Input } from "../Input/Input/Input";
@@ -13,44 +13,46 @@ import "./ChatArea.css";
 export const ChatArea = () => {
     const dispatch = useDispatch();
     const chat = useSelector(state => state.chatSlice.chat) || {messages: []};
-    const loggedInUser = useSelector(state => state.authSlice.user);
-    const currentChat = useSelector(state =>state.chatSlice.chat);
-    const messageObj = {
-        user:loggedInUser,
-        text: '',
-        dateTime: null,
-        chat: currentChat
-    }
-    const [isAddMessage, setIsAddMessage] = useState(false);
-    const newMessage = useRef(messageObj);
-    UseFetch('messages/addNewMessage', 'post', newMessage.current,[isAddMessage],isAddMessage);
-    console.log('current message: ',newMessage.current);
+    const messages = useSelector(state => state.chatSlice.chat?.messages);
+    const user = useSelector(state => state.authSlice.user);
+    
+    const [dateTime, setDateTime] = useState(null);
+    const [text, setText] = useState('');
+    const newMessage = ({user,text,dateTime,chat});
+    
+    UseFetch('messages/addNewMessage', 'post', newMessage,[dateTime],dateTime && text);
+    console.log('newMessage: ',newMessage);
     const sendNewMessage = () =>{
-        newMessage.current.dateTime = new Date();
-        dispatch(sendMessage({...newMessage.current}));
-        setIsAddMessage(true);
-        newMessage.current.text = '';
+        newMessage.dateTime = new Date();
+        setDateTime(newMessage.dateTime);
+        dispatch(sendMessage(newMessage));
     }
 
     return (
         <div className="chatArea">
-            <Rows>
+            <div className='chatAreaContainer'>
+                <Rows>
                 <h1>Chat Area</h1>
-                {chat.messages.map((message) => 
-                    <MessageCard key={message._id} message={message}/>
-                )}
-                <form>
+                <h1>{chat.name}</h1>
+                <div className="list">
+                    {messages?.map((message) => 
+                    <Fragment key={message._id}>
+                        <MessageCard message={message}/>
+                    </Fragment>
+                    )}
+                </div>
+                <form className='form'>
                     <Saparate>                       
                         <Input 
                         type={'text'} 
                         placeholder={'Write a new message...'} 
                         name={"newMessage"} 
-                        onTextChange={(text) => newMessage.current.text = text}/>
+                        onTextChange={(text) => setText(text)}/>
                         <Button onClick={sendNewMessage}>Send</Button>
                     </Saparate>
                 </form>
             </Rows>
-        </div>
-        
+            </div>
+        </div>    
     )
 }

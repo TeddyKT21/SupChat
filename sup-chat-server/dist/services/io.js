@@ -8,9 +8,13 @@ function addEvents(io, functions, names) {
     }
 }
 export function initSocketIO(server) {
+export function initSocketIO(server) {
     const io = new Server(server, { cors: { origin: "*" } });
     addEvents(io, chatEvents.functions, chatEvents.eventNames);
     addEvents(io, messageEvents.functions, messageEvents.eventNames);
     addEvents(io, userEvents.functions, userEvents.eventNames);
+    io.on("connection", (socket) => {
+        console.log("Client connected:", socket.id);
+    });
 }
 //# sourceMappingURL=io.js.map

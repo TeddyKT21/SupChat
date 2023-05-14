@@ -1,17 +1,17 @@
-import { useSelector,useDispatch } from 'react-redux';
-import { useRef, useState, Fragment } from "react";
+import { useSelector } from 'react-redux'; //useDispatch
+import { useState, useEffect, Fragment } from "react";
 import { Rows } from "../../Layouts/Line/Line";
 import { MessageCard } from "../Cards/MessageCard/MessageCard";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
-import { sendMessage } from "../../../store/chatSlice";
-import { setMessageText } from '../../../store/messageSlice';
+//import { sendMessage } from "../../../store/chatSlice";
 import { UseFetch } from "../../../CustomHooks/useFetch";
+import { connectSocket,disconnectSocket,addMessage } from '../../../services/socket';
 import "./ChatArea.css";
 
 export const ChatArea = () => {
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
     const chat = useSelector(state => state.chatSlice.chat) || {messages: []};
     const messages = useSelector(state => state.chatSlice.chat?.messages);
     const user = useSelector(state => state.authSlice.user);
@@ -25,8 +25,19 @@ export const ChatArea = () => {
     const sendNewMessage = () =>{
         newMessage.dateTime = new Date();
         setDateTime(newMessage.dateTime);
-        dispatch(sendMessage(newMessage));
+        //dispatch(sendMessage(newMessage));
+        addMessage(newMessage);
     }
+
+    useEffect(() => {
+        if(user){
+            connectSocket(user.username);
+        }
+
+        return () => {
+            disconnectSocket();
+        }
+    }, [user])
 
     return (
         <div className="chatArea">

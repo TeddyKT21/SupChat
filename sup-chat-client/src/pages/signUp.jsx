@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect, lazy } from "react";
 import { Input } from "../UIkit/Components/Input/Input/Input";
 import { Button } from "../UIkit/Components/Button/Button";
 import { Chats } from "./chats";
@@ -7,17 +7,22 @@ import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
 import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux";
+import { createUser } from "../store/authSlice";
+
 
 export const SignUp = () => {
     const navigate = useNavigate();
-    const [inputData, setInputData] = useState(null);
-    const [resp, isLoading, fetchError] = UseFetch('signUp', 'post',inputData,[inputData]);
-    if(inputData && [200,201].includes(resp?.status)){
+    const dispatch = useDispatch()
+     
+    async function success(){
         toast("success","sign up successful");
         navigate('/login');
-    }
-    const isSignedUp = !isLoading && [200,201].includes(resp?.status)
-    const error = fetchError;
+     }
+    const [inputData, setInputData] = useState(null);
+    const {isSignedUp, error,loading} = useSelector(state => state.authSlice);
+    console.log(isSignedUp, error, loading);
+    if(isSignedUp) success();
     const submit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -26,7 +31,8 @@ export const SignUp = () => {
         const password = formData.get('password');
         const confirmPassword = formData.get('confirmPassword');
         if(password === confirmPassword) {
-            setInputData({email, password, username});
+            // setInputData({email, password, username});
+            dispatch(createUser({email, password, username}));
         } else {
             console.log('passwords do not match !'); 
             toast("error", 'passwords do not match !');
@@ -49,5 +55,5 @@ export const SignUp = () => {
             </form>
         </div>)
 
-    return !isSignedUp && <AuthLayout>{form}</AuthLayout>
+    return (error || !loading) && <AuthLayout>{form}</AuthLayout> || loading && <div>loading...</div>
 }

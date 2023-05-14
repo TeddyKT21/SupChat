@@ -6,7 +6,17 @@ export class UserRepository extends Repository {
         super(model);
     }
     async findByEmail(email) {
-        const user = await User.findOne({ email }).populate('friends chats').exec();
+        const user = await User.findOne({ email })
+            .populate('friends')
+            .populate({
+            path: 'chats',
+            model: 'Chat',
+            populate: {
+                path: 'messages',
+                populate: { path: 'user', select: 'username email' },
+                model: 'Message'
+            }
+        });
         return user;
     }
 }

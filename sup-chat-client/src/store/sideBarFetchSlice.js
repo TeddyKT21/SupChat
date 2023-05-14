@@ -5,15 +5,13 @@ export const SideBarFetchSlice = createSlice({
   name: "SideBarFetchSlice",
   initialState: {
     cardType: "ChatCard",
-    method: "get",
-    url: "data/chats",
+    data: []
   },
   reducers: {
     updateFetchParams(state, action) {
       console.log("updating params", action);
       state.cardType = action.payload.cardType;
-      state.method = action.payload.method;
-      state.url = action.payload.url;
+      state.data = action.payload.data;
     },
   },
 });

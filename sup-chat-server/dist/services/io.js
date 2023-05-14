@@ -12,7 +12,7 @@ function addEvents(io, functions, names) {
         io.on(names[i], functions[i]);
     }
 }
-function initSocketIO(server) {
+export function initSocketIO(server) {
     const io = new Server(server, { cors: { origin: "*" } });
     // const io : socketIO.Server = socketIO(server)
     addEvents(io, chatEvents.functions, chatEvents.eventNames);
@@ -46,5 +46,5 @@ function initSocketIO(server) {
     //   });
     // });
 }
-module.exports = { init: initSocketIO };
+// module.exports = { init: initSocketIO };
 //# sourceMappingURL=io.js.map

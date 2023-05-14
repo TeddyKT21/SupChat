@@ -1,12 +1,16 @@
 import express from "express";
+import http from "http";
 import bodyparser from 'body-parser';
 import cors from "cors";
 import UserRouter from "./routes/user.js";
 import mongoose from "mongoose";
 import DataRouter from "./routes/data.js";
 import MessageRouter from "./routes/msg.js";
+import { initSocketIO } from "./services/io.js";
 const app = express();
 const port = 8080;
+const server = http.createServer(app);
+initSocketIO(server);
 const MONGODB_URI = "mongodb://127.0.0.1:27017/supChat";
 // app.use((req, res, next) => {
 //   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,7 +34,7 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 mongoose.connect(MONGODB_URI).then((result) => {
-    app.listen(port, () => {
+    server.listen(port, () => {
         console.log(`Chat app listening on port ${port}!`);
     });
 });

@@ -8,12 +8,12 @@ const newMessageEventName = "newMessage";
 
 async function newChat(socket) {
   console.log(socket.id);
-  socket.on("send-message", (message, room) => {
+  socket.on("message", (message, room) => {
     if (room === "") {
-      socket.broadcast.emit("recieve-message", message);
+      socket.broadcast.emit("message", message);
       console.log(message);
     } else {
-      socket.to(room).emit("receive-message", message);
+      socket.to(room).emit("message", message);
     }
   });
 }

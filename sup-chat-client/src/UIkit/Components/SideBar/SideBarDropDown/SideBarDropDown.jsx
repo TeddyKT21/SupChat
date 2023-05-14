@@ -10,21 +10,20 @@ import { ChatCard } from "../../Cards/ChatCard/ChatCard"
 
 export const SideBarDropDown = () => {
     const dispatch = useDispatch()
+    const contacts = useSelector(state => state.authSlice.user?.friends);
+    const chats = useSelector(state => state.authSlice.user?.chats);
     console.log('in sidebar dropdown');
     const userFetchParams = {
         cardType: 'UserCard',
-        method: "get",
-        url: "data/users",
+        data: contacts,
     }
     const chatFetchParams = {
         cardType: 'ChatCard',
-        method: "get",
-        url: "data/chats",
+        data: chats,
     }
     const contactsFetchParams = {
         cardType: 'UserCard',
-        method: "get",
-        url: "data/users",
+        data: contacts,
     }
 
     const options = ['users', 'chats', 'contacts']

@@ -10,8 +10,8 @@ export const Chats = () => {
     return ( 
         <div className="chats">
             <Line>
-                <SideBar url="data/chats" cardType={ChatCard}/>
-                <ChatArea messages={[]}/>
+                <SideBar />
+                <ChatArea/>
             </Line>
         </div>
     )

@@ -7,21 +7,20 @@ import { UseFetch } from "../CustomHooks/useFetch";
 import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
-import { logIn , logOut } from "../store/authSlice";
+import { fetchUser, logIn , logOut } from "../store/authSlice";
 
 export const Login = () => {
     const dispatch = useDispatch(); 
     const navigate = useNavigate();
     const [inputData, setInputData] = useState(null);
-    const [resp, isLoading, error] = UseFetch('login', 'post',inputData,[inputData]);
-    if (resp?.data && resp?.status === 200) dispatch(logIn(resp?.data));
-    const loggedInUser = useSelector(state => state.authSlice.user);
+    const {user,error,loading} = useSelector(state => state.authSlice);
+    if (inputData) dispatch(fetchUser(inputData));
 
-    if (loggedInUser) {
+    if (user) {
         toast("success","login successful");
         navigate("/chats");
     }
-    if(!loggedInUser && inputData) toast("error", "login failed");
+    if(!user && inputData) toast("error", "login failed");
 
     const submit = async (e) => {
         e.preventDefault();
@@ -45,7 +44,7 @@ export const Login = () => {
             </form>
         </div>)
 
-    return  !loggedInUser && <AuthLayout>{form}</AuthLayout> || <div>loading...</div>
+    return  !user && !loading && <AuthLayout>{form}</AuthLayout> || loading && <div>loading...</div>
 
    
 }

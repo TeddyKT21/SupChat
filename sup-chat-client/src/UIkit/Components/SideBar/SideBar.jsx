@@ -11,19 +11,21 @@ import "./SideBar.css";
 export const SideBar = () => {
     const url = useSelector(store => store.SideBarFetchSlice.url);
     const cardType = useSelector(store => store.SideBarFetchSlice.cardType);
-    const method = useSelector(store => store.SideBarFetchSlice.method);
-    const text = '';
-    const [doSearch, setDoSearch] = useState(false)
-    const [resp,isLoading, error] = UseFetch(url,method,{text},[doSearch,cardType]);
+    const data = useSelector(store => store.SideBarFetchSlice.data);
+    const isLoading = false;
+    const error = false;
+    // const text = '';
+    // const [doSearch, setDoSearch] = useState(false)
+    // const [resp,isLoading, error] = UseFetch(url,method,{text},[doSearch,cardType]);
 
-    console.log(resp?.data); 
-    if (doSearch){
-        setDoSearch(false);
-    }
+    // console.log(resp?.data); 
+    // if (doSearch){
+    //     setDoSearch(false);
+    // }
 
     function onBtnClick(){
         
-        setDoSearch(true);
+        // setDoSearch(true);
     }
 
     return (
@@ -33,7 +35,7 @@ export const SideBar = () => {
                     <SideBarDropDown/>
                 </Saparate>    
                 <SearchBar onSearch={onBtnClick}/>
-                { !isLoading && !error && <CardList items={resp?.data} cardType={cardType}/>}
+                { !isLoading && !error && <CardList items={data} cardType={cardType}/>}
             </Rows>
         </div>
     )

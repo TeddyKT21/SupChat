@@ -34,6 +34,7 @@ export const fetchAllChats = async (req, res) => {
                 model: 'User'
             }
         });
+        console.log('chats: ', chats, chats[0].messages);
         res.send(JSON.stringify(chats));
     }
     catch (error) {

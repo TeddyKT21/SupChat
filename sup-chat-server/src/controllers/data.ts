@@ -28,7 +28,6 @@ export const fetchAllMessages = async (req, res) => {
 export const fetchAllChats = async (req, res) => {
   try {
     /* const chats = await Chat.find().populate('participants messages admins'); */
-    
     const chats = await Chat.find()
     .populate('participants')
     .populate('admins')
@@ -38,6 +37,7 @@ export const fetchAllChats = async (req, res) => {
         path: 'user',
         model: 'User'
       }});
+    console.log('chats: ', chats, chats[0].messages)
     res.send(JSON.stringify(chats));
 
   } catch (error) {

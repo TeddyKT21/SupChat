@@ -2,16 +2,19 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    /* height: 100%; */
+    height: 100%;
 
+}
+
+.Layout{
+    align-items: start;
+    gap: 0;
 }
 
 .Line.Saparate{
     justify-content: space-between;
-    gap: 0px;
+    gap: 5px;
 }
-
-
 
 .Line.Saparate.Main>:nth-child(1){
     background-color: rgb(50, 50, 50);

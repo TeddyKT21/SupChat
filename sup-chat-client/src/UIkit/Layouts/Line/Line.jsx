@@ -8,6 +8,10 @@ export const Line = (props) =>{
     )
 }
 
+export const LayoutLine = (props) => {
+    return <Line {...props} addClass={"Layout"}></Line>;
+}
+
 export const Saparate = (props) => {
     return (
         <Line {...props} addClass={'Saparate'}></Line>

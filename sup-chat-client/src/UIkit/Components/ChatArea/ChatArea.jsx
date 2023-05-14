@@ -43,26 +43,27 @@ export const ChatArea = () => {
         <div className="chatArea">
             <div className='chatAreaContainer'>
                 <Rows>
-                <h1>Chat Area</h1>
-                <h1>{chat.name}</h1>
-                <div className="list">
-                    {messages?.map((message) => 
-                    <Fragment key={message._id}>
-                        <MessageCard message={message}/>
-                    </Fragment>
-                    )}
-                </div>
-                <form className='form'>
-                    <Saparate>                       
-                        <Input 
-                        type={'text'} 
-                        placeholder={'Write a new message...'} 
-                        name={"newMessage"} 
-                        onTextChange={(text) => setText(text)}/>
-                        <Button onClick={sendNewMessage}>Send</Button>
-                    </Saparate>
-                </form>
-            </Rows>
+                    <h1>Chat Area</h1>
+                    <h1>{chat.name}</h1>
+                    <div className="list">
+                        {messages?.map((message) => 
+                        <Fragment key={message._id}>
+                            <MessageCard message={message}/>
+                        </Fragment>
+                        )}
+                    </div>
+                    <form className='form'>
+                        <Saparate>                       
+                            <Input 
+                            type={'text'} 
+                            placeholder={'Write a new message...'} 
+                            name={"newMessage"} 
+                            onTextChange={(text) => setText(text)}
+                            className="inputForm"/>
+                            <Button onClick={sendNewMessage} className="buttonForm">Send</Button>
+                        </Saparate>
+                    </form>
+                </Rows>
             </div>
         </div>    
     )

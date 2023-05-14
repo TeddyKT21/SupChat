@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { store } from "../store/index";
 import { sendMessage, setChat } from "../store/chatSlice";
 
-const URL = "http://localhost:8080";
+const URL = "http://localhost:8080/";
 
 const socket = io(URL, {
     transports: ["websocket"],
@@ -22,6 +22,7 @@ export const connectSocket = (username) => {
     if(!socket.connected){
         socket.auth = {username};
         socket.connect();
+        console.log("connecting to the server...");
     }
 }
 

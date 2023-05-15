@@ -20,7 +20,7 @@ export const SignUp = () => {
         navigate('/login');
      }
     const [inputData, setInputData] = useState(null);
-    const {isSignedUp, error,loading} = useSelector(state => state.authSlice);
+    const {isSignedUp, error,loading} = useSelector(state => state.userSlice);
     console.log(isSignedUp, error, loading);
     if(isSignedUp) success();
     const submit = async (e) => {

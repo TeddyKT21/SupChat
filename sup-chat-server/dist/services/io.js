@@ -8,8 +8,8 @@ function addEvents(io, functions, names) {
     }
 }
 export function initSocketIO(server) {
-export function initSocketIO(server) {
     const io = new Server(server, { cors: { origin: "*" } });
+    // const io : socketIO.Server = socketIO(server)
     addEvents(io, chatEvents.functions, chatEvents.eventNames);
     addEvents(io, messageEvents.functions, messageEvents.eventNames);
     addEvents(io, userEvents.functions, userEvents.eventNames);

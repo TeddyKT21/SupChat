@@ -1,10 +1,10 @@
 import { Rows } from "../../../Layouts/Line/Line"
 import { SearchBar } from "../../SearchBar/SearchBar"
 import { UseFetch } from "../../../../CustomHooks/useFetch"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DropDown } from "../../DropDown/DropDown"
 import { useDispatch, useSelector } from "react-redux";
-import { updateFetchParams } from "../../../../store/sideBarFetchSlice"
+import { updateDisplayParams } from "../../../../store/sideBarDisplaySlice"
 import { UserCard } from "../../Cards/UserCard/UserCard"
 import { ChatCard } from "../../Cards/ChatCard/ChatCard"
 
@@ -12,25 +12,30 @@ export const SideBarDropDown = () => {
     const dispatch = useDispatch()
     const contacts = useSelector(state => state.authSlice.user?.friends);
     const chats = useSelector(state => state.authSlice.user?.chats);
+    
+    useEffect(()=>{dispatch(updateDisplayParams(userDisplayParams))}, [contacts]);
+    
+    useEffect(()=>{dispatch(updateDisplayParams(chatDisplayParams))}, [chats]);
+    
     console.log('in sidebar dropdown');
-    const userFetchParams = {
+    const userDisplayParams = {
         cardType: 'UserCard',
         data: contacts,
     }
-    const chatFetchParams = {
+    const chatDisplayParams = {
         cardType: 'ChatCard',
         data: chats,
     }
-    const contactsFetchParams = {
+    const contactsDisplayParams = {
         cardType: 'UserCard',
         data: contacts,
     }
 
     const options = ['users', 'chats', 'contacts']
     const actions =[
-        () => dispatch(updateFetchParams(userFetchParams)),
-        () => dispatch(updateFetchParams(chatFetchParams)),
-        () => dispatch(updateFetchParams(contactsFetchParams))
+        () => dispatch(updateDisplayParams(userDisplayParams)),
+        () => dispatch(updateDisplayParams(chatDisplayParams)),
+        () => dispatch(updateDisplayParams(contactsDisplayParams))
     ];
     return (
         <div className="sideBarDropDown">

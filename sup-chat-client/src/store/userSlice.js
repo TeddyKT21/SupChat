@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { customFetch } from "../UIkit/utils/customFetch";
 
 
-export const fetchUser = createAsyncThunk('authSlice/fetchUser',async (data) => await customFetch('login', 'post', data));
-export const createUser = createAsyncThunk('authSlice/createUser',async (data) => await customFetch('signUp', 'post', data));
+export const fetchUser = createAsyncThunk('userSlice/fetchUser',async (data) => await customFetch('login', 'post', data));
+export const createUser = createAsyncThunk('userSlice/createUser',async (data) => await customFetch('signUp', 'post', data));
 
 
-export const authSlice = createSlice({
-  name: "authSlice",
+export const userSlice = createSlice({
+  name: "userSlice",
   initialState: {
     isLoggedIn: false,
     user: null,
@@ -35,7 +35,7 @@ export const authSlice = createSlice({
       console.log("new active chat: ", action.payload);
     },
     sendMessage(state, action) {
-      console.log("sendMessage authSlice:", action.payload);
+      console.log("sendMessage userSlice :", action.payload);
       const selectedChat = state.user.chats.find(chat => chat._id === state.selectedChat._id);
       selectedChat.messages.push(action.payload);
       state.selectedChat = selectedChat;
@@ -73,5 +73,5 @@ export const authSlice = createSlice({
   }
 });
 
-export const authReducer = authSlice.reducer;
-export const { logIn, logOut, addContact, addNewChat, setSelectedChat, sendMessage } = authSlice.actions;
+export const userReducer = userSlice.reducer;
+export const { logIn, logOut, addContact, addNewChat, setSelectedChat, sendMessage } = userSlice.actions;

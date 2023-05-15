@@ -10,8 +10,8 @@ import { ChatCard } from "../../Cards/ChatCard/ChatCard"
 
 export const SideBarDropDown = () => {
     const dispatch = useDispatch()
-    const contacts = useSelector(state => state.authSlice.user?.friends);
-    const chats = useSelector(state => state.authSlice.user?.chats);
+    const contacts = useSelector(state => state.userSlice.user?.friends);
+    const chats = useSelector(state => state.userSlice.user?.chats);
     
     useEffect(()=>{dispatch(updateDisplayParams(userDisplayParams))}, [contacts]);
     

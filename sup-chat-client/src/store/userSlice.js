@@ -1,10 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { customFetch } from "../UIkit/utils/customFetch";
 
-
 export const fetchUser = createAsyncThunk('userSlice/fetchUser',async (data) => await customFetch('login', 'post', data));
-export const createUser = createAsyncThunk('userSlice/createUser',async (data) => await customFetch('signUp', 'post', data));
-
 
 export const userSlice = createSlice({
   name: "userSlice",
@@ -13,7 +10,6 @@ export const userSlice = createSlice({
     user: null,
     error:null,
     loading: false,
-    isSignedUp: false,
     selectedChat: null
   },
   reducers: {
@@ -57,19 +53,6 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload.error.message;
       })
-      .addCase(createUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        state.isSignedUp = true;
-      })
-      .addCase(createUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.error.message;
-      });
   }
 });
 

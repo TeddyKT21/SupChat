@@ -9,7 +9,7 @@ import { addContact, addNewChat } from "../../../../store/userSlice";
 
 export const UserCard = (user) => {
     //console.log(user);
-    const loggedInUser = useSelector(state => state.authSlice.user);
+    const loggedInUser = useSelector(state => state.userSlice.user);
     //console.log("state:",logeedInUser)
     const dispatch = useDispatch()
     const options = ['message', 'add contact', 'add to chat'];

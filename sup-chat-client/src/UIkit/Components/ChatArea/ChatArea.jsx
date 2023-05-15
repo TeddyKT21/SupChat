@@ -13,10 +13,9 @@ import "./ChatArea.css";
 
 export const ChatArea = () => {
     const dispatch = useDispatch();
-    const chat = useSelector(state => state.authSlice.selectedChat) || {messages: []};
-    const messages = useSelector(state => state.authSlice.selectedChat?.messages);
-    const user = useSelector(state => state.authSlice.user);
-    console.log('messages in current chat:',messages);
+    const chat = useSelector(state => state.userSlice.selectedChat) || {messages: []};
+    const messages = useSelector(state => state.userSlice.selectedChat?.messages);
+    const user = useSelector(state => state.userSlice.user);
     const [dateTime, setDateTime] = useState(null);
     const [text, setText] = useState('');
     const newMessage = ({user,text,dateTime,chat});

@@ -13,7 +13,7 @@ export const Login = () => {
     const dispatch = useDispatch(); 
     const navigate = useNavigate();
     const [inputData, setInputData] = useState(null);
-    const {user,error,loading} = useSelector(state => state.authSlice);
+    const {user,error,loading} = useSelector(state => state.userSlice);
     if (inputData) dispatch(fetchUser(inputData));
 
     if (user) {

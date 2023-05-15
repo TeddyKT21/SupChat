@@ -8,7 +8,7 @@ export async function login(request, response) {
         const foundUser = await Dal.userRep.findByEmail(email);
         const IsValid = !(foundUser == null || foundUser.password != password);
         console.log('user login: ', foundUser);
-        console.log('a chat:', foundUser.chats[0].messages);
+        console.log('a chat:', foundUser.chats[0]?.messages);
         IsValid ? response.send(foundUser) : response.sendStatus(404);
     }
     catch (error) {

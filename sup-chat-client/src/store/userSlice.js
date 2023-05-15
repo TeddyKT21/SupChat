@@ -38,7 +38,7 @@ export const authSlice = createSlice({
     },
     sendMessage(state, action) {
       console.log("sendMessage authSlice:", action.payload);
-      action.payload.dateTime = action.payload.dateTime.toDateString();
+      // action.payload.dateTime = JSON.stringify(action.payload.dateTime);
       // console.log(
       //   "after adding message",
       //   useSelector((state) => state.chat)

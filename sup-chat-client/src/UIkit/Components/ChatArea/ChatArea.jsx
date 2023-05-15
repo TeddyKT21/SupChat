@@ -24,7 +24,7 @@ export const ChatArea = () => {
     UseFetch('messages/addNewMessage', 'post', newMessage,[dateTime],dateTime && text);
     console.log('newMessage: ',newMessage);
     const sendNewMessage = () =>{
-        newMessage.dateTime = new Date();
+        newMessage.dateTime = Date.now();
         dispatch(sendMessage(newMessage));
         setDateTime(newMessage.dateTime);
     }

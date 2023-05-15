@@ -8,7 +8,7 @@ import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
-import { createUser } from "../store/userSlice";
+import { createUser } from "../store/signUpSlice";
 
 
 export const SignUp = () => {
@@ -20,7 +20,7 @@ export const SignUp = () => {
         navigate('/login');
      }
     const [inputData, setInputData] = useState(null);
-    const {isSignedUp, error,loading} = useSelector(state => state.userSlice);
+    const {isSignedUp, error,loading} = useSelector(state => state.signUpSlice);
     console.log(isSignedUp, error, loading);
     if(isSignedUp) success();
     const submit = async (e) => {
@@ -31,7 +31,7 @@ export const SignUp = () => {
         const password = formData.get('password');
         const confirmPassword = formData.get('confirmPassword');
         if(password === confirmPassword) {
-            // setInputData({email, password, username});
+            setInputData({email, password, username});
             dispatch(createUser({email, password, username}));
         } else {
             console.log('passwords do not match !'); 

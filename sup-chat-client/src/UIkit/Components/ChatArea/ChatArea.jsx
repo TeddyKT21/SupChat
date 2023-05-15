@@ -1,4 +1,4 @@
-import { useSelector , useDispatch} from 'react-redux'; //useDispatch
+import { useSelector , useDispatch} from 'react-redux';
 import { useState, useEffect, Fragment } from "react";
 import { Rows } from "../../Layouts/Line/Line";
 import { MessageCard } from "../Cards/MessageCard/MessageCard";
@@ -6,9 +6,8 @@ import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
-import { setMessageText } from '../../../store/messageSlice';
 import { UseFetch } from "../../../CustomHooks/useFetch";
-import { connectSocket,disconnectSocket,addMessage } from '../../../services/socket';
+import { connectSocket,disconnectSocket } from '../../../services/socket';
 import "./ChatArea.css";
 
 export const ChatArea = () => {
@@ -39,31 +38,37 @@ export const ChatArea = () => {
     }, [user])
 
     return (
-        <div className="chatArea">
-            <div className='chatAreaContainer'>
-                <Rows>
-                    <h1>Chat Area</h1>
-                    <h1>{chat.name}</h1>
-                    <div className="list">
-                        {messages?.map((message) => 
-                        <Fragment key={message._id}>
-                            <MessageCard message={message}/>
-                        </Fragment>
-                        )}
-                    </div>
-                    <form className='form'>
-                        <Saparate>                       
-                            <Input 
-                            type={'text'} 
-                            placeholder={'Write a new message...'} 
-                            name={"newMessage"} 
-                            onTextChange={(text) => setText(text)}
-                            className="inputForm"/>
-                            <Button onClick={sendNewMessage} className="buttonForm">Send</Button>
-                        </Saparate>
-                    </form>
-                </Rows>
+      <div className="chatArea">
+        <div className="chatAreaContainer">
+          <Rows>
+            <h1>{chat.name ? chat.name : "Chat Area"}</h1>
+            <div className="list">
+              {messages?.map((message) => (
+                <Fragment key={message._id}>
+                  <MessageCard
+                    message={message}
+                    //className={chat.admins[0] === user._id ? "messageCard" : ""}
+                    className="messageCard"
+                  />
+                </Fragment>
+              ))}
             </div>
-        </div>    
-    )
+            <form className="form">
+              <Saparate>
+                <Input
+                  type={"text"}
+                  placeholder={"Write a new message..."}
+                  name={"newMessage"}
+                  onTextChange={(text) => setText(text)}
+                  className="inputForm"
+                />
+                <Button onClick={sendNewMessage} className="buttonForm">
+                  Send
+                </Button>
+              </Saparate>
+            </form>
+          </Rows>
+        </div>
+      </div>
+    );
 }

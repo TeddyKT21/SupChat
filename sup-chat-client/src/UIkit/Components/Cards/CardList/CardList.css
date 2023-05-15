@@ -1,4 +1,6 @@
 .cardList{
     padding: 5px;
+    padding-top: 6px;
     margin: 5px;
+    height: 85vh;
 }

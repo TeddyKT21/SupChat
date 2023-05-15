@@ -5,7 +5,7 @@ import "./UserCard.css"
 import { useSelector, useDispatch } from "react-redux";
 import { UseFetch } from "../../../../CustomHooks/useFetch";
 import { useState, useRef } from "react";
-import { addContact, addNewChat } from "../../../../store/authSlice";
+import { addContact, addNewChat } from "../../../../store/userSlice";
 
 export const UserCard = (user) => {
     //console.log(user);

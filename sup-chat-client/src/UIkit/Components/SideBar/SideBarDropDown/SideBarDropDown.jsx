@@ -1,37 +1,41 @@
 import { Rows } from "../../../Layouts/Line/Line"
 import { SearchBar } from "../../SearchBar/SearchBar"
 import { UseFetch } from "../../../../CustomHooks/useFetch"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DropDown } from "../../DropDown/DropDown"
 import { useDispatch, useSelector } from "react-redux";
-import { updateFetchParams } from "../../../../store/sideBarFetchSlice"
+import { updateDisplayParams } from "../../../../store/sideBarDisplaySlice"
 import { UserCard } from "../../Cards/UserCard/UserCard"
 import { ChatCard } from "../../Cards/ChatCard/ChatCard"
 
 export const SideBarDropDown = () => {
     const dispatch = useDispatch()
+    const contacts = useSelector(state => state.userSlice.user?.friends);
+    const chats = useSelector(state => state.userSlice.user?.chats);
+    
+    useEffect(()=>{dispatch(updateDisplayParams(userDisplayParams))}, [contacts]);
+    
+    useEffect(()=>{dispatch(updateDisplayParams(chatDisplayParams))}, [chats]);
+    
     console.log('in sidebar dropdown');
-    const userFetchParams = {
+    const userDisplayParams = {
         cardType: 'UserCard',
-        method: "get",
-        url: "data/users",
+        data: contacts,
     }
-    const chatFetchParams = {
+    const chatDisplayParams = {
         cardType: 'ChatCard',
-        method: "get",
-        url: "data/chats",
+        data: chats,
     }
-    const contactsFetchParams = {
+    const contactsDisplayParams = {
         cardType: 'UserCard',
-        method: "get",
-        url: "data/users",
+        data: contacts,
     }
 
     const options = ['users', 'chats', 'contacts']
     const actions =[
-        () => dispatch(updateFetchParams(userFetchParams)),
-        () => dispatch(updateFetchParams(chatFetchParams)),
-        () => dispatch(updateFetchParams(contactsFetchParams))
+        () => dispatch(updateDisplayParams(userDisplayParams)),
+        () => dispatch(updateDisplayParams(chatDisplayParams)),
+        () => dispatch(updateDisplayParams(contactsDisplayParams))
     ];
     return (
         <div className="sideBarDropDown">

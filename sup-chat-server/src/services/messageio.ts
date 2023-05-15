@@ -1,7 +1,3 @@
-import socketio from "socket.io";
-import { Sup } from "../repository/Sup.js";
-import { Message } from "../models/message.js";
-
 //seen and sent message
 
 const seenEventName = "seen";

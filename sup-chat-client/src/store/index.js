@@ -1,12 +1,12 @@
-import { authReducer } from "./authSlice";
-import { SideBarFetchReducer } from "./sideBarFetchSlice";
+import { userReducer } from "./userSlice";
+import { SideBarDisplayReducer } from "./sideBarDisplaySlice";
 import { chatReducer } from "./chatSlice";
 import { messageReducer } from "./messageSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({
-  authSlice: authReducer,
-  SideBarFetchSlice: SideBarFetchReducer,
+  userSlice: userReducer,
+  SideBarDisplaySlice: SideBarDisplayReducer,
   chatSlice: chatReducer,
   messageSlice: messageReducer,
 });

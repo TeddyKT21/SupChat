@@ -2,7 +2,7 @@ import { Line, Saparate,Rows } from "../../../Layouts/Line/Line"
 import GroupsIcon from '@mui/icons-material/Groups';
 import "./ChatCard.css";
 import { useDispatch } from "react-redux";
-import { setChat } from "../../../../store/chatSlice";
+import { setSelectedChat } from "../../../../store/userSlice";
 
 export const ChatCard = (chat,key) => {
     const dispatch = useDispatch()
@@ -11,7 +11,7 @@ export const ChatCard = (chat,key) => {
     const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: false});
 
     return (
-        <div className="ChatCard" onClick = {() => dispatch(setChat(chat))} key={key}>
+        <div className="ChatCard" onClick = {() => dispatch(setSelectedChat(chat))} key={key}>
             <Rows>
                 <Saparate>
                     <Line>

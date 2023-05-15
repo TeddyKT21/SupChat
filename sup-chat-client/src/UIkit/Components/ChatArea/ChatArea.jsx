@@ -5,7 +5,7 @@ import { MessageCard } from "../Cards/MessageCard/MessageCard";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
-import { sendMessage } from "../../../store/authSlice";
+import { sendMessage } from "../../../store/userSlice";
 import { setMessageText } from '../../../store/messageSlice';
 import { UseFetch } from "../../../CustomHooks/useFetch";
 import { connectSocket,disconnectSocket,addMessage } from '../../../services/socket';
@@ -24,7 +24,7 @@ export const ChatArea = () => {
     UseFetch('messages/addNewMessage', 'post', newMessage,[dateTime],dateTime && text);
     console.log('newMessage: ',newMessage);
     const sendNewMessage = () =>{
-        newMessage.dateTime = new Date();
+        newMessage.dateTime = Date.now();
         dispatch(sendMessage(newMessage));
         setDateTime(newMessage.dateTime);
     }

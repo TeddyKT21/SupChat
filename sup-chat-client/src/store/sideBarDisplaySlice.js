@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ChatCard } from "../UIkit/Components/Cards/ChatCard/ChatCard";
 
-export const SideBarFetchSlice = createSlice({
-  name: "SideBarFetchSlice",
+export const SideBarDisplaySlice = createSlice({
+  name: "SideBarDisplaySlice",
   initialState: {
     cardType: "ChatCard",
     data: []
   },
   reducers: {
-    updateFetchParams(state, action) {
+    updateDisplayParams(state, action) {
       console.log("updating params", action);
       state.cardType = action.payload.cardType;
       state.data = action.payload.data;
@@ -16,5 +16,5 @@ export const SideBarFetchSlice = createSlice({
   },
 });
 
-export const SideBarFetchReducer = SideBarFetchSlice.reducer;
-export const { updateFetchParams } = SideBarFetchSlice.actions;
+export const SideBarDisplayReducer = SideBarDisplaySlice.reducer;
+export const { updateDisplayParams } = SideBarDisplaySlice.actions;

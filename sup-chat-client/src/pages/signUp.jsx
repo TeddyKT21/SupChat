@@ -8,7 +8,7 @@ import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
-import { createUser } from "../store/authSlice";
+import { createUser } from "../store/userSlice";
 
 
 export const SignUp = () => {

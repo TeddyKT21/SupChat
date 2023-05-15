@@ -2,7 +2,7 @@ import { Line, Saparate,Rows } from "../../../Layouts/Line/Line"
 import GroupsIcon from '@mui/icons-material/Groups';
 import "./ChatCard.css";
 import { useDispatch } from "react-redux";
-import { setSelectedChat } from "../../../../store/authSlice";
+import { setSelectedChat } from "../../../../store/userSlice";
 
 export const ChatCard = (chat,key) => {
     const dispatch = useDispatch()

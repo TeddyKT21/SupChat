@@ -11,17 +11,8 @@ import "./SideBar.css";
 export const SideBar = () => {
     const url = useSelector(state => state.SideBarDisplaySlice.url);
     const cardType = useSelector(state => state.SideBarDisplaySlice.cardType);
-    const data = useSelector(state => state.SideBarDisplaySlice.data);
-    const isLoading = false;
-    const error = false;
-    // const text = '';
-    // const [doSearch, setDoSearch] = useState(false)
-    // const [resp,isLoading, error] = UseFetch(url,method,{text},[doSearch,cardType]);
-
-    // console.log(resp?.data); 
-    // if (doSearch){
-    //     setDoSearch(false);
-    // }
+    const {data, isLoading, error} = useSelector(state => state.SideBarDisplaySlice);
+    console.log('sidebar data: ',data);
 
     function onBtnClick(){
         

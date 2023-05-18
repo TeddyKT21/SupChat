@@ -25,6 +25,7 @@ export const ChatArea = () => {
         newMessage.dateTime = Date.now();
         dispatch(sendMessage(newMessage));
         setDateTime(newMessage.dateTime);
+        setText('');
     }
 
     useEffect(() => {
@@ -60,6 +61,7 @@ export const ChatArea = () => {
                   placeholder={"Write a new message..."}
                   name={"newMessage"}
                   onTextChange={(text) => setText(text)}
+                  value={text}
                   className="inputForm"
                 />
                 <Button onClick={sendNewMessage} className="buttonForm">

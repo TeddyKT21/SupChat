@@ -1,16 +1,26 @@
 import { io } from "socket.io-client";
 import { store } from "../store/index";
-import { sendMessage, setSelectedChat } from "../store/userSlice";
-
-const URL = "http://localhost:8080/";
+import { reciveMessage, sendMessage, setSelectedChat } from "../store/userSlice";
+const URL = require('../URL.json').url;
 
 const socket = io(URL, {
   transports: ["websocket"],
   autoConnect: false,
 });
 
-socket.on("message", (message) => {
-  store.dispatch(sendMessage(message));
+export const emitMessage = (message, chat) =>{
+  if (message.text.trim !== ''){
+    console.log(`emitting message: ${message}, in chat:${chat._id}`);
+    socket.emit('message',{'chat_id':chat._id, 'message': message});
+    if(!socket.connected){
+      console.log('socket not connected !!!!!')
+    }
+    socket.emit('test','this is test');
+  }
+}
+
+socket.on("message", (data) => {
+  store.dispatch(reciveMessage(data));
 });
 
 socket.on("userList", (userList) => {
@@ -32,10 +42,10 @@ export const disconnectSocket = () => {
   }
 };
 
-export const addMessage = (message) => {
-  if (socket.connected) {
-    socket.emit("message", message);
-  }
-};
+// export const addMessage = (message) => {
+//   if (socket.connected) {
+//     socket.emit("message", message);
+//   }
+// };
 
 export default socket;

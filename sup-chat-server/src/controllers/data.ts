@@ -2,6 +2,7 @@ import { Chat } from "../schemas/chat.js";
 import { Message } from "../schemas/message.js";
 import { User } from "../schemas/user.js";
 
+
 export const fetchAllUsers = async (req,res) => {
     try {
       const users = await User.find().populate('friends chats');

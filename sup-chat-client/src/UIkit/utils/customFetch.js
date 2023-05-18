@@ -8,7 +8,7 @@ export async function customFetch(url, method, data){
             url: `${baseUrl}/${url}`,
             data
         });
-    console.log(resp);
+    console.log("customFetch",resp);
     return resp.data;
 }
 

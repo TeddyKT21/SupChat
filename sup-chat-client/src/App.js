@@ -5,16 +5,22 @@ import { Chats } from "./pages/chats";
 import { MainLayout } from "./UIkit/Layouts/MainLayout/MainLayout";
 import "./App.css";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function App() {
+  //const user = useSelector(state => state.userSlice.user);
+
   return (
     <div className="App">
+      {/* {user ? 
+      <MainLayout>
+        <Outlet />
+      </MainLayout> :
+       <Login/>} */}
+
       <MainLayout>
         <Outlet />
       </MainLayout>
-      {/* <SideBar/> 
-      <ChatArea/>
-      <Button>+</Button> route to new chat page */}
     </div>
   );
 }

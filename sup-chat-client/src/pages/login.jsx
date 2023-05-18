@@ -44,7 +44,7 @@ export const Login = () => {
             </form>
         </div>)
 
-    return  !user && !loading && <AuthLayout>{form}</AuthLayout> || loading && <div>loading...</div>
+    return  (!user && !loading && <AuthLayout>{form}</AuthLayout>) || (loading && <div>loading...</div>)
 
    
 }

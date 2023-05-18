@@ -5,6 +5,7 @@ const Dal = new Sup();
 const newChatEventName = "newChat";
 const leaveChatEventName = "leaveChat";
 const newMessageEventName = "message";
+
 // async function newChat(socket) {
 //   console.log(socket.id);
 //   socket.on("message", (message, room) => {

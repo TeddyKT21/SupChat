@@ -7,7 +7,7 @@ import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
 import { UseFetch } from "../../../CustomHooks/useFetch";
-import { connectSocket,disconnectSocket } from '../../../services/socket';
+import { connectSocket,disconnectSocket, emitMessage } from '../../../services/socket';
 import "./ChatArea.css";
 
 export const ChatArea = () => {
@@ -15,16 +15,12 @@ export const ChatArea = () => {
     const chat = useSelector(state => state.userSlice.selectedChat) || {messages: []};
     const messages = useSelector(state => state.userSlice.selectedChat?.messages);
     const user = useSelector(state => state.userSlice.user);
-    const [dateTime, setDateTime] = useState(null);
     const [text, setText] = useState('');
-    const newMessage = ({user,text,dateTime,chat});
-    
-    UseFetch('messages/addNewMessage', 'post', newMessage,[dateTime],dateTime && text);
-    console.log('newMessage: ',newMessage);
+    const newMessage = ({user,text,dateTime:null});
     const sendNewMessage = () =>{
         newMessage.dateTime = Date.now();
         dispatch(sendMessage(newMessage));
-        setDateTime(newMessage.dateTime);
+        emitMessage(newMessage, chat)
         setText('');
     }
 
@@ -36,7 +32,7 @@ export const ChatArea = () => {
         return () => {
             disconnectSocket();
         }
-    }, [user])
+    }, [])
 
     return (
       <div className="chatArea">

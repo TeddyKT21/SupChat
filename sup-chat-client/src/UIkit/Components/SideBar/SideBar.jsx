@@ -9,7 +9,6 @@ import { Saparate } from "../../Layouts/Line/Line";
 import "./SideBar.css";
 
 export const SideBar = () => {
-    const url = useSelector(state => state.SideBarDisplaySlice.url);
     const cardType = useSelector(state => state.SideBarDisplaySlice.cardType);
     const {data, isLoading, error} = useSelector(state => state.SideBarDisplaySlice);
     console.log('sidebar data: ',data);

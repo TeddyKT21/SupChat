@@ -13,6 +13,26 @@ export const fetchAllUsers = async (req,res) => {
     }
 };
 
+
+export const fetchNonFriendUsers = async (req, res) => {
+  try {
+    const currentUser = req.body;
+    const allUsers = await User.find().select('_id');
+    const friendIds = currentUser.friends.map((friend) => friend._id.toString());
+    const unknownUsersId = allUsers.filter((user) => !friendIds.includes(user._id.toString()) && user._id.toString() !== req.body._id.toString());
+    const unknownUsers = await User.find({
+      _id: { $in: unknownUsersId }
+    });
+
+    res.send(JSON.stringify(unknownUsers));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+
+
 export const fetchAllMessages = async (req, res) => {
   try {
     const messages = await Message.find().populate('user');

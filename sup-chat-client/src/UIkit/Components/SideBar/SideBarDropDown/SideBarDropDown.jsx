@@ -12,6 +12,7 @@ export const SideBarDropDown = () => {
     const dispatch = useDispatch()
     const contacts = useSelector(state => state.userSlice.user?.friends);
     const chats = useSelector(state => state.userSlice.user?.chats);
+    const user = useSelector(state => state.userSlice.user);
     
     useEffect(()=>{dispatch(updateDisplayParams(contactsDisplayParams))}, [contacts]);
     
@@ -28,7 +29,7 @@ export const SideBarDropDown = () => {
 
     const options = ['users', 'chats', 'contacts']
     const actions =[
-        () => dispatch(fetchUsers()),
+        () => dispatch(fetchUsers(user)),
         () => dispatch(updateDisplayParams(chatDisplayParams)),
         () => dispatch(updateDisplayParams(contactsDisplayParams))
     ];

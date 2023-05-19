@@ -5,7 +5,7 @@ import userEvents from "./userio.js";
 function addEvents(socket, functions, names) {
     console.log('adding events...');
     for (let i = 0; i < names.length; i++) {
-        socket.on(names[i], (data) => functions[i](data, socket));
+        socket.on(names[i], async (data) => await functions[i](data, socket));
     }
 }
 export function initSocketIO(server) {

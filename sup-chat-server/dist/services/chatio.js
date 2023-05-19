@@ -5,7 +5,6 @@ const Dal = new Sup();
 const newChatEventName = "newChat";
 const leaveChatEventName = "leaveChat";
 const newMessageEventName = "message";
-
 // async function newChat(socket) {
 //   console.log(socket.id);
 //   socket.on("message", (message, room) => {
@@ -17,22 +16,22 @@ const newMessageEventName = "message";
 //     }
 //   });
 // }
-const newChat = async (io) => {
-    io.on("connection", (socket) => {
-        socket.on("joinRoom", (room) => {
-            socket.join(room);
-            console.log(`User with ID: ${socket.id} joined room: ${room}`);
-        });
-    });
-};
-const leaveChat = async (io) => {
-    io.on("connection", (socket) => {
-        socket.on("leaveRoom", (room) => {
-            socket.leave(room);
-            console.log(`User with ID: ${socket.id} left room: ${room}`);
-        });
-    });
-};
+// const newChat = async (io: Server): Promise<void> => {
+//   io.on("connection", (socket: Socket) => {
+//     socket.on("joinRoom", (room: string) => {
+//       socket.join(room);
+//       console.log(`User with ID: ${socket.id} joined room: ${room}`);
+//     });
+//   });
+// };
+// const leaveChat = async (io: Server): Promise<void> => {
+//   io.on("connection", (socket: Socket) => {
+//     socket.on("leaveRoom", (room: string) => {
+//       socket.leave(room);
+//       console.log(`User with ID: ${socket.id} left room: ${room}`);
+//     });
+//   });
+// };
 const newMessage = async (data, io) => {
     console.log(`new message recived: ${data.message}`);
     const { message: messageData, chat_id } = data;
@@ -48,8 +47,8 @@ const newMessage = async (data, io) => {
     io.to(chat_id).emit('message', newMessage);
 };
 const chatEvents = {
-    functions: [newChat, leaveChat, newMessage],
-    eventNames: [newChatEventName, leaveChatEventName, newMessageEventName],
+    functions: [newMessage],
+    eventNames: [newMessageEventName],
 };
 export default chatEvents;
 //# sourceMappingURL=chatio.js.map

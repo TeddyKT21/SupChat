@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ChatCard } from "../UIkit/Components/Cards/ChatCard/ChatCard";
 import { customFetch } from "../UIkit/utils/customFetch";
 
 export const fetchUsers = createAsyncThunk(

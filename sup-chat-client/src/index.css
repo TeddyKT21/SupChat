@@ -27,3 +27,12 @@ body,
 :root{
   height: 100%;
 }
+
+::-webkit-scrollbar {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background: rgba(0, 40, 255, 0.6);
+  border-radius: 10px;
+}

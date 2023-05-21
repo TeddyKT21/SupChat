@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { UseFetch } from "../../../../CustomHooks/useFetch";
 import { useState, useRef } from "react";
 import { addContact, addNewChat } from "../../../../store/userSlice";
+import { emitNewChat } from "../../../../services/socket";
 
 export const UserCard = (user) => {
     //console.log(user);
@@ -13,25 +14,21 @@ export const UserCard = (user) => {
     //console.log("state:",logeedInUser)
     const dispatch = useDispatch()
     const options = ['message', 'add contact', 'add to chat'];
-
     const [isAddContact,setIsAddContact] = useState(false);
-    const [isAddChat, setIsAddChat] = useState(false);
-
     const newChat = useRef({});
-
     UseFetch('addContact', 'put',loggedInUser,[isAddContact],isAddContact);
-    UseFetch('addNewChat', 'post', newChat.current,[isAddChat],isAddChat);
+    
     const messageAction = ()=>{
         console.log('message action pressed');
          newChat.current = {
             participants: [loggedInUser, user],
             messages: [],
             admins:[loggedInUser],
-            name:`chat with ${user.username}`,
+            name:`private chat`,
             description: ""
         };
-        dispatch(addNewChat(newChat.current));
-        setIsAddChat(true);
+        // dispatch(addNewChat(newChat.current));
+        emitNewChat(newChat.current);
 
     };
     const addContactAction = () =>{

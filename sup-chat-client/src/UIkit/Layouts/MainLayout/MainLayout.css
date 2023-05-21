@@ -2,3 +2,24 @@
     height: 100%;
     width: 100%;
 }
+
+.addBtn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 3%;
+    left: 3%;
+    background-color: var(--secondary);
+    border: 1px solid black;
+}
+
+.MainLayout> * > .sideBar {
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .MainLayout>*>.sideBar {
+        width: 400px;
+    }
+}

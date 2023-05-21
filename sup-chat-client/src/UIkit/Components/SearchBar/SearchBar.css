@@ -5,7 +5,12 @@
     display: flex;
     gap: 100px;
 }
-.searchBar>.Line>.Line{
+.searchBar>.Line{
     display: flex;
     gap: 10px;
+}
+
+.searchBtn {
+    margin-left: 40px;
+    width: 25%;
 }

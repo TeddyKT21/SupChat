@@ -1,7 +1,6 @@
 import { useSelector , useDispatch} from 'react-redux';
 import { useState, useEffect, Fragment } from "react";
 import { Rows } from "../../Layouts/Line/Line";
-import { MessageCard } from "../Cards/MessageCard/MessageCard";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
@@ -38,17 +37,7 @@ export const ChatArea = () => {
         <div className="chatAreaContainer">
           <Rows>
             <h1>{chat.name ? chat.name : "Chat Area"}</h1>
-            <div className="list">
-              {messages?.map((message) => (
-                <Fragment key={message._id}>
-                  <MessageCard
-                    message={message}
-                    //className={chat.admins[0] === user._id ? "messageCard" : ""}
-                    className="messageCard"
-                  />
-                </Fragment>
-              ))}
-            </div>
+            <MessageList messages={messages}/>
             <form className="form">
               <Saparate>
                 <Input

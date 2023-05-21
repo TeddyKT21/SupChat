@@ -5,12 +5,12 @@ import "./SearchBar.css";
 import React, { useState } from "react";
 
 export const SearchBar = ({ onSearch }) => {
-  let [text, setText] = useState("");
+  const [text, setText] = useState("");
   return (
     <div className="searchBar">
           <Line>
             <Input onTextChange={setText} placeholder={"Search..."} name={"search"}/>
-            <Button onClick={() => onSearch(text)}>
+            <Button onClick={() => onSearch(text)} className={"searchBtn"}>
               Search
             </Button>
           </Line>

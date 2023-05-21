@@ -36,6 +36,12 @@ export const userSlice = createSlice({
       selectedChat.messages.push(action.payload);
       state.selectedChat = selectedChat;
     },
+    reciveMessage(state, action){
+      const message = action.payload.message;
+      const chat = state.user.chats.find(chat => chat._id === action.payload.chat_id);
+      console.log('adding message : ', action.payload);
+      chat.messages.push(message);
+    }
   },
   extraReducers: (builder) =>{
     builder
@@ -57,4 +63,4 @@ export const userSlice = createSlice({
 });
 
 export const userReducer = userSlice.reducer;
-export const { logIn, logOut, addContact, addNewChat, setSelectedChat, sendMessage } = userSlice.actions;
+export const { logIn, logOut, addContact, addNewChat, setSelectedChat, sendMessage, reciveMessage } = userSlice.actions;

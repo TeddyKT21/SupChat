@@ -1,5 +1,5 @@
-import s from "./AuthLayout.css"
-export const AuthLayout = ({ children }) => {
+import "./AuthLayout.css"
+export const AuthLayout = ({ children,className }) => {
     
 //   const header = (
 //     <div className={s.header}>
@@ -18,7 +18,7 @@ export const AuthLayout = ({ children }) => {
 //   );
   return (
     <div className={'formRoot'}>
-      <div className={s.mainSection}>{children}</div>
+      <div className={`mainSection ${className}`}>{children}</div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ import UserRouter  from "./routes/user.js"
 import mongoose from "mongoose";
 import DataRouter from "./routes/data.js";
 import MessageRouter from "./routes/msg.js";
-import { initSocketIO } from "./services/io.js";
+import initSocketIO  from "./services/io.js";
 
 const app = express();
 const port = 8080;

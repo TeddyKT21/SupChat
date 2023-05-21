@@ -34,12 +34,14 @@ export const Login = () => {
    const form = (<div className="logIn">
             <h1>Login</h1>
             <form onSubmit={submit} className="loginForm">
-            <Rows>
-                <Input placeholder={"Email"} name="email"/>
-                <Input type={"password"} placeholder={"Password"} name="password"/>
-                <Button type={"submit"} className="btn">Log In</Button>
-                <span style={{color:"red"}}>{error && "invalid fields"}</span>
-            </Rows>
+                <Rows>
+                    <Input placeholder={"Email"} name="email"/>
+                    <Input type={"password"} placeholder={"Password"} name="password"/>
+                    <Button type={"submit"} className="btn">Log In</Button>
+                    or
+                    <Button type={"button"} onClick={() => navigate("/signUp")} className="btn">Sign Up</Button>
+                    <span style={{color:"red"}}>{error && "invalid fields"}</span>
+                </Rows>
             </form>
         </div>)
 

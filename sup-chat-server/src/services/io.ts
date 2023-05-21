@@ -11,7 +11,7 @@ function addEvents(socket:Socket,io:Server, functions, names) {
   }
 }
 
-export function initSocketIO(server: http.Server) {
+function initSocketIO(server: http.Server) {
   const io = new Server(server, { cors: { origin: "*" } });
   // const io : socketIO.Server = socketIO(server)
   io.on("connection", (socket) => {
@@ -20,3 +20,5 @@ export function initSocketIO(server: http.Server) {
     addEvents(socket, io, userEvents.functions, userEvents.eventNames);
   });
 }
+
+export default initSocketIO;

@@ -40,20 +40,28 @@ export const SignUp = () => {
         
     }
 
-   const form = (<div className="signUp">
-            <h1>Sign Up</h1>
-            <form onSubmit={submit} className="signUpForm">
-                <Rows>
-                <Input placeholder={"Email"} name="email"/>
-                <Input placeholder={"username"} name="username"/>
-                <Input type={"password"} placeholder={"Password"} name="password"/>
-                <Input type={"password"} placeholder={"Confirm Password"} name="confirmPassword"/>
-                {/* <span>Already have an account? <NavLink to={"/login"}> Login </NavLink> </span> */}
-                <span style={{color:"red"}}>{error && "invalid fields"}</span>
-                </Rows>
-                <Button type={"submit"} className="btn">Sign Up</Button>
-            </form>
-        </div>)
+   const form = (
+     <div className="signUp">
+       <h1>Sign Up</h1>
+       <form onSubmit={submit} className="signUpForm">
+         <Rows>
+           <Input placeholder={"Email"} name="email" />
+           <Input placeholder={"username"} name="username" />
+           <Input type={"password"} placeholder={"Password"} name="password" />
+           <Input
+             type={"password"}
+             placeholder={"Confirm Password"}
+             name="confirmPassword"
+           />
+           {/* <span>Already have an account? <NavLink to={"/login"}> Login </NavLink> </span> */}
+           <span style={{ color: "red" }}>{error && "invalid fields"}</span>
+         </Rows>
+         <Button type={"submit"} className="btn">Sign Up</Button>
+         or
+         <Button type={"button"} onClick={() => navigate("/login")} className="btn">Log In</Button>
+       </form>
+     </div>
+   );
 
     return (error || !loading) && <AuthLayout>{form}</AuthLayout> || loading && <div>loading...</div>
 }

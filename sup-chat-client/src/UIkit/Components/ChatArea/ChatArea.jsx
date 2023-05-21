@@ -1,10 +1,11 @@
 import { useSelector , useDispatch} from 'react-redux';
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { Rows } from "../../Layouts/Line/Line";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
+import { MessageList } from '../MessageList/MessageList';
 import { connectSocket,disconnectSocket, emitMessage, listenToMessages } from '../../../services/socket';
 import "./ChatArea.css";
 

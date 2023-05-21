@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 
 function App() {
   //const user = useSelector(state => state.userSlice.user);
-
   return (
     <div className="App">
       {/* {user ? 

@@ -1,51 +1,57 @@
 import { io } from "socket.io-client";
 import { store } from "../store/index";
-import { reciveMessage, sendMessage, setSelectedChat } from "../store/userSlice";
-const URL = require('../URL.json').url;
+import {
+  addNewChat,
+  reciveMessage,
+  sendMessage,
+  setSelectedChat,
+} from "../store/userSlice";
+const URL = require("../URL.json").url;
 
 const socket = io(URL, {
   transports: ["websocket"],
   autoConnect: false,
 });
 
-export const emitMessage = (message, chat) =>{
-  if (message.text.trim !== ''){
-    console.log(`emitting message: ${message}, in chat:${chat._id}`);
-    socket.emit('message',{'chat_id':chat._id, 'message': message});
-    if(!socket.connected){
-      console.log('socket not connected !!!!!')
-    }
-    socket.emit('test','this is test');
+export const emitMessage = (message, chat) => {
+  if (message.text.trim !== "") {
+    socket.emit("message", { chat_id: chat._id, message: message });
   }
-}
+};
 
-socket.on("message", (data) => {
-  store.dispatch(reciveMessage(data));
-});
+export const emitNewChat = (chat) => socket.emit("newChat", chat);
 
-socket.on("userList", (userList) => {
-  const currentChat = store.getState().userSlice.selectedChat;
-  store.dispatch(setSelectedChat({ ...currentChat, userList }));
-});
+const listenToMessages = () =>
+  socket.on("message", (data) => store.dispatch(reciveMessage(data)));
 
-export const connectSocket = (username) => {
+const listenToNewChats = () =>
+  socket.on("newChat", (data) => store.dispatch(addNewChat(data)));
+
+export const connectSocket = (user) => {
   if (!socket.connected) {
+    const username = user.username;
     socket.auth = { username };
     socket.connect();
     console.log("connecting to the server...");
+    user.chats.forEach((chat) => socket.emit("joinRoom", chat._id));
+    socket.emit("joinRoom", user._id);
+    listenToMessages();
+    listenToNewChats();
   }
 };
+
+export const leaveChatRoom = (chat) => socket.emit("leaveRoom", chat._id);
+
+export const removeFromChatRoom = (chat, user) =>
+  socket.emit("removeFromRoom", { chat_id: chat._id, user_id: user._id });
+
+export const addToRoom = (chat, user) =>
+  socket.emit("addToRoom", { chat_id: chat._id, user_id: user._id });
 
 export const disconnectSocket = () => {
   if (socket.connected) {
     socket.disconnect();
   }
 };
-
-// export const addMessage = (message) => {
-//   if (socket.connected) {
-//     socket.emit("message", message);
-//   }
-// };
 
 export default socket;

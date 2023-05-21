@@ -1,67 +1,100 @@
-import socketio from "socket.io";
 import { Sup } from "../repository/Sup.js";
-import { Chat } from "../models/chat.js";
+import { Chat } from "../schemas/chat.js";
 import { Server, Socket } from "socket.io";
-import { server } from "typescript";
 import { Message } from "../schemas/message.js";
 
 const Dal = new Sup();
 
 //events name
-const newChatEventName: string = "newChat";
-const leaveChatEventName: string = "leaveChat";
 const newMessageEventName: string = "message";
+const joinRoomEventName: string = "joinRoom";
+const leaveRoomEventName: string = "leaveRoom";
+const addToRoomEventName: string = "addToRoom";
+const removeFromRoomEventName: string = "removeFromRoom";
+const createChatEventName: string = "newChat";
 
-// async function newChat(socket) {
-//   console.log(socket.id);
-//   socket.on("message", (message, room) => {
-//     if (room === "") {
-//       socket.broadcast.emit("message", message);
-//       console.log(message);
-//     } else {
-//       socket.to(room).emit("message", message);
-//     }
-//   });
-// }
+const remove = (array:Array<any>, item: any) => {
+  const index = array.indexOf(item);
+  if (index > -1){
+    array.splice(index, 1);
+  }
+}
 
-// const newChat = async (io: Server): Promise<void> => {
-//   io.on("connection", (socket: Socket) => {
-//     socket.on("joinRoom", (room: string) => {
-//       socket.join(room);
-//       console.log(`User with ID: ${socket.id} joined room: ${room}`);
-//     });
-//   });
-// };
 
-// const leaveChat = async (io: Server): Promise<void> => {
-//   io.on("connection", (socket: Socket) => {
-//     socket.on("leaveRoom", (room: string) => {
-//       socket.leave(room);
-//       console.log(`User with ID: ${socket.id} left room: ${room}`);
-//     });
-//   });
-// };
-
-const newMessage = async (data: any, io: Server) => {
-  console.log(`new message recived: ${data.message}`)
-  const { message:messageData, chat_id } = data;
+const newMessage = async (data: any, io: Server, socket: Socket) => {
+  console.log(`new message recived: ${data.message}`);
+  const { message: messageData, chat_id } = data;
   const newMessage = new Message({
     text: messageData.text,
     dateTime: messageData.dateTime,
     user: messageData.user._id,
   });
   await Dal.messageRep.add(newMessage);
-
   const chat = await Dal.chatRep.getById(chat_id);
   chat.messages.push(newMessage);
   Dal.chatRep.update(chat_id, chat);
+  socket.broadcast.to(chat_id).emit("message", data);
 
-  io.to(chat_id).emit('message', newMessage);
 };
 
+const joinRoom = async (room_id: any, io: Server, socket: Socket) => {
+  socket.join(room_id);
+};
+const leaveRoom = async (room_id: any, io: Server, socket: Socket) => {
+  socket.leave(room_id);
+};
+
+const addToRoom = async (data: any, io: Server, socket: Socket) => {
+  const {chat_id, user_id} = data;
+  const chat = await Dal.chatRep.getById(chat_id);
+  const user = await Dal.userRep.getById(user_id);
+  chat.participants.push(user);
+  user.chats.push(chat);
+  await Dal.chatRep.update(chat._id,chat);
+  await Dal.userRep.update(user._id,user);
+  socket.broadcast.to(chat_id).emit("addToRoom", user);
+};
+
+const removeFromRoom =async (data: any, io: Server, socket: Socket) => {
+  const {chat_id, user_id} = data;
+  const chat = await Dal.chatRep.getById(chat_id);
+  const user = await Dal.userRep.getById(user_id);
+  remove(chat.participants,user);
+  remove(chat.admins,user);
+  remove(user.chats, chat);
+  await Dal.chatRep.update(chat._id,chat);
+  await Dal.userRep.update(user._id,user);
+  socket.broadcast.to(chat_id).emit("removeFromRoom", user);
+}
+
+const createChat = async (data: any, io: Server, socket: Socket) => {
+  const newChat = new Chat({...data});
+  await Dal.chatRep.add(newChat);
+  newChat.participants.forEach(async (p) => {
+    const user = await Dal.userRep.getById(p._id);
+    user.chats.push(newChat);
+    await Dal.userRep.update(user._id,user);
+  });
+  newChat.participants.forEach(async (u) => {
+    const socketIdArr = await io.in(u._id).fetchSockets()
+    if (socketIdArr){
+      const socketId = await io.in(u._id).fetchSockets()[0];
+      socketId && io.to(socketId).emit("newChat", newChat);
+    }
+  });
+}
+
+
 const chatEvents = {
-  functions: [newMessage],
-  eventNames: [newMessageEventName],
+  functions: [newMessage, joinRoom, leaveRoom, addToRoom,removeFromRoom,createChat],
+  eventNames: [
+    newMessageEventName,
+    joinRoomEventName,
+    leaveRoomEventName,
+    addToRoomEventName,
+    removeFromRoomEventName,
+    createChatEventName
+  ],
 };
 
 export default chatEvents;

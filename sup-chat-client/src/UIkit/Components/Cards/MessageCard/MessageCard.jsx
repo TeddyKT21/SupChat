@@ -2,7 +2,7 @@ import { Line, Saparate,Rows } from "../../../Layouts/Line/Line";
 import "./MessageCard.css";
 
 export const MessageCard = (message, key, className) => {
-    console.log('rendeing message card ', message);
+    // console.log('rendeing message card ', message);
 
     message = message.message;
     const date =  new Date(message.dateTime)

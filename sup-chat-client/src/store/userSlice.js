@@ -39,6 +39,7 @@ export const userSlice = createSlice({
     reciveMessage(state, action){
       const message = action.payload.message;
       const chat = state.user.chats.find(chat => chat._id === action.payload.chat_id);
+      console.log('adding message : ', action.payload);
       chat.messages.push(message);
     }
   },

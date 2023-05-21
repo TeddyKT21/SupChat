@@ -5,9 +5,7 @@ import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
-import { UseFetch } from "../../../CustomHooks/useFetch";
-import { connectSocket,disconnectSocket,emitMessage } from '../../../services/socket';
-import { MessageList } from '../MessageList/MessageList';
+import { connectSocket,disconnectSocket, emitMessage, listenToMessages } from '../../../services/socket';
 import "./ChatArea.css";
 
 export const ChatArea = () => {
@@ -26,7 +24,7 @@ export const ChatArea = () => {
 
     useEffect(() => {
         if(user){
-            connectSocket(user.username);
+            connectSocket(user);
         }
 
         return () => {

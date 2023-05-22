@@ -56,20 +56,20 @@ const removeFromRoom = async (data, io, socket) => {
     await Dal.userRep.update(user._id, user);
     socket.broadcast.to(chat_id).emit("removeFromRoom", user);
 };
-const createChat = async (data, io, socket) => {
+const createChat = async (data, io, socket, users) => {
     const newChat = new Chat({ ...data });
     await Dal.chatRep.add(newChat);
-    newChat.participants.forEach(async (p) => {
-        const user = await Dal.userRep.getById(p._id);
+    const participants = [];
+    data.participants.forEach(async (p) => participants.push(await Dal.userRep.getById(p._id)));
+    participants.forEach(async (user) => {
         user.chats.push(newChat);
         await Dal.userRep.update(user._id, user);
     });
-    newChat.participants.forEach(async (u) => {
-        const socketIdArr = await io.in(u._id).fetchSockets();
-        if (socketIdArr) {
-            const socketId = await io.in(u._id).fetchSockets()[0];
-            socketId && io.to(socketId).emit("newChat", newChat);
-        }
+    newChat.participants = { ...newChat.participants, ...participants };
+    await Dal.chatRep.update(newChat._id, newChat);
+    participants.forEach((p) => {
+        const pSocket = users.get(p._id);
+        pSocket && pSocket.emit('newChat', newChat);
     });
 };
 const chatEvents = {

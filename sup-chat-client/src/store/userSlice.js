@@ -41,6 +41,7 @@ export const userSlice = createSlice({
       const chat = state.user.chats.find(chat => chat._id === action.payload.chat_id);
       console.log('adding message : ', action.payload);
       chat.messages.push(message);
+      state.selectedChat = chat;
     }
   },
   extraReducers: (builder) =>{

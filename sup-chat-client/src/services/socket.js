@@ -34,9 +34,11 @@ export const connectSocket = (user) => {
     socket.connect();
     console.log("connecting to the server...");
     user.chats.forEach((chat) => socket.emit("joinRoom", chat._id));
-    socket.emit("joinRoom", user._id);
-    listenToMessages();
-    listenToNewChats();
+    socket.on('connect', () => {
+      socket.emit("subscribe", user._id);
+      listenToMessages();
+      listenToNewChats();
+    });
   }
 };
 

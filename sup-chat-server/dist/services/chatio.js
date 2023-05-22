@@ -56,31 +56,51 @@ const removeFromRoom = async (data, io, socket) => {
     await Dal.userRep.update(user._id, user);
     socket.broadcast.to(chat_id).emit("removeFromRoom", user);
 };
+// const createChat = async (data: any, io: Server, socket: Socket, users:Map<string,Socket>) => {
+//   const newChat = new Chat({...data});
+//   await Dal.chatRep.add(newChat);
+//   const participants = [];
+//   data.participants.forEach(async (p) => participants.push(await Dal.userRep.getById(p._id)));
+//   participants.forEach(async (user) => {
+//     user.chats.push(newChat);
+//     await Dal.userRep.update(user._id,user);
+//   });
+//   newChat.participants = {...newChat.participants,...participants}
+//   await Dal.chatRep.update(newChat._id,newChat);
+//   participants.forEach( (p) => {
+//     const pSocket = users.get(p._id);
+//     pSocket && pSocket.emit('newChat', newChat);
+//   });
+// }
 const createChat = async (data, io, socket, users) => {
     const newChat = new Chat({ ...data });
     await Dal.chatRep.add(newChat);
-    const participants = [];
-    data.participants.forEach(async (p) => participants.push(await Dal.userRep.getById(p._id)));
-    participants.forEach(async (user) => {
+    newChat.participants.forEach(async (p) => {
+        const user = await Dal.userRep.getById(p._id);
         user.chats.push(newChat);
         await Dal.userRep.update(user._id, user);
     });
-    newChat.participants = { ...newChat.participants, ...participants };
-    await Dal.chatRep.update(newChat._id, newChat);
-    participants.forEach((p) => {
-        const pSocket = users.get(p._id);
-        pSocket && pSocket.emit('newChat', newChat);
+    newChat.participants.forEach(async (u) => {
+        const pSocket = users.get(u._id.toString());
+        pSocket?.emit("newChat", newChat);
     });
 };
 const chatEvents = {
-    functions: [newMessage, joinRoom, leaveRoom, addToRoom, removeFromRoom, createChat],
+    functions: [
+        newMessage,
+        joinRoom,
+        leaveRoom,
+        addToRoom,
+        removeFromRoom,
+        createChat,
+    ],
     eventNames: [
         newMessageEventName,
         joinRoomEventName,
         leaveRoomEventName,
         addToRoomEventName,
         removeFromRoomEventName,
-        createChatEventName
+        createChatEventName,
     ],
 };
 export default chatEvents;

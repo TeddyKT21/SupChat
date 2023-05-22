@@ -15,7 +15,7 @@ export const SideBar = () => {
 
 const filteredList = data && data.filter((item) => {
     const userItem = item.username && item.username.toUpperCase().includes(searchTerm.toUpperCase());
-    const chatItem = item.messages && item.messages.some((message) => message.text.toUpperCase().includes(searchTerm.toUpperCase())); 
+    const chatItem = (item.messages && item.messages.some((message) => message.text.toUpperCase().includes(searchTerm.toUpperCase()))) || (item.name && !searchTerm); 
 
     return userItem || chatItem;
   });

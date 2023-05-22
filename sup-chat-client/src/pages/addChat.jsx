@@ -24,10 +24,16 @@ export const AddChat = () => {
     isDisabled: contact._id === currentUser._id,
   })); // Transform contacts to options
 
-  const handleSelectChange = (selected) => {
-    setSelectedParticipants(selected);
-    const newAdmins = admins.filter(admin => selected.includes(admin));
-    setAdmins(newAdmins);
+  const handleParticipantsChange = (selected) => {
+    const newParticipants = selected.filter(
+      (participant) => !selectedParticipants.find(
+        (currentParticipant) => currentParticipant.value === participant.value
+      )
+    );
+
+    if(newParticipants.length > 0) {
+      setSelectedParticipants([...newParticipants, ...selectedParticipants]);
+    }
   };
 
   const handleAdminChange = (selected) => {
@@ -79,7 +85,7 @@ export const AddChat = () => {
             placeholder={"Participants"}
             isMulti
             options={options}
-            onChange={handleSelectChange}
+            onChange={handleParticipantsChange}
             defaultValue={[
               { value: currentUser._id, label: currentUser.username },
             ]}

@@ -8,6 +8,7 @@ function addEvents(socket, io, functions, names) {
         socket.on(names[i], async (data) => await functions[i](data, io, socket));
     }
 }
+
 function initSocketIO(server) {
     const io = new Server(server, { cors: { origin: "*" } });
     // const io : socketIO.Server = socketIO(server)
@@ -18,4 +19,5 @@ function initSocketIO(server) {
     });
 }
 export default initSocketIO;
+
 //# sourceMappingURL=io.js.map

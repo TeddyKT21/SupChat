@@ -16,10 +16,13 @@ export const SideBar = () => {
     const {data, isLoading, error} = useSelector(state => state.SideBarDisplaySlice);
     // console.log('sidebar data: ',data);
 
-const filteredList = data && data.filter((item) => {
-    const userItem = item.username && item.username.toUpperCase().includes(searchTerm.toUpperCase());
-    const chatItem =(item.messages && item.messages.some((message) => message.text.toUpperCase().includes(searchTerm.toUpperCase()))) || (item.name && !searchTerm); 
-
+    const filteredList = data && data.filter((item) => {
+      const userItem = item.username && item.username.toUpperCase().includes(searchTerm.toUpperCase());
+      const chatItem =
+        (item.messages &&
+          item.messages.some((message) => hasTerm(message.text, searchTerm))) ||
+        (item.name && hasTerm(item.name, searchTerm)) ||
+        (item.description && hasTerm(item.description, searchTerm));
       return userItem || chatItem;
     });
 

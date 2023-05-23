@@ -5,11 +5,12 @@ import { useDispatch } from "react-redux";
 import { setSelectedChat } from "../../../../store/userSlice";
 
 export const ChatCard = (chat,key) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const isTyping = Array.isArray(chat.typingUsers) && chat.typingUsers.length > 0;
     const lastMessage = chat.messages?.slice(-1)[0]? chat.messages?.slice(-1)[0] : {dateTime: new Date(), text: 'last message'};
     const date =  new Date(lastMessage.dateTime)
     const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: false});
-
+    //console.log(chat.typingUsers)
     return (
         <div className="ChatCard" onClick = {() => dispatch(setSelectedChat(chat))} key={key}>
             <Rows>
@@ -22,8 +23,16 @@ export const ChatCard = (chat,key) => {
                     </Line>
                     <div>{timeStr}</div>
                 </Saparate>
-                <div>{lastMessage.text}</div>
+                <div>{isTyping ? "Typing..." : lastMessage.text}</div>
             </Rows>
         </div>
     )
 }
+
+//{
+//   typingUserNames.length > 0 ? (
+//     <p>{typingUserNames.join(", ")} is typing...</p>
+//   ) : (
+//     <p>{chat.messages[chat.messages.length - 1].text}</p>
+//   );
+// }

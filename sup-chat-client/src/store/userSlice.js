@@ -34,12 +34,17 @@ export const userSlice = createSlice({
     },
     addNewChat(state, action) {
       console.log("added chat:", action.payload);
+      action.payload.typingUsers = [];
       state.user.chats.push(action.payload);
+      state.selectedChat = action.payload;
     },
     setSelectedChat(state, action) {
       state.selectedChat = state.user.chats.find(
         (chat) => chat._id === action.payload._id
       );
+      if (!state.selectedChat.typingUsers) {
+        state.selectedChat.typingUsers = [];
+      }
       console.log("new active chat: ", action.payload);
     },
     sendMessage(state, action) {
@@ -57,7 +62,38 @@ export const userSlice = createSlice({
       );
       console.log("adding message : ", action.payload);
       chat.messages.push(message);
+      if (!chat.typingUsers) {
+        chat.typingUsers = [];
+      }
       state.selectedChat = chat;
+    },
+    typing(state, action) {
+      const chat = state.user.chats.find(
+        (chat) => chat._id === action.payload.chatId
+      );
+
+      if (
+        chat &&
+        action.payload.userId &&
+        !chat.typingUsers.includes(action.payload.userId)
+      ) {
+        chat.typingUsers.push(action.payload.userId);
+      }
+    },
+    stoppedTyping(state, action) {
+      const chatIndex = state.user.chats.findIndex(
+        (chat) => chat._id === action.payload.chatId
+      );
+      if (chatIndex !== -1 && action.payload.userId) {
+        const updatedChat = { ...state.user.chats[chatIndex] };
+        const typingUserIndex = updatedChat.typingUsers.findIndex(
+          (userId) => userId === action.payload.userId
+        );
+        if (typingUserIndex !== -1) {
+          updatedChat.typingUsers.splice(typingUserIndex, 1);
+        }
+        state.user.chats[chatIndex] = updatedChat;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -91,4 +127,6 @@ export const {
   setSelectedChat,
   sendMessage,
   reciveMessage,
+  typing,
+  stoppedTyping,
 } = userSlice.actions;

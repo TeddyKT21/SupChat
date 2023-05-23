@@ -3,8 +3,8 @@ import { store } from "../store/index";
 import {
   addNewChat,
   reciveMessage,
-  sendMessage,
-  setSelectedChat,
+  typing,
+  stoppedTyping,
 } from "../store/userSlice";
 const URL = require("../URL.json").url;
 
@@ -25,7 +25,10 @@ const listenToMessages = () =>
   socket.on("message", (data) => store.dispatch(reciveMessage(data)));
 
 const listenToNewChats = () =>
-  socket.on("newChat", (data) => store.dispatch(addNewChat(data)));
+  socket.on("newChat", (data) => {
+    socket.emit("joinRoom", data._id);
+    store.dispatch(addNewChat(data));
+  });
 
 export const connectSocket = (user) => {
   if (!socket.connected) {
@@ -37,6 +40,8 @@ export const connectSocket = (user) => {
     socket.emit("joinRoom", user._id);
     listenToMessages();
     listenToNewChats();
+    typingMessage();
+    stopTyping();
   }
 };
 
@@ -53,5 +58,28 @@ export const disconnectSocket = () => {
     socket.disconnect();
   }
 };
+
+export const typingMessage = () => {
+  socket.on("typing", ({userId, chatId}) => {
+    console.log("Received typing event with payload", { userId, chatId });
+    store.dispatch(typing({userId, chatId}));
+  })
+}
+
+export const emitTyping = (userId, chatId) => {
+  console.log("client Emitting typing event with payload", { userId, chatId });
+  socket.emit("typing", { userId, chatId });
+}
+
+export const stopTyping = () => {
+  socket.on("stopped typing",({userId, chatId}) => {
+    console.log("client Received stopped typing event with payload", { userId, chatId });
+    store.dispatch(stoppedTyping({userId, chatId})) 
+  })
+}
+
+export const emitStopTyping = (userId, chatId) => {
+  socket.emit("stopped typing", { userId, chatId });
+}
 
 export default socket;

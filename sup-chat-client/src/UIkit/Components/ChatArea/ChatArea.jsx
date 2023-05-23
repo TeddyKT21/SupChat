@@ -1,61 +1,109 @@
-import { useSelector , useDispatch} from 'react-redux';
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { Rows } from "../../Layouts/Line/Line";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
-import { MessageList } from '../MessageList/MessageList';
-import { connectSocket,disconnectSocket, emitMessage, listenToMessages } from '../../../services/socket';
+import { MessageList } from "../MessageList/MessageList";
+import SendIcon from "@mui/icons-material/Send";
+import socket, {
+  connectSocket,
+  disconnectSocket,
+  emitMessage,
+  emitTyping,
+  emitStopTyping,
+} from "../../../services/socket";
 import "./ChatArea.css";
 
 export const ChatArea = () => {
-    const dispatch = useDispatch();
-    const chat = useSelector(state => state.userSlice.selectedChat) || {messages: []};
-    const messages = useSelector(state => state.userSlice.selectedChat?.messages);
-    const user = useSelector(state => state.userSlice.user);
-    const [text, setText] = useState('');
-    const newMessage = ({user,text,dateTime:null});
-    const sendNewMessage = () =>{
-        newMessage.dateTime = Date.now();
-        dispatch(sendMessage(newMessage));
-        emitMessage(newMessage, chat)
-        setText('');
+  let typingTimeoutRef = useRef(null);
+  const dispatch = useDispatch();
+  const chat = useSelector((state) => state.userSlice.selectedChat) || {
+    messages: [],
+  };
+  const messages = useSelector(
+    (state) => state.userSlice.selectedChat?.messages
+  );
+  const user = useSelector((state) => state.userSlice.user);
+  const [text, setText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const newMessage = { user, text, dateTime: null };
+
+  const sendNewMessage = () => {
+    newMessage.dateTime = Date.now();
+    dispatch(sendMessage(newMessage));
+    emitMessage(newMessage, chat);
+    setText("");
+  };
+
+  const handleChange = (text) => {
+    setText(text);
+
+    if(!isTyping) {
+      setIsTyping(true);
+      emitTyping(user._id, chat._id);
     }
 
-    useEffect(() => {
-        if(user){
-            connectSocket(user);
-        }
+    if(typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
 
-        return () => {
-            disconnectSocket();
-        }
-    }, [])
+    if(text === "") {
+      setIsTyping(false);
+      emitStopTyping(user._id, chat._id);
+    } else {
+      typingTimeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+        emitStopTyping(user._id, chat._id);
+      }, 1000);
+    }
+  }
 
+  useEffect(() => {
+    if (user) {
+      connectSocket(user);
+    }
+
+    return () => {
+      disconnectSocket();
+      if(typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (!chat || !chat._id) {
     return (
       <div className="chatArea">
-        <div className="chatAreaContainer">
-          <Rows>
-            <h1>{chat.name ? chat.name : "Chat Area"}</h1>
-            <MessageList messages={messages}/>
-            <form className="form">
-              <Saparate>
-                <Input
-                  type={"text"}
-                  placeholder={"Write a new message..."}
-                  name={"newMessage"}
-                  onTextChange={(text) => setText(text)}
-                  value={text}
-                  className="inputForm"
-                />
-                <Button onClick={sendNewMessage} className="buttonForm">
-                  Send
-                </Button>
-              </Saparate>
-            </form>
-          </Rows>
-        </div>
+        <p>Please select a chat to start messaging.</p>
       </div>
     );
-}
+  }
+
+  return (
+    <div className="chatArea">
+      <div className="chatAreaContainer">
+        <Rows>
+          <h1>{chat.name ? chat.name : "Chat Area"}</h1>
+          <MessageList messages={messages} />
+          <form className="form">
+            <Saparate>
+              <Input
+                type={"text"}
+                placeholder={"Write a new message..."}
+                name={"newMessage"}
+                onTextChange={handleChange}
+                value={text}
+                className="inputForm"
+              />
+              <Button onClick={sendNewMessage} className="buttonForm">
+                <SendIcon />
+              </Button>
+            </Saparate>
+          </form>
+        </Rows>
+      </div>
+    </div>
+  );
+};

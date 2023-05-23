@@ -28,17 +28,3 @@ export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, value
     </div>
   );
 }
-
-
-
-/* import s from "./input.css";
-export function Input({ type, onTextChange, placeholder }) {
-  return (
-    <input
-      type={type || "text"}
-      className={s.input}
-      onChange={(e) => onTextChange(e.target.value)}
-      placeholder={placeholder}
-    />
-  );
-} */

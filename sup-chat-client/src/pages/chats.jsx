@@ -9,16 +9,6 @@ import { useEffect } from "react";
 import { connectSocket, disconnectSocket } from "../services/socket";
 
 export const Chats = () => {
-  const user = useSelector(state => state.userSlice.user);
-  useEffect(() => {
-    if(user){
-        connectSocket(user);
-    }
-
-    return () => {
-        disconnectSocket();
-    }
-}, [user])
     return (
       <div className="chats">
         <LayoutLine>

@@ -12,12 +12,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* {user ? 
-      <MainLayout>
-        <Outlet />
-      </MainLayout> :
-       <Login/>} */}
-
       <MainLayout>
         <Outlet />
       </MainLayout>

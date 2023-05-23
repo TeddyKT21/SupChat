@@ -18,7 +18,7 @@ export const Login = () => {
 
     if (user) {
         toast("success","login successful");
-        navigate("/chats");
+        navigate("/chats",{replace:true});
         return
     }
     if(error) toast("error", "login failed");

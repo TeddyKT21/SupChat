@@ -1,8 +1,6 @@
-import { useState,useEffect, lazy } from "react";
+import { useState } from "react";
 import { Input } from "../UIkit/Components/Input/Input/Input";
 import { Button } from "../UIkit/Components/Button/Button";
-import { Chats } from "./chats";
-import { UseFetch } from "../CustomHooks/useFetch";
 import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";

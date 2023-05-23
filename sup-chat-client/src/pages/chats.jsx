@@ -5,14 +5,15 @@ import { ChatArea } from "../UIkit/Components/ChatArea/ChatArea";
 import { ChatCard } from "../UIkit/Components/Cards/ChatCard/ChatCard";
 import "./PageStyles/chat.css";
 
+
 export const Chats = () => {
 
-    return (
-      <div className="chats">
-        <LayoutLine>
-          <SideBar />
-          <ChatArea />
-        </LayoutLine>
-      </div>
-    );
+  return (
+    <div className="chats">
+      <LayoutLine>
+        <SideBar />
+        <ChatArea />
+      </LayoutLine>
+    </div>
+  );
 }

@@ -34,6 +34,3 @@ mongoose.connect(MONGODB_URI).then((result) => {
     console.log(`Chat app listening on port ${port}!`);
   });
 });
-
-  
-

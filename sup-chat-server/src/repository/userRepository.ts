@@ -22,4 +22,6 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
         }});
     return user;
   }
+  
+  
 }

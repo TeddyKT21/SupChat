@@ -23,16 +23,6 @@ export const ChatArea = () => {
         setText('');
     }
 
-    useEffect(() => {
-        if(user){
-            connectSocket(user);
-        }
-
-        return () => {
-            disconnectSocket();
-        }
-    }, [])
-
     return (
       <div className="chatArea">
         <div className="chatAreaContainer">

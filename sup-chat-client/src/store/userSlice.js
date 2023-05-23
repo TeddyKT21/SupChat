@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  createSelector,
+} from "@reduxjs/toolkit";
 import { customFetch } from "../UIkit/utils/customFetch";
 
 export const fetchUser = createAsyncThunk(
@@ -14,6 +18,7 @@ export const userSlice = createSlice({
     error: null,
     loading: false,
     selectedChat: null,
+    token: null,
   },
   reducers: {
     logOut(state, action) {
@@ -21,6 +26,8 @@ export const userSlice = createSlice({
       state.user = null;
       state.error = null;
       state.loading = false;
+      state.token = null;
+      localStorage.removeItem("token");
     },
     addContact(state, action) {
       state.user.friends.push(action.payload);
@@ -63,6 +70,8 @@ export const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         localStorage.setItem("token", action.payload.token);
+        console.log("Action Payload: ", action.payload);
+        state.token = action.payload.token;
         state.isLoggedIn = true;
         state.error = null;
       })

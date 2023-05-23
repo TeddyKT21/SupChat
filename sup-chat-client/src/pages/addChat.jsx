@@ -5,6 +5,7 @@ import { Rows } from "../UIkit/Layouts/Line/Line";
 import { Button } from "../UIkit/Components/Button/Button";
 import { Input } from "../UIkit/Components/Input/Input/Input";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
+import { emitNewChat } from "../services/socket";
 
 export const AddChat = () => {
   const contacts = useSelector((state) => state.userSlice.user?.friends);
@@ -26,12 +27,13 @@ export const AddChat = () => {
 
   const handleParticipantsChange = (selected) => {
     const newParticipants = selected.filter(
-      (participant) => !selectedParticipants.find(
-        (currentParticipant) => currentParticipant.value === participant.value
-      )
+      (participant) =>
+        !selectedParticipants.find(
+          (currentParticipant) => currentParticipant.value === participant.value
+        )
     );
 
-    if(newParticipants.length > 0) {
+    if (newParticipants.length > 0) {
       setSelectedParticipants([...newParticipants, ...selectedParticipants]);
     }
   };
@@ -42,19 +44,22 @@ export const AddChat = () => {
 
   const submit = async (e) => {
     e.preventDefault();
+    const participantIds = selectedParticipants.map((participant) => {
+      return { _id: participant.value };
+    });
 
-    const participantIds = selectedParticipants.map(
-      (participant) => participant.value
-    );
-
+    const adminIds = admins.map((admin) => {
+      return { _id: admin.value };
+    });
     const newChat = {
-        name,
-        description,
-        admins,
-        participants: participantIds,
-    }
-
-    console.log("new chat", newChat);
+      name,
+      description,
+      admins:adminIds,
+      participants: participantIds,
+      messages: [],
+    };
+    console.log("new chat : ", newChat);
+    emitNewChat(newChat);
   };
 
   const form = (

@@ -26,6 +26,7 @@ export const userSlice = createSlice({
       console.log("added chat:", action.payload);
       action.payload.typingUsers = [];
       state.user.chats.push(action.payload);
+      state.selectedChat = action.payload
     },
     setSelectedChat(state, action) {
       state.selectedChat = state.user.chats.find(chat => chat._id === action.payload._id);

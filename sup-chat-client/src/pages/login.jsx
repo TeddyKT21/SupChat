@@ -6,7 +6,7 @@ import { Button } from "../UIkit/Components/Button/Button";
 import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
-import { fetchUser, logIn , logOut } from "../store/userSlice";
+import { fetchUser } from "../store/userSlice";
 
 export const Login = () => {
     const dispatch = useDispatch(); 

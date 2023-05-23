@@ -5,7 +5,6 @@ import "./MessageList.css";
 
 export const MessageList = ({messages}) => {
     const user = useSelector(state => state.userSlice.user);
-    console.log("user",user);
 
     // const style =
     //   user.username === messages.user.username

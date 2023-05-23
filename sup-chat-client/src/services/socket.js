@@ -25,7 +25,10 @@ const listenToMessages = () =>
   socket.on("message", (data) => store.dispatch(reciveMessage(data)));
 
 const listenToNewChats = () =>
-  socket.on("newChat", (data) => store.dispatch(addNewChat(data)));
+  socket.on("newChat", (data) => {
+    socket.emit("joinRoom", data._id);
+    store.dispatch(addNewChat(data));
+  });
 
 export const connectSocket = (user) => {
   if (!socket.connected) {

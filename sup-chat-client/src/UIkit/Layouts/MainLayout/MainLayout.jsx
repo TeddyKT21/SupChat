@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { AddChat } from "../../../pages/addChat";
+import { connectSocket, disconnectSocket } from "../../../services/socket";
+import { useEffect } from "react";
 
 export const MainLayout = () => {
   const [addChatForm, setAddChatForm] = useState(false);

@@ -29,8 +29,6 @@ function stoppedTyping(data, io, socket) {
         socket.to(chatId).emit("stopped typing", { userId, chatId });
     });
 }
-/* module.exports.functions = [seen, sent];
-module.exports.eventNames = [seenEventName, sentEventName]; */
 const messageEvents = { functions: [seen, sent, typing, stoppedTyping],
     eventNames: [seenEventName, sentEventName, typingEventName, stoppedTypingEventName] };
 export default messageEvents;

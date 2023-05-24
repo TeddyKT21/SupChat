@@ -5,20 +5,19 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const Dal = new Sup();
 
-                                                                      
- export async function signUp(request, response){
-   try {
-     console.log("body:",request.body);
-     const { email, username, password } = request.body;
-     console.log("email:",email,"username:",username,"password:",password);
-     const newUser = new User({ email, username, password });
-     const signUpUser = await Dal.userRep.add(newUser);
-     response.sendStatus(201);
-   } catch (error) {
-     console.log("signUp error:", error);
-     response.redirect('signUp');
-   }
- }
+export async function signUp(request, response) {
+  try {
+    console.log("body:", request.body);
+    const { email, username, password } = request.body;
+    console.log("email:", email, "username:", username, "password:", password);
+    const newUser = new User({ email, username, password });
+    const signUpUser = await Dal.userRep.add(newUser);
+    response.sendStatus(201);
+  } catch (error) {
+    console.log("signUp error:", error);
+    response.redirect("signUp");
+  }
+}
 
 // function verifyToken(token, secret) {
 //   try {
@@ -42,49 +41,10 @@ const Dal = new Sup();
 //   return null; // Token not found in the header
 // }
 
-// export async function login(request, response) {
-//   try {
-//     const token = getTokenFromHeader(request);
-//     if (token) {
-//       const decodedToken = verifyToken(token, "jwtSecret");
-//       if (decodedToken) {
-//         // Token is valid, you can log in the user using the token
-//         // Your login logic here
-//         // For example, retrieve the user using the decoded token's userId
-//         const foundUser = await Dal.userRep.findById(decodedToken.userId);
-//         if (foundUser) {
-//           response.json({ token, user: foundUser });
-//         } else {
-//           response.sendStatus(404);
-//         }
-//         return; // Exit the function after successful login
-//       }
-//     }
-
-//     // Token is not present or invalid, continue with regular login
-//     const { email, password } = request.body;
-//     const foundUser = await Dal.userRep.findByEmail(email);
-//     const isPasswordMatch = await bcrypt.compare(password, foundUser.password);
-//     const isValid = !(foundUser == null || !isPasswordMatch);
-
-//     if (isValid) {
-//       // Generate a new token
-//       const newToken = jwt.sign({ userId: foundUser.id }, "jwtSecret", { expiresIn: "1h" });
-
-//       // Send the new token and user data in the response
-//       response.json({ token: newToken, user: foundUser });
-//     } else {
-//       response.sendStatus(404);
-//     }
-//   } catch (error) {
-//     console.log("Login error:", error);
-//     response.redirect("login");
-//   }
-// }
 
 // export async function login (request, response) {
 //   try {
-//     const { email, password } = request.body; 
+//     const { email, password } = request.body;
 //   const foundUser = await Dal.userRep.findByEmail(email);
 //   const isPasswordMatch = await bcrypt.compare(password, foundUser.password);
 //   const IsValid = !(foundUser == null || !isPasswordMatch);
@@ -96,7 +56,7 @@ const Dal = new Sup();
 //   response.redirect('login');
 // }
 // };
-  //working with new users (with password hashing)
+//working with new users (with password hashing)
 // export async function signUp(request, response){
 //   try {
 //     const saltRounds = 12;
@@ -113,12 +73,9 @@ const Dal = new Sup();
 //   }
 // }
 
-
-
-
 // export async function login (request, response) {
 //   try {
-//     const { email, password } = request.body; 
+//     const { email, password } = request.body;
 //   const foundUser = await Dal.userRep.findByEmail(email);
 //   const isPasswordMatch = await bcrypt.compare(password, foundUser.password);
 //   const IsValid = !(foundUser == null || !isPasswordMatch);
@@ -146,6 +103,32 @@ const Dal = new Sup();
 //     response.redirect('signUp');
 //   }
 // }
+export async function login(request, response) {
+  try {
+    const { email, password } = request.body;
+    const foundUser = await Dal.userRep.findByEmail(email);
+    if (foundUser) {
+      const isPasswordMatch = await bcrypt.compare(
+        password,
+        foundUser.password
+      );
+      const IsValid = !(foundUser == null || !isPasswordMatch);
+      if (IsValid) {
+        // Generate a new token
+        const newToken = jwt.sign({ userId: foundUser.id }, "jwtSecret", {
+          expiresIn: "1h",
+        });
+        // Send the new token and user data in the response
+        response.json({ token: newToken, user: foundUser });
+      }
+    } else {
+      response.status(404).send("user not found");
+    }
+  } catch (error) {
+    console.log("Login error:", error);
+    response.response.status(500).send("Internal server error");
+  }
+}
 
 export async function addContact(request, response) {
   console.log("adding a contact...");

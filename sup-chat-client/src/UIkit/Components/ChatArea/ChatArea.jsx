@@ -70,6 +70,14 @@ export const ChatArea = () => {
         }
     }, [])
 
+    if (!chat || !chat._id) {
+      return (
+        <div className="chatArea">
+          <p>Please select a chat to start messaging.</p>
+        </div>
+      );
+    }
+
     return (
       <div className="chatArea">
         <div className="chatAreaContainer">

@@ -5,6 +5,25 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const Dal = new Sup();
 
+export const getUserByToken = (token) => {
+  try {
+    // Verify and decode the token
+    const decodedToken = jwt.verify(token, 'jwtSecret');
+
+    // Extract the user ID from the token payload
+    const userId = decodedToken.userId;
+
+    // Retrieve the user information based on the user ID
+    const user = Dal.userRep.findById(userId);
+
+    // Return the user information
+    return user;
+  } catch (error) {
+    // Handle any errors that occur during the token verification or user retrieval process
+    throw new Error('Unable to retrieve user by token');
+  }
+};
+
 
 export async function signUp(request, response){
   try {

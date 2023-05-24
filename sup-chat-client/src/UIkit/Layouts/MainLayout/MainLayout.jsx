@@ -11,10 +11,14 @@ import { useState } from "react";
 import { AddChat } from "../../../pages/addChat";
 import { connectSocket, disconnectSocket } from "../../../services/socket";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { logOut ,fetchUser} from "../../../store/userSlice";
+
 
 export const MainLayout = () => {
   const [addChatForm, setAddChatForm] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.userSlice.token);
   const loading = useSelector((state) => state.userSlice.loading);
   const user = useSelector((state) => state.userSlice.user);
@@ -29,13 +33,25 @@ export const MainLayout = () => {
 
   useEffect(() => {
     console.log("In Check Token");
-    if (!token && !loading) {
-      console.log("NOOO Token!!!!!!!");
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      console.log("NO Token Found. Redirecting to login page...");
+      dispatch(logOut());
       navigate("/login");
-    } else {
-      console.log("Token Found!!!");
+    } else  {
+      console.log("Token Found:", storedToken);
+      dispatch(fetchUser(storedToken));
     }
-  }, [token, loading, navigate]);
+  }, [navigate, dispatch]);
+  // useEffect(() => {
+  //   console.log("In Check Token");
+  //   if (!token && !loading) {
+  //     console.log("NOOO Token!!!!!!!");
+  //     navigate("/login");
+  //   } else {
+  //     console.log("Token Found!!!");
+  //   }
+  // }, [token, loading, navigate]);
 
   return (
     <div className="MainLayout">

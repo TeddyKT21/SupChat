@@ -5,9 +5,25 @@ import {
 } from "@reduxjs/toolkit";
 import { customFetch } from "../UIkit/utils/customFetch";
 
+// export const fetchUser = createAsyncThunk(
+//   "userSlice/fetchUser",
+//   async (data) => await customFetch("login", "post", data)
+// );
+
 export const fetchUser = createAsyncThunk(
   "userSlice/fetchUser",
-  async (data) => await customFetch("login", "post", data)
+  async (data) => {
+    if (data.email && data.password) {
+      // If email and password are present, use login endpoint
+      return await customFetch("login", "post", data);
+    } else if (data.token) {
+      // If token is present, use getUserByToken endpoint
+      return await customFetch("getUserByToken", "post", data);
+    } else {
+      // Handle invalid data
+      console.log("Failed fetchUser");
+    }
+  }
 );
 
 export const userSlice = createSlice({
@@ -100,7 +116,7 @@ export const userSlice = createSlice({
     builder
       .addCase(fetchUser.pending, (state) => {
         state.error = null;
-        console.log('waiting for server to return user');
+        console.log("waiting for server to return user");
         state.loading = true;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
@@ -110,14 +126,14 @@ export const userSlice = createSlice({
         console.log("Action Payload: ", action.payload);
         state.token = action.payload.token;
         state.isLoggedIn = true;
-        console.log('user found !');
+        console.log("user found !");
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = 'email or password invalid !';
-        console.log('user not found !');
-      })
-  }
+        state.error = "email or password invalid !";
+        console.log("user not found !");
+      });
+  },
 });
 
 export const userReducer = userSlice.reducer;

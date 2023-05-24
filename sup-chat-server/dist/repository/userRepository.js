@@ -19,5 +19,19 @@ export class UserRepository extends Repository {
         });
         return user;
     }
+    async findById(id) {
+        const user = await User.findOne({ id })
+            .populate('friends')
+            .populate({
+            path: 'chats',
+            model: 'Chat',
+            populate: {
+                path: 'messages',
+                populate: { path: 'user', select: 'username email' },
+                model: 'Message'
+            }
+        });
+        return user;
+    }
 }
 //# sourceMappingURL=userRepository.js.map

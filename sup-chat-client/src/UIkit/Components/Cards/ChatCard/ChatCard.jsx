@@ -38,6 +38,7 @@ export const ChatCard = (chat, key) => {
     return () => clearInterval(typingInterval);
   }, [isTyping]);
   const infoAction = () => {
+    dispatch(setSelectedChat(chat));
     dispatch(setDisplay(true));
   };
   const leaveAction = () => {};

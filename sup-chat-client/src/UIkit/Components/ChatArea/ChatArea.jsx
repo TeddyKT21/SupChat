@@ -1,27 +1,74 @@
-import { useSelector , useDispatch} from 'react-redux';
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { Rows } from "../../Layouts/Line/Line";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
-import { MessageList } from '../MessageList/MessageList';
-import { connectSocket,disconnectSocket, emitMessage, listenToMessages } from '../../../services/socket';
+import { MessageList } from "../MessageList/MessageList";
+import SendIcon from "@mui/icons-material/Send";
+import socket, {
+  connectSocket,
+  disconnectSocket,
+  emitMessage,
+  emitTyping,
+  emitStopTyping,
+} from "../../../services/socket";
 import "./ChatArea.css";
 
 export const ChatArea = () => {
-    const dispatch = useDispatch();
-    const chat = useSelector(state => state.userSlice.selectedChat) || {messages: []};
-    const messages = useSelector(state => state.userSlice.selectedChat?.messages);
-    const user = useSelector(state => state.userSlice.user);
-    const [text, setText] = useState('');
-    const newMessage = ({user,text,dateTime:null});
-    const sendNewMessage = () =>{
-        newMessage.dateTime = Date.now();
-        dispatch(sendMessage(newMessage));
-        emitMessage(newMessage, chat)
-        setText('');
+  let typingTimeoutRef = useRef(null);
+  const dispatch = useDispatch();
+  const chat = useSelector((state) => state.userSlice.selectedChat) || {
+    messages: [],
+  };
+  const messages = useSelector(
+    (state) => state.userSlice.selectedChat?.messages
+  );
+  const user = useSelector((state) => state.userSlice.user);
+  const [text, setText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const newMessage = { user, text, dateTime: null };
+
+  const sendNewMessage = () => {
+    newMessage.dateTime = Date.now();
+    dispatch(sendMessage(newMessage));
+    emitMessage(newMessage, chat);
+    setText("");
+  };
+
+  const handleChange = (text) => {
+    setText(text);
+
+    if(!isTyping) {
+      setIsTyping(true);
+      emitTyping(user._id, chat._id);
     }
+
+    if(typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    if(text === "") {
+      setIsTyping(false);
+      emitStopTyping(user._id, chat._id);
+    } else {
+      typingTimeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+        emitStopTyping(user._id, chat._id);
+      }, 1000);
+    }
+  }
+
+    useEffect(() => {
+      
+
+        return () => {
+          if(typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+          }
+        }
+    }, [])
 
     return (
       <div className="chatArea">
@@ -35,12 +82,12 @@ export const ChatArea = () => {
                   type={"text"}
                   placeholder={"Write a new message..."}
                   name={"newMessage"}
-                  onTextChange={(text) => setText(text)}
+                  onTextChange={handleChange}
                   value={text}
                   className="inputForm"
                 />
                 <Button onClick={sendNewMessage} className="buttonForm">
-                  Send
+                  <SendIcon />
                 </Button>
               </Saparate>
             </form>

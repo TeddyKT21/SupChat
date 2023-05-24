@@ -22,7 +22,7 @@ export const SideBarDisplaySlice = createSlice({
   },
   reducers: {
     updateDisplayParams(state, action) {
-      console.log("updating params", action);
+      //console.log("updating params", action);
       state.cardType = action.payload.cardType;
       state.data = action.payload.data;
     },

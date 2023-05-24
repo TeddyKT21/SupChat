@@ -64,8 +64,6 @@ export const ChatArea = () => {
 
 
     useEffect(() => {
-      
-
         return () => {
           if(typingTimeoutRef.current) {
             clearTimeout(typingTimeoutRef.current);

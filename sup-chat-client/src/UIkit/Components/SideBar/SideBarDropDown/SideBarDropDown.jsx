@@ -4,7 +4,7 @@ import { UseFetch } from "../../../../CustomHooks/useFetch"
 import { useEffect, useState } from "react"
 import { DropDown } from "../../DropDown/DropDown"
 import { useDispatch, useSelector } from "react-redux";
-import { updateDisplayParams } from "../../../../store/sideBarDisplaySlice"
+import { fetchUsers, updateDisplayParams } from "../../../../store/sideBarDisplaySlice"
 import { UserCard } from "../../Cards/UserCard/UserCard"
 import { ChatCard } from "../../Cards/ChatCard/ChatCard"
 
@@ -12,16 +12,12 @@ export const SideBarDropDown = () => {
     const dispatch = useDispatch()
     const contacts = useSelector(state => state.userSlice.user?.friends);
     const chats = useSelector(state => state.userSlice.user?.chats);
+    const user = useSelector(state => state.userSlice.user);
     
-    useEffect(()=>{dispatch(updateDisplayParams(userDisplayParams))}, [contacts]);
+    useEffect(()=>{dispatch(updateDisplayParams(contactsDisplayParams))}, [contacts]);
     
     useEffect(()=>{dispatch(updateDisplayParams(chatDisplayParams))}, [chats]);
     
-    console.log('in sidebar dropdown');
-    const userDisplayParams = {
-        cardType: 'UserCard',
-        data: contacts,
-    }
     const chatDisplayParams = {
         cardType: 'ChatCard',
         data: chats,
@@ -33,7 +29,7 @@ export const SideBarDropDown = () => {
 
     const options = ['users', 'chats', 'contacts']
     const actions =[
-        () => dispatch(updateDisplayParams(userDisplayParams)),
+        () => dispatch(fetchUsers(user)),
         () => dispatch(updateDisplayParams(chatDisplayParams)),
         () => dispatch(updateDisplayParams(contactsDisplayParams))
     ];

@@ -1,69 +1,106 @@
-import { useSelector , useDispatch} from 'react-redux'; //useDispatch
-import { useState, useEffect, Fragment } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { Rows } from "../../Layouts/Line/Line";
-import { MessageCard } from "../Cards/MessageCard/MessageCard";
 import { Input } from "../Input/Input/Input";
 import { Saparate } from "../../Layouts/Line/Line";
 import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
-import { setMessageText } from '../../../store/messageSlice';
-import { UseFetch } from "../../../CustomHooks/useFetch";
-import { connectSocket,disconnectSocket,addMessage } from '../../../services/socket';
+import { MessageList } from "../MessageList/MessageList";
+import SendIcon from "@mui/icons-material/Send";
+import socket, {
+  connectSocket,
+  disconnectSocket,
+  emitMessage,
+  emitTyping,
+  emitStopTyping,
+} from "../../../services/socket";
 import "./ChatArea.css";
 
 export const ChatArea = () => {
-    const dispatch = useDispatch();
-    const chat = useSelector(state => state.userSlice.selectedChat) || {messages: []};
-    const messages = useSelector(state => state.userSlice.selectedChat?.messages);
-    const user = useSelector(state => state.userSlice.user);
-    const [dateTime, setDateTime] = useState(null);
-    const [text, setText] = useState('');
-    const newMessage = ({user,text,dateTime,chat});
-    
-    UseFetch('messages/addNewMessage', 'post', newMessage,[dateTime],dateTime && text);
-    console.log('newMessage: ',newMessage);
-    const sendNewMessage = () =>{
-        newMessage.dateTime = Date.now();
-        dispatch(sendMessage(newMessage));
-        setDateTime(newMessage.dateTime);
+  let typingTimeoutRef = useRef(null);
+  const dispatch = useDispatch();
+  const chat = useSelector((state) => state.userSlice.selectedChat) || {
+    messages: [],
+  };
+  const messages = useSelector(
+    (state) => state.userSlice.selectedChat?.messages
+  );
+  const user = useSelector((state) => state.userSlice.user);
+  const [text, setText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const newMessage = { user, text, dateTime: null };
+
+  const sendNewMessage = () => {
+    newMessage.dateTime = Date.now();
+    dispatch(sendMessage(newMessage));
+    emitMessage(newMessage, chat);
+    setText("");
+  };
+
+  const handleChange = (text) => {
+    setText(text);
+
+    if(!isTyping) {
+      setIsTyping(true);
+      emitTyping(user._id, chat._id);
     }
 
+    if(typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    if(text === "") {
+      setIsTyping(false);
+      emitStopTyping(user._id, chat._id);
+    } else {
+      typingTimeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+        emitStopTyping(user._id, chat._id);
+      }, 1000);
+    }
+  }
+
     useEffect(() => {
-        if(user){
-            connectSocket(user.username);
-        }
+      
 
         return () => {
-            disconnectSocket();
+          if(typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+          }
         }
-    }, [user])
+    }, [])
+
+    if (!chat || !chat._id) {
+      return (
+        <div className="chatArea">
+          <p>Please select a chat to start messaging.</p>
+        </div>
+      );
+    }
 
     return (
-        <div className="chatArea">
-            <div className='chatAreaContainer'>
-                <Rows>
-                    <h1>Chat Area</h1>
-                    <h1>{chat.name}</h1>
-                    <div className="list">
-                        {messages?.map((message) => 
-                        <Fragment key={message._id}>
-                            <MessageCard message={message}/>
-                        </Fragment>
-                        )}
-                    </div>
-                    <form className='form'>
-                        <Saparate>                       
-                            <Input 
-                            type={'text'} 
-                            placeholder={'Write a new message...'} 
-                            name={"newMessage"} 
-                            onTextChange={(text) => setText(text)}
-                            className="inputForm"/>
-                            <Button onClick={sendNewMessage} className="buttonForm">Send</Button>
-                        </Saparate>
-                    </form>
-                </Rows>
-            </div>
-        </div>    
-    )
+      <div className="chatArea">
+        <div className="chatAreaContainer">
+          <Rows>
+            <h1>{chat.name ? chat.name : "Chat Area"}</h1>
+            <MessageList messages={messages}/>
+            <form className="form">
+              <Saparate>
+                <Input
+                  type={"text"}
+                  placeholder={"Write a new message..."}
+                  name={"newMessage"}
+                  onTextChange={handleChange}
+                  value={text}
+                  className="inputForm"
+                />
+                <Button onClick={sendNewMessage} className="buttonForm">
+                  <SendIcon />
+                </Button>
+              </Saparate>
+            </form>
+          </Rows>
+        </div>
+      </div>
+    );
 }

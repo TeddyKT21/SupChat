@@ -2,6 +2,7 @@ import { Chat } from "../schemas/chat.js";
 import { Message } from "../schemas/message.js";
 import { User } from "../schemas/user.js";
 
+
 export const fetchAllUsers = async (req,res) => {
     try {
       const users = await User.find().populate('friends chats');
@@ -12,6 +13,26 @@ export const fetchAllUsers = async (req,res) => {
       res.status(500).send("Internal server error");
     }
 };
+
+
+export const fetchNonFriendUsers = async (req, res) => {
+  try {
+    const currentUser = req.body;
+    const allUsers = await User.find().select('_id');
+    const friendIds = currentUser.friends.map((friend) => friend._id.toString());
+    const unknownUsersId = allUsers.filter((user) => !friendIds.includes(user._id.toString()) && user._id.toString() !== req.body._id.toString());
+    const unknownUsers = await User.find({
+      _id: { $in: unknownUsersId }
+    });
+
+    res.send(JSON.stringify(unknownUsers));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+
 
 export const fetchAllMessages = async (req, res) => {
   try {

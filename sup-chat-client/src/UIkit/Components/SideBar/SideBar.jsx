@@ -1,41 +1,50 @@
 import { Rows } from "../../Layouts/Line/Line";
 import { SearchBar } from "../SearchBar/SearchBar";
 import { CardList } from "../Cards/CardList/CardList";
-import { UseFetch } from "../../../CustomHooks/useFetch";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { SideBarDropDown } from "./SideBarDropDown/SideBarDropDown";
-import { useSelector } from "react-redux";
+import { useDispatch ,useSelector } from "react-redux";
 import { Saparate } from "../../Layouts/Line/Line";
 import "./SideBar.css";
+import { logOut } from "../../../store/userSlice";
+import { Button } from "../Button/Button";
+
+
+const hasTerm = (text, term) => text.toUpperCase().includes(term.toUpperCase());
 
 export const SideBar = () => {
-    const url = useSelector(state => state.SideBarDisplaySlice.url);
+    const dispatch = useDispatch(); 
+    const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState("");
     const cardType = useSelector(state => state.SideBarDisplaySlice.cardType);
-    const data = useSelector(state => state.SideBarDisplaySlice.data);
-    const isLoading = false;
-    const error = false;
-    // const text = '';
-    // const [doSearch, setDoSearch] = useState(false)
-    // const [resp,isLoading, error] = UseFetch(url,method,{text},[doSearch,cardType]);
+    const {data, isLoading, error} = useSelector(state => state.SideBarDisplaySlice);
+    // console.log('sidebar data: ',data);
 
-    // console.log(resp?.data); 
-    // if (doSearch){
-    //     setDoSearch(false);
-    // }
+    const filteredList = data && data.filter((item) => {
+      const userItem = item.username && item.username.toUpperCase().includes(searchTerm.toUpperCase());
+      const chatItem =
+        (item.messages &&
+          item.messages.some((message) => hasTerm(message.text, searchTerm))) ||
+        (item.name && hasTerm(item.name, searchTerm)) ||
+        (item.description && hasTerm(item.description, searchTerm));
+      return userItem || chatItem;
+    });
 
-    function onBtnClick(){
-        
-        // setDoSearch(true);
-    }
+  const logoutButtonClick = () => {
+    dispatch(logOut());
+    navigate("/login");
+  }
 
     return (
         <div className="sideBar">
             <Rows>
                 <Saparate>
                     <SideBarDropDown/>
+                    <Button onClick={logoutButtonClick}>Logout</Button>
                 </Saparate>    
-                <SearchBar onSearch={onBtnClick}/>
-                { !isLoading && !error && <CardList items={data} cardType={cardType}/>}
+                <SearchBar onSearch={setSearchTerm}/>
+                { !isLoading && !error && <CardList items={data ? filteredList : data} cardType={cardType}/>}
             </Rows>
         </div>
     )

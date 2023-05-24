@@ -1,7 +1,7 @@
 import "./input.css";
 import { useState } from "react";
 
-export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, className}) => {
+export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, value, className}) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = showPassword ? "text" : type || "text";
 
@@ -12,6 +12,7 @@ export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, class
         className={"input"}
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={placeholder}
+        value={value}
         name={name}
       />
       {type === "password" && (
@@ -27,17 +28,3 @@ export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, class
     </div>
   );
 }
-
-
-
-/* import s from "./input.css";
-export function Input({ type, onTextChange, placeholder }) {
-  return (
-    <input
-      type={type || "text"}
-      className={s.input}
-      onChange={(e) => onTextChange(e.target.value)}
-      placeholder={placeholder}
-    />
-  );
-} */

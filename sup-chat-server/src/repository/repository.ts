@@ -12,6 +12,13 @@ export class Repository<T> implements IRepository<T> {
     await new this.model(obj).save();
   }
 
+//  async add(obj: T): Promise<T> {
+//   const createdObject = await this.model.create(obj);
+//   await new this.model(obj).save();
+//   return createdObject;
+// }
+
+
   async getAll(): Promise<T[]> {
     const items = await this.model.find().exec();
     return items;

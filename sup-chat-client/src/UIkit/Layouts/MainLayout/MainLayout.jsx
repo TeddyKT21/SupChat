@@ -11,6 +11,7 @@ import { useState } from "react";
 import { AddChat } from "../../../pages/addChat";
 import { connectSocket, disconnectSocket } from "../../../services/socket";
 import { useEffect } from "react";
+import { ChatInfo } from "../../Components/ChatInfo/ChatInfo";
 
 export const MainLayout = () => {
   const [addChatForm, setAddChatForm] = useState(false);
@@ -18,6 +19,9 @@ export const MainLayout = () => {
   const token = useSelector((state) => state.userSlice.token);
   const loading = useSelector((state) => state.userSlice.loading);
   const user = useSelector((state) => state.userSlice.user);
+  const doDisplay = useSelector((state) => state.chatDisplaySlice.doDisplay);
+  console.log('do display:', doDisplay)
+  const selectedChat = useSelector((state) => state.userSlice.selectedChat);
   useEffect(() => {
     if (user) {
       connectSocket(user);
@@ -44,11 +48,11 @@ export const MainLayout = () => {
       </Button>
       <LayoutLine>
         {addChatForm ? (
-          <AddChat />
+          <AddChat closeCb = {() => setAddChatForm(false)}/>
         ) : (
           <SideBar  />
         )}
-        <ChatArea messages={[]} />
+        {doDisplay ? (<ChatInfo chat = {selectedChat}/>) : (<ChatArea />)}
       </LayoutLine>
     </div>
   );

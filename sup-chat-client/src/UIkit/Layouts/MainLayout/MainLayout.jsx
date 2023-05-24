@@ -20,7 +20,7 @@ export const MainLayout = () => {
     return () => {
       disconnectSocket();
     };
-  }, [user]);
+  }, []);
   return (
     <div className="MainLayout">
       <Button onClick={() => setAddChatForm(!addChatForm)} className="addBtn">

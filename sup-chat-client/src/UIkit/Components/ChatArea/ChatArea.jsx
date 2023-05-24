@@ -14,6 +14,8 @@ import socket, {
   emitTyping,
   emitStopTyping,
 } from "../../../services/socket";
+//import { Picker } from "emoji-mart";
+//import "emoji-mart/css/emoji-mart.css";
 import "./ChatArea.css";
 
 export const ChatArea = () => {
@@ -60,6 +62,11 @@ export const ChatArea = () => {
     }
   }
 
+  // const addEmoji = e => {
+  //   let emoji = e.native;
+  //   setText(text + emoji);
+  // }
+
   useEffect(() => {
     if (user) {
       connectSocket(user);
@@ -97,6 +104,7 @@ export const ChatArea = () => {
                 value={text}
                 className="inputForm"
               />
+              {/* <Picker onSelect={addEmoji}/> */}
               <Button onClick={sendNewMessage} className="buttonForm">
                 <SendIcon />
               </Button>

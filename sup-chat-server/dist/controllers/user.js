@@ -4,20 +4,19 @@ import { Chat } from "../schemas/chat.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const Dal = new Sup();
-export async function signUp(request, response) {
-    try {
-        console.log("body:", request.body);
-        const { email, username, password } = request.body;
-        console.log("email:", email, "username:", username, "password:", password);
-        const newUser = new User({ email, username, password });
-        const signUpUser = await Dal.userRep.add(newUser);
-        response.sendStatus(201);
-    }
-    catch (error) {
-        console.log("signUp error:", error);
-        response.redirect("signUp");
-    }
-}
+// export async function signUp(request, response) {
+//   try {
+//     console.log("body:", request.body);
+//     const { email, username, password } = request.body;
+//     console.log("email:", email, "username:", username, "password:", password);
+//     const newUser = new User({ email, username, password });
+//     const signUpUser = await Dal.userRep.add(newUser);
+//     response.sendStatus(201);
+//   } catch (error) {
+//     console.log("signUp error:", error);
+//     response.redirect("signUp");
+//   }
+// }
 // function verifyToken(token, secret) {
 //   try {
 //     const decoded = jwt.verify(token, secret);
@@ -81,21 +80,22 @@ export async function signUp(request, response) {
 // }
 // };
 //                                                                                                   //working with new users (with password hashing)
-// export async function signUp(request, response){
-//   try {
-//     const saltRounds = 12;
-//     console.log("body:",request.body);
-//     const { email, username, password } = request.body;
-//     const hashedPassword = await bcrypt.hash(password, saltRounds);
-//     console.log("email:",email,"username:",username,"password:",hashedPassword);
-//     const newUser = new User({ email, username, password: hashedPassword });
-//     const signUpUser = await Dal.userRep.add(newUser);
-//     response.sendStatus(201);
-//   } catch (error) {
-//     console.log("signUp error:", error);
-//     response.redirect('signUp');
-//   }
-// }
+export async function signUp(request, response) {
+    try {
+        const saltRounds = 12;
+        console.log("body:", request.body);
+        const { email, username, password } = request.body;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        console.log("email:", email, "username:", username, "password:", hashedPassword);
+        const newUser = new User({ email, username, password: hashedPassword });
+        const signUpUser = await Dal.userRep.add(newUser);
+        response.sendStatus(201);
+    }
+    catch (error) {
+        console.log("signUp error:", error);
+        response.redirect('signUp');
+    }
+}
 export async function login(request, response) {
     try {
         const { email, password } = request.body;

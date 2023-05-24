@@ -29,7 +29,7 @@ export const SignUp = () => {
         const password = formData.get('password');
         const confirmPassword = formData.get('confirmPassword');
         if(password === confirmPassword) {
-            setInputData({email, password, username});
+            // setInputData({email, password, username});
             dispatch(createUser({email, password, username}));
         } else {
             console.log('passwords do not match !'); 

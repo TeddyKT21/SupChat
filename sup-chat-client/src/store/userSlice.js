@@ -99,8 +99,9 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
-        state.loading = true;
         state.error = null;
+        console.log('waiting for server to return user');
+        state.loading = true;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -109,13 +110,14 @@ export const userSlice = createSlice({
         console.log("Action Payload: ", action.payload);
         state.token = action.payload.token;
         state.isLoggedIn = true;
-        state.error = null;
+        console.log('user found !');
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.error.message;
-      });
-  },
+        state.error = 'email or password invalid !';
+        console.log('user not found !');
+      })
+  }
 });
 
 export const userReducer = userSlice.reducer;

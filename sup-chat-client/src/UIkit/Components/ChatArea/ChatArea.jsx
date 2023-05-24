@@ -62,56 +62,48 @@ export const ChatArea = () => {
     }
   }
 
-  // const addEmoji = e => {
-  //   let emoji = e.native;
-  //   setText(text + emoji);
-  // }
 
-  useEffect(() => {
-    if (user) {
-      connectSocket(user);
+    useEffect(() => {
+      
+
+        return () => {
+          if(typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+          }
+        }
+    }, [])
+
+    if (!chat || !chat._id) {
+      return (
+        <div className="chatArea">
+          <p>Please select a chat to start messaging.</p>
+        </div>
+      );
     }
 
-    return () => {
-      disconnectSocket();
-      if(typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  if (!chat || !chat._id) {
     return (
       <div className="chatArea">
-        <p>Please select a chat to start messaging.</p>
+        <div className="chatAreaContainer">
+          <Rows>
+            <h1>{chat.name ? chat.name : "Chat Area"}</h1>
+            <MessageList messages={messages}/>
+            <form className="form">
+              <Saparate>
+                <Input
+                  type={"text"}
+                  placeholder={"Write a new message..."}
+                  name={"newMessage"}
+                  onTextChange={handleChange}
+                  value={text}
+                  className="inputForm"
+                />
+                <Button onClick={sendNewMessage} className="buttonForm">
+                  <SendIcon />
+                </Button>
+              </Saparate>
+            </form>
+          </Rows>
+        </div>
       </div>
     );
-  }
-
-  return (
-    <div className="chatArea">
-      <div className="chatAreaContainer">
-        <Rows>
-          <h1>{chat.name ? chat.name : "Chat Area"}</h1>
-          <MessageList messages={messages} />
-          <form className="form">
-            <Saparate>
-              <Input
-                type={"text"}
-                placeholder={"Write a new message..."}
-                name={"newMessage"}
-                onTextChange={handleChange}
-                value={text}
-                className="inputForm"
-              />
-              {/* <Picker onSelect={addEmoji}/> */}
-              <Button onClick={sendNewMessage} className="buttonForm">
-                <SendIcon />
-              </Button>
-            </Saparate>
-          </form>
-        </Rows>
-      </div>
-    </div>
-  );
-};
+}

@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const Dal = new Sup();
 
-
 export async function signUp(request, response){
   try {
     const saltRounds = 12;
@@ -20,6 +19,7 @@ export async function signUp(request, response){
     response.redirect('signUp');
   }
 }
+
 export async function login(request, response) {
   try {
     const { email, password } = request.body;

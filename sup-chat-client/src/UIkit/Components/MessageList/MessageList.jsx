@@ -11,14 +11,19 @@ export const MessageList = ({messages}) => {
     //     ? "userMessage"
     //     : "otherUserMessage";
 
-    return(
-        <div className="messageList">
-            {messages?.map((message) => (
-                <Fragment key={message._id}>
-                    <MessageCard message={message} className={"messageCard"}/>
-                      {/* className={style} */}
-                </Fragment>
-            ))}
-        </div>
-    )
+    return (
+      <div className="messageList">
+        {messages?.map((message) => (
+          <Fragment key={message._id}>
+            <MessageCard
+              message={message}
+              className={
+                message.userId === user._id ? "mymessage" : "othermessage"
+              }
+            />
+            {/* className={style} */}
+          </Fragment>
+        ))}
+      </div>
+    );
 }

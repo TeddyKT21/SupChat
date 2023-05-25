@@ -7,6 +7,7 @@ import { Rows } from "../UIkit/Layouts/Line/Line" ;
 import { toast } from "../UIkit/utils/sweetAlert";
 import { AuthLayout } from "../UIkit/Layouts/AuthLayout/AuthLayout";
 import { fetchUser } from "../store/userSlice";
+import { Loading } from "../UIkit/Components/Loading/Loading";
 
 export const Login = () => {
     const dispatch = useDispatch(); 
@@ -52,7 +53,7 @@ export const Login = () => {
                 </Rows>
             </form>
         </div>)
-    return  ((error || !loading) && <AuthLayout>{form}</AuthLayout>) || (loading && <div>loading...</div>)
+    return  ((error || !loading) && <AuthLayout>{form}</AuthLayout>) || (loading && <Loading/>)
 
    
 }

@@ -1,20 +1,46 @@
-import { Line, Saparate,Rows } from "../../Layouts/Line/Line";
+import { useEffect } from "react";
+import { fetchUserList } from "../../../store/chatDisplaySlice";
+import { Line, Saparate, Rows } from "../../Layouts/Line/Line";
+import { Loading } from "../Loading/Loading";
 import "./ChatInfo.css";
-
+import { ParticipantList } from "./ParticipantList/ParticipantList";
+import GroupsIcon from "@mui/icons-material/Groups";
+import { useSelector, useDispatch } from "react-redux";
 export const ChatInfo = (chat) => {
-   chat = chat.chat;
-    return (
-        <div className={`chatInfo`}>
-            <Rows>  
-                <Line>
-                    <h1>chat name: {chat.name}</h1>
-                    <div>description:{chat.description} </div>
-                </Line>
-                <Saparate>
-                    <div>participants:{chat.participants}</div>
-                    <div>created at :{chat.createdAt}</div>
-                </Saparate>
-            </Rows>
+  chat = chat.chat;
+  const dispatch = useDispatch();
+  const slice = useSelector(state => state.chatDisplaySlice);
+  console.log('slice', slice);
+  const participants = useSelector(state => state.chatDisplaySlice.participantList);
+  const error = useSelector(state => state.chatDisplaySlice.error);
+  const isLoading = useSelector(state => state.chatDisplaySlice.isLoading);
+
+  console.log('participants from selector : ', participants)
+
+  if ((!participants || participants.length == 0) && !error && !isLoading){
+    dispatch(fetchUserList(chat.participants));
+  }
+  if (isLoading){
+    return <Loading/>
+  }
+  if (error){
+  }
+  return (
+    <div className='ChatInfo'>
+      <Rows>
+        <div className="image">
+          <GroupsIcon />
         </div>
-    )
-}
+
+        <h1>{chat.name}</h1>
+        <h3>{chat.description} </h3>
+        <h3>participants: </h3>
+        <ParticipantList
+          participants={participants}
+          admins={chat.admins}
+        ></ParticipantList>
+        <div>created at :{chat.createdAt}</div>
+      </Rows>
+    </div>
+  );
+};

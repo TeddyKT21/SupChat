@@ -1,6 +1,7 @@
 //import { User } from "../models/user.js";
 import { User } from "../schemas/user.js";
 import { Repository } from "./repository.js";
+import mongoose from "mongoose";
 export class UserRepository extends Repository {
     constructor(model) {
         super(model);
@@ -20,7 +21,9 @@ export class UserRepository extends Repository {
         return user;
     }
     async findById(id) {
-        const user = await User.findOne({ id })
+        console.log("in findById id: ", id);
+        const { ObjectId } = mongoose.Types;
+        const user = await User.findOne({ _id: new ObjectId(id) })
             .populate('friends')
             .populate({
             path: 'chats',
@@ -31,6 +34,7 @@ export class UserRepository extends Repository {
                 model: 'Message'
             }
         });
+        console.log("in findById user: ", user);
         return user;
     }
 }

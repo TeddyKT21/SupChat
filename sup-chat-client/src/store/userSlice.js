@@ -13,6 +13,7 @@ import { customFetch } from "../UIkit/utils/customFetch";
 export const fetchUser = createAsyncThunk(
   "userSlice/fetchUser",
   async (data) => {
+    console.log("Data: ", data);
     if (data.email && data.password) {
       // If email and password are present, use login endpoint
       return await customFetch("login", "post", data);
@@ -120,6 +121,8 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
+        console.log("State: ", state);
+        console.log("Action: ", action);
         state.loading = false;
         state.user = action.payload.user;
         localStorage.setItem("token", action.payload.token);

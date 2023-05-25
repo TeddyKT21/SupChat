@@ -1,4 +1,4 @@
-import { useState,React, useRef } from "react";
+import { useState,React, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "../UIkit/Components/Input/Input/Input";
@@ -17,12 +17,16 @@ export const Login = () => {
     const error = useSelector(state => state.userSlice.error);
     const loading = useSelector(state => state.userSlice.loading);
 
-    if (user) {
-        toast("success","login successful");
-        navigate("/chats");
-        return
+    const displayToast = async (type, message) => {
+        await toast(type, message);
     }
-    if(error) toast("error", "login failed");
+
+    useEffect (() => {
+        if (user) {
+          displayToast("success", "login successful");
+          navigate("/chats");
+        }else if (error) displayToast("error", "login failed");
+    },[user,error])
 
     const submit = async (e) => {
         e.preventDefault();

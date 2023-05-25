@@ -1,29 +1,67 @@
-import { Fragment } from "react"
+import React,{ useState,useEffect, useRef, useCallback } from "react"
 import { MessageCard } from "../Cards/MessageCard/MessageCard"
 import { useSelector } from "react-redux";
 import "./MessageList.css";
+import { FixedSizeList } from "react-window";
 
 export const MessageList = ({messages}) => {
     const user = useSelector(state => state.userSlice.user);
+    const [displayMessages, setDisplayMessages] = useState([]);
+    const listRef = useRef();
 
-    // const style =
-    //   user.username === messages.user.username
-    //     ? "userMessage"
-    //     : "otherUserMessage";
+    const loadMoreMessages = useCallback(() => {
+      if(displayMessages.length >= messages.length) return;
+      const moreMessages = messages.slice(Math.max(0, messages.length - displayMessages.length - 10),
+      messages.length - displayMessages.length);
+      setDisplayMessages((prevDisplayMessages) => [
+        ...moreMessages,
+        ...prevDisplayMessages,
+        ]);
+    }, [displayMessages, messages]);
+
+    const handleItemRendered = useCallback(({visibleStartIndex}) => {
+      if(visibleStartIndex === 0) {
+        loadMoreMessages();
+      }
+    },
+    [loadMoreMessages]);
+
+    useEffect(() => {
+      setDisplayMessages(messages.slice(-10));
+    }, [messages]);
+
+    useEffect(() => {
+      if(listRef.current) {
+        listRef.current.scrollToItem(displayMessages.length - 1, "end")
+      }
+    },[displayMessages]);
+
+    const MessageCardRow = ({ index, style }) => {
+      const message = displayMessages[index];
+      return (
+        <div style={style}>
+          <MessageCard
+            message={message}
+            className={
+              message.user._id === user._id ? "mymessage" : "othermessage"
+            }
+          />
+        </div>
+      );
+    };
 
     return (
       <div className="messageList">
-        {messages?.map((message) => (
-          <Fragment key={message._id}>
-            <MessageCard
-              message={message}
-              className={
-                message.userId === user._id ? "mymessage" : "othermessage"
-              }
-            />
-            {/* className={style} */}
-          </Fragment>
-        ))}
+        <FixedSizeList
+          height={640}
+          itemCount={displayMessages.length}
+          itemSize={65}
+          width={"100%"}
+          ref={listRef}
+          onItemsRendered={handleItemRendered }
+          >
+          {MessageCardRow}
+        </FixedSizeList>
       </div>
     );
 }

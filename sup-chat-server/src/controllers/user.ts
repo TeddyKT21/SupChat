@@ -2,8 +2,11 @@ import { Sup } from "../repository/Sup.js";
 import { IUser, User } from "../schemas/user.js";
 import { Chat } from "../schemas/chat.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import { Schema } from "mongoose";
 const Dal = new Sup();
+
+
 
 export async function signUp(request, response){
   try {
@@ -20,6 +23,26 @@ export async function signUp(request, response){
   }
 }
 
+export const SECRET_KEY = 'mySecretKey';
+
+
+export async function getUserByToken(request, response)  {
+  try {
+    const token = request.body.token;
+    //console.log("token:", token);
+
+    // Verify and decode the token
+    const decodedToken = jwt.verify(token, SECRET_KEY);
+    const user = await Dal.userRep.findById(decodedToken.userId);
+
+    response.json({ token: token, user: user });
+  } catch (error) {
+    console.log("Token error: ", error);
+    response.status(404).send("Token not Valid");
+  }
+};
+
+
 export async function login(request, response) {
   try {
     const { email, password } = request.body;
@@ -32,10 +55,10 @@ export async function login(request, response) {
       const IsValid = !(foundUser == null || !isPasswordMatch);
       if (IsValid) {
         // Generate a new token
-        const newToken = jwt.sign({ userId: foundUser.id }, "jwtSecret", {
+        const newToken = jwt.sign({ userId : foundUser.id},SECRET_KEY, {
           expiresIn: "1h",
         });
-        // Send the new token and user data in the response
+        
         response.json({ token: newToken, user: foundUser });
       }
     }

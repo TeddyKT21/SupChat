@@ -1,8 +1,12 @@
 .sideBar{
-    padding: 3px;
+    padding: 0px 3px;
     border-right: 2px solid black;
     /* position: relative; */
     top: 0;
     left: 0;
     overflow-y: auto;
+}
+
+.sideBar>.Line.Rows>.Line.Saparate {
+    height: 10%;
 }

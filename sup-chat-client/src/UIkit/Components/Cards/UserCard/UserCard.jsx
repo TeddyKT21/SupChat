@@ -25,9 +25,9 @@ export const UserCard = (user) => {
             messages: [],
             admins:[loggedInUser],
             name:`private chat`,
-            description: ""
+            description: "",
+            createdAt: Date.now()
         };
-        // dispatch(addNewChat(newChat.current));
         emitNewChat(newChat.current);
 
     };

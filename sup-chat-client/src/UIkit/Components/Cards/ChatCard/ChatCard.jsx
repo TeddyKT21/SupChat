@@ -6,6 +6,8 @@ import { setSelectedChat } from "../../../../store/userSlice";
 import { useEffect, useState } from "react";
 import { resetParticipants, setDisplay } from "../../../../store/chatDisplaySlice";
 import { DropDown } from "../../DropDown/DropDown";
+import { ConfirmDialog } from "../../ConfirmDialog/ConfirmDialog";
+import { removeSelfFromChatRoom } from "../../../../services/socket";
 
 export const ChatCard = (chat, key) => {
   const [dots, setDots] = useState(".");
@@ -22,6 +24,7 @@ export const ChatCard = (chat, key) => {
     hour12: false,
   });
   const options = ["details", "exit chat"];
+  const [openExitChat, setOpenExitChat] = useState(false);
 
   useEffect(() => {
     let typingInterval;
@@ -42,14 +45,20 @@ export const ChatCard = (chat, key) => {
     dispatch(resetParticipants());
     dispatch(setDisplay(true));
   };
-  const leaveAction = () => {};
+  const openLeaveDialog = () => {
+    setOpenExitChat(true);
+  };
 
+  const leaveChat = () =>{
+    removeSelfFromChatRoom(chat);
+  }
   const onClick = () => {
     dispatch(setDisplay(false));
     dispatch(setSelectedChat(chat));
   };
   return (
     <div className="ChatCard" onClick={onClick} key={key}>
+      <ConfirmDialog startOpen={openExitChat} action={leaveChat} close = {() => setOpenExitChat(false)}/>
       <Rows>
         <Saparate>
           <Line>
@@ -63,7 +72,7 @@ export const ChatCard = (chat, key) => {
             </div>
           </Line>
           <div>{timeStr}</div>
-          <DropDown options={options} actions={[infoAction, leaveAction]} />
+          <DropDown options={options} actions={[infoAction, openLeaveDialog]} />
         </Saparate>
         <div>{isTyping ? `Typing${dots}` : lastMessage.text}</div>
       </Rows>

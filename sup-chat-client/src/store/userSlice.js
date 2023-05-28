@@ -59,7 +59,7 @@ export const userSlice = createSlice({
       state.selectedChat = state.user.chats.find(
         (chat) => chat._id === action.payload._id
       );
-      if (!state.selectedChat.typingUsers) {
+      if (state.selectedChat && !state.selectedChat.typingUsers) {
         state.selectedChat.typingUsers = [];
       }
       console.log("new active chat: ", action.payload);
@@ -83,6 +83,22 @@ export const userSlice = createSlice({
         chat.typingUsers = [];
       }
       state.selectedChat = chat;
+    },
+    leaveChat(state, action) {
+      const chatToLeave = action.payload;
+      if (chatToLeave == state.selectedChat) {
+        state.selectedChat = null;
+      }
+      state.user.chats = state.user.chats.filter(
+        (chat) => chat._id !== chatToLeave._id
+      );
+      console.log("current chats: ", state.user.chats);
+    },
+    removeFromChatRoom(state, action) {
+      console.log('in remove from chatroom with: ',action.payload);
+      const chat = state.user.chats.find(c => c._id == action.payload.chat._id);
+      chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
+      chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
     },
     typing(state, action) {
       const chat = state.user.chats.find(
@@ -148,6 +164,8 @@ export const {
   setSelectedChat,
   sendMessage,
   reciveMessage,
+  leaveChat,
   typing,
   stoppedTyping,
+  removeFromChatRoom,
 } = userSlice.actions;

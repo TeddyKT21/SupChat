@@ -4,7 +4,7 @@ import "./ChatCard.css";
 import { useDispatch } from "react-redux";
 import { setSelectedChat } from "../../../../store/userSlice";
 import { useEffect, useState } from "react";
-import { setDisplay } from "../../../../store/chatDisplaySlice";
+import { resetParticipants, setDisplay } from "../../../../store/chatDisplaySlice";
 import { DropDown } from "../../DropDown/DropDown";
 
 export const ChatCard = (chat, key) => {
@@ -39,6 +39,7 @@ export const ChatCard = (chat, key) => {
   }, [isTyping]);
   const infoAction = () => {
     dispatch(setSelectedChat(chat));
+    dispatch(resetParticipants());
     dispatch(setDisplay(true));
   };
   const leaveAction = () => {};

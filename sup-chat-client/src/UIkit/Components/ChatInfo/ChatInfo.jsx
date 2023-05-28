@@ -9,8 +9,6 @@ import { useSelector, useDispatch } from "react-redux";
 export const ChatInfo = (chat) => {
   chat = chat.chat;
   const dispatch = useDispatch();
-  const slice = useSelector(state => state.chatDisplaySlice);
-  console.log('slice', slice);
   const participants = useSelector(state => state.chatDisplaySlice.participantList);
   const error = useSelector(state => state.chatDisplaySlice.error);
   const isLoading = useSelector(state => state.chatDisplaySlice.isLoading);

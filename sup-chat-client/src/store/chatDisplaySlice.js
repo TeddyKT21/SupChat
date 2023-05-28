@@ -13,6 +13,11 @@ export const chatDisplaySlice = createSlice({
     setDisplay(state, action) {
       state.doDisplay = action.payload;
     },
+    resetParticipants(state, action){
+      state.error = null;
+      state.isLoading = false;
+      state.participantList = [];
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -35,4 +40,4 @@ export const chatDisplaySlice = createSlice({
 });
 
 export const chatDisplayreucer = chatDisplaySlice.reducer;
-export const { setDisplay } = chatDisplaySlice.actions;
+export const { setDisplay,resetParticipants } = chatDisplaySlice.actions;

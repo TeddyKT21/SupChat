@@ -28,7 +28,7 @@ export const ChatInfo = (chat) => {
   return (
     <div className='ChatInfo'>
       <Rows>
-        <div className="image">
+        <div className="imageDetails">
           <GroupsIcon />
         </div>
 

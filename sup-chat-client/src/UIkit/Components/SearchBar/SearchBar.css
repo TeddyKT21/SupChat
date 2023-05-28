@@ -1,5 +1,6 @@
 .searchBar{
     width: fit-content;
+    
 }
 .searchBar>.Line{
     display: flex;
@@ -11,6 +12,7 @@
 }
 
 .searchBtn {
-    margin-left: 40px;
-    width: 20%;
+    margin-left: 30px;
+    width: 50px;
+    height: 50px;
 }

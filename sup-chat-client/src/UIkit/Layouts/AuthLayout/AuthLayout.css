@@ -1,6 +1,6 @@
 .formRoot {
     height: 100%;
-    flex: 5;
+    /* flex: 5; */
 }
 
 .logoTitle {
@@ -64,7 +64,7 @@
 }
 
 .formRoot>*>*{
-    margin: 20px;
+    margin: 10px;
 }
 
 .addChatForm{
@@ -83,12 +83,16 @@
     background-color: aqua;
 }
 
+form>input{
+    width: fit-content;
+}
+
 h1 {
     white-space: nowrap;
 }
 
 @media screen and (min-width: 768px) {
     .addChatForm {
-        width: 350px;
+        width: 320px;
     }
 }

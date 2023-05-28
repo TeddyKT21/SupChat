@@ -2,6 +2,7 @@ import { LayoutLine } from "../Line/Line";
 import { SideBar } from "../../Components/SideBar/SideBar";
 import { ChatArea } from "../../Components/ChatArea/ChatArea";
 import { Button } from "../../Components/Button/Button";
+import { SpeedDialOptions } from "../../Components/Button/SpeedDial/SpeedDialOptions";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import AddIcon from "@mui/icons-material/Add";
 import "./MainLayout.css";
@@ -15,9 +16,11 @@ import { useDispatch } from "react-redux";
 import { logOut ,fetchUser} from "../../../store/userSlice";
 
 import { ChatInfo } from "../../Components/ChatInfo/ChatInfo";
+import { Profile } from "../../../pages/profile";
 
 export const MainLayout = () => {
-  const [addChatForm, setAddChatForm] = useState(false);
+  const [view, setView] = useState('sidebar');
+  //const [addChatForm, setAddChatForm] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userSlice.user);
@@ -48,16 +51,20 @@ export const MainLayout = () => {
 
   return (
     <div className="MainLayout">
-      <Button onClick={() => setAddChatForm(!addChatForm)} className="addBtn">
+      {/* <Button onClick={() => setAddChatForm(!addChatForm)} className="addBtn">
         {addChatForm ? <ArrowBackIosNewIcon /> : <AddIcon />}
-      </Button>
+      </Button> */}
+      <SpeedDialOptions setView={setView} />
       <LayoutLine>
-        {addChatForm ? (
+        {view === "chat" && <AddChat closeCb={() => setView("sidebar")} />}
+        {view === "sidebar" && <SideBar />}
+        {view === "profile" && <Profile user={user}/>}
+        {/* {addChatForm ? (
           <AddChat closeCb = {() => setAddChatForm(false)}/>
         ) : (
           <SideBar  />
-        )}
-        {doDisplay ? (<ChatInfo chat = {selectedChat}/>) : (<ChatArea />)}
+        )} */}
+        {doDisplay ? <ChatInfo chat={selectedChat} /> : <ChatArea />}
       </LayoutLine>
     </div>
   );

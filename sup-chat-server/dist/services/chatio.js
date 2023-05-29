@@ -9,6 +9,7 @@ const leaveRoomEventName = "leaveRoom";
 const addToRoomEventName = "addToRoom";
 const removeFromRoomEventName = "removeFromRoom";
 const createChatEventName = "newChat";
+const updateChatEventName = "updateChat";
 const newMessage = async (data, io, socket) => {
     console.log(`new message recived: ${data.message}`);
     const { message: messageData, chat_id } = data;
@@ -43,18 +44,14 @@ const removeFromRoom = async (data, io, socket, users) => {
     const { chat_id, user_id } = data;
     const chat = await Dal.chatRep.getById(chat_id);
     const user = await Dal.userRep.getById(user_id);
-    chat.participants = chat.participants.filter(p => p._id.toString() !== user._id.toString());
-    chat.admins = chat.admins.filter(p => p._id.toString() !== user._id.toString());
-    user.chats = user.chats.filter(c => c._id.toString() !== chat._id.toString());
+    chat.participants = chat.participants.filter((p) => p._id.toString() !== user._id.toString());
+    chat.admins = chat.admins.filter((p) => p._id.toString() !== user._id.toString());
+    user.chats = user.chats.filter((c) => c._id.toString() !== chat._id.toString());
     await Dal.chatRep.update(chat._id, chat);
     await Dal.userRep.update(user._id, user);
-    const inRoom = (await io.in(chat_id).fetchSockets()).length;
     socket.broadcast.to(chat_id).emit("removeFromRoom", { user, chat });
-    const inRoom2 = (await io.in(chat_id).fetchSockets()).length;
     const userSocket = users.get(user_id);
     userSocket?.leave(chat_id);
-    const inRoom3 = (await io.in(chat_id).fetchSockets()).length;
-    console.log('bruh');
 };
 const createChat = async (data, io, socket, users) => {
     const newChat = new Chat({ ...data });
@@ -69,6 +66,21 @@ const createChat = async (data, io, socket, users) => {
         pSocket?.emit("newChat", newChat);
     });
 };
+const updateChat = async (data, io, socket, users) => {
+    const oldChat = await Dal.chatRep.getById(data._id);
+    oldChat.participants.forEach(async (p) => {
+        if (!data.participants.includes(p._id)) {
+            const user = await Dal.userRep.getById(p._id);
+            oldChat.participants = oldChat.participants.filter((p) => p._id.toString() !== user._id.toString());
+            oldChat.admins = oldChat.admins.filter((p) => p._id.toString() !== user._id.toString());
+            user.chats = user.chats.filter((c) => c._id.toString() !== oldChat._id.toString());
+            await Dal.userRep.update(user._id, user);
+            const userSocket = users.get(user._id);
+            userSocket?.leave(oldChat._id);
+        }
+        await Dal.chatRep.update(oldChat._id, data);
+    });
+};
 const chatEvents = {
     functions: [
         newMessage,
@@ -77,6 +89,7 @@ const chatEvents = {
         addToRoom,
         removeFromRoom,
         createChat,
+        updateChat,
     ],
     eventNames: [
         newMessageEventName,
@@ -85,6 +98,7 @@ const chatEvents = {
         addToRoomEventName,
         removeFromRoomEventName,
         createChatEventName,
+        updateChatEventName,
     ],
 };
 export default chatEvents;

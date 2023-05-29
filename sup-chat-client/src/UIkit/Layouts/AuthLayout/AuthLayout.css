@@ -25,7 +25,7 @@
 }
 
 .mainSection {
-    flex: 6;
+    /* flex: 6; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,10 +79,6 @@
     border: 1px solid black;
 }
 
-.formRoot>*>.input{
-    background-color: aqua;
-}
-
 form>input{
     width: fit-content;
 }
@@ -93,6 +89,16 @@ h1 {
 
 @media screen and (min-width: 768px) {
     .addChatForm {
-        width: 320px;
+        width: 400px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .formRoot{
+        width: 100%;
+    }
+    /* change it later */
+    .formRoot>*>*>*>*{
+        gap:40px
     }
 }

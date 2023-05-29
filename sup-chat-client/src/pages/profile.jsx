@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
 
 export const Profile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -38,11 +39,12 @@ export const Profile = ({ user }) => {
         alignItems: "center",
         justifyContent: "center",
         minWidth: "300px",
+        paddingTop:"100px",
       }}
     >
       <Avatar
         alt={username}
-        src={user.profilePicture}
+        src={user.imageUrl}
         style={{ height: "100px", width: "100px" }}
       />
       <ListItem>
@@ -68,7 +70,7 @@ export const Profile = ({ user }) => {
       <Divider variant="inset" component="li" />
       <ListItem>
         <ListItemAvatar>
-          <Avatar />
+          <EmailIcon />
         </ListItemAvatar>
         <ListItemText
           primary="Email"

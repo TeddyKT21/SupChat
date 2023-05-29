@@ -7,6 +7,7 @@ import { FixedSizeList } from "react-window";
 export const MessageList = ({messages}) => {
     const user = useSelector(state => state.userSlice.user);
     const [displayMessages, setDisplayMessages] = useState([]);
+    const [listHeight, setListHeight] = useState(window.innerHeight * 0.68);
     const listRef = useRef();
 
     const loadMoreMessages = useCallback(() => {
@@ -25,6 +26,12 @@ export const MessageList = ({messages}) => {
       }
     },
     [loadMoreMessages]);
+
+    useEffect(() => {
+      const handleResize = () => setListHeight(window.innerHeight * 0.68);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     useEffect(() => {
       setDisplayMessages(messages.slice(-10));
@@ -53,7 +60,7 @@ export const MessageList = ({messages}) => {
     return (
       <div className="messageList">
         <FixedSizeList
-          height={640}
+          height={listHeight}
           itemCount={displayMessages.length}
           itemSize={65}
           width={"100%"}

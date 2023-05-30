@@ -15,7 +15,7 @@ export const ChatInfo = (chat) => {
 
   console.log('participants from selector : ', participants)
 
-  if ((!participants || participants.length == 0) && !error && !isLoading){
+  if ((!participants || participants.length === 0) && !error && !isLoading){
     dispatch(fetchUserList(chat.participants));
   }
   if (isLoading){

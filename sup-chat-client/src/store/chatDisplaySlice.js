@@ -7,12 +7,16 @@ export const chatDisplaySlice = createSlice({
     doDisplay:false,
     participantList:[],
     error:null,
-    isLoading:false
+    isLoading:false,
+    //view: 'sidebar',
   },
   reducers: {
     setDisplay(state, action) {
       state.doDisplay = action.payload;
     },
+    // setView(state,action) {
+    //   state.view = action.payload;
+    // },
     resetParticipants(state, action){
       state.error = null;
       state.isLoading = false;

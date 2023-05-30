@@ -38,25 +38,7 @@ export const ChatInfo = (chat) => {
   }
   if (error) {
   }
-  const participantView = (
-    <div className="ChatInfo">
-      <Rows>
-        <div className="imageDetails">
-          <GroupsIcon />
-        </div>
-
-        <h1>{chat.name}</h1>
-        <h3>{chat.description} </h3>
-        <h3>participants: </h3>
-        <ParticipantList
-          participants={participants}
-          admins={chat.admins}
-        ></ParticipantList>
-        <div>created at :{chat.createdAt}</div>
-      </Rows>
-    </div>
-  );
-  const adminView = (
+  return (
     <div className="ChatInfo">
       <SetDialog
         startOpen={dialogData.open}
@@ -68,7 +50,7 @@ export const ChatInfo = (chat) => {
       />
       <ConfirmDialog
         close={() => setOpenConfirm(false)}
-        startOpen = {openConfirm}
+        startOpen={openConfirm}
         action={() => {
           emitUpdateChat(editedChat);
           dispatch(updateChat(editedChat));
@@ -120,9 +102,10 @@ export const ChatInfo = (chat) => {
           </Rows>
         </Saparate>
         <div>created at :{chat.createdAt}</div>
-        {didChange && <Button onClick={() => setOpenConfirm(true)}> save </Button>}
+        {didChange && (
+          <Button onClick={() => setOpenConfirm(true)}> save </Button>
+        )}
       </Rows>
     </div>
   );
-  return <>{(isAdmin && adminView) || participantView}</>;
 };

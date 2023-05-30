@@ -114,6 +114,21 @@ export const userSlice = createSlice({
       chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
       chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
     },
+    updateChat(state, action){
+      const id = action.payload._id
+      state.user.chats.forEach(chat => {
+        if (id == chat._id){
+          chat.participants = action.payload.participants;
+          chat.admins = action.payload.admins;
+          chat.description = action.payload.description;
+          chat.name = action.payload.name;
+
+          if (chat._id == state.selectedChat._id){
+            state.selectedChat = {...chat};
+          }
+        }
+      });
+    },
     typing(state, action) {
       const chat = state.user.chats.find(
         (chat) => chat._id === action.payload.chatId
@@ -185,4 +200,5 @@ export const {
   stoppedTyping,
   removeFromChatRoom,
   viewChat,
+  updateChat,
 } = userSlice.actions;

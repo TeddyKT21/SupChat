@@ -108,6 +108,10 @@ export const userSlice = createSlice({
           chat.admins = action.payload.admins;
           chat.description = action.payload.description;
           chat.name = action.payload.name;
+
+          if (chat._id == state.selectedChat._id){
+            state.selectedChat = {...chat};
+          }
         }
       });
     },

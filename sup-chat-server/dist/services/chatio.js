@@ -67,19 +67,22 @@ const createChat = async (data, io, socket, users) => {
     });
 };
 const updateChat = async (data, io, socket, users) => {
-    const oldChat = await Dal.chatRep.getById(data._id);
-    oldChat.participants.forEach(async (p) => {
-        if (!data.participants.includes(p._id)) {
+    const Chat = await Dal.chatRep.getById(data._id);
+    Chat.participants.forEach(async (p) => {
+        if (!data.participants.includes(p._id.toString())) {
             const user = await Dal.userRep.getById(p._id);
-            oldChat.participants = oldChat.participants.filter((p) => p._id.toString() !== user._id.toString());
-            oldChat.admins = oldChat.admins.filter((p) => p._id.toString() !== user._id.toString());
-            user.chats = user.chats.filter((c) => c._id.toString() !== oldChat._id.toString());
+            Chat.participants = Chat.participants.filter((p) => p._id.toString() !== user._id.toString());
+            Chat.admins = Chat.admins.filter((p) => p._id.toString() !== user._id.toString());
+            user.chats = user.chats.filter((c) => c._id.toString() !== Chat._id.toString());
             await Dal.userRep.update(user._id, user);
             const userSocket = users.get(user._id);
-            userSocket?.leave(oldChat._id);
+            userSocket?.leave(Chat._id);
         }
-        await Dal.chatRep.update(oldChat._id, data);
     });
+    Chat.name = data.name;
+    Chat.description = data.description;
+    await Dal.chatRep.update(Chat._id, Chat);
+    socket.broadcast.to(data._id).emit("updateChat", Chat);
 };
 const chatEvents = {
     functions: [

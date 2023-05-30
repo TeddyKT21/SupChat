@@ -21,6 +21,7 @@ export const ChatInfo = (chat) => {
   const [editedChat, saveChat] = useState(chat);
   const [dialogData, setDialogData] = useState({ open: false });
   const [didChange, setChange] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   console.log("did change: ", didChange);
 
   const error = useSelector((state) => state.chatDisplaySlice.error);
@@ -66,7 +67,8 @@ export const ChatInfo = (chat) => {
         setObject={saveChat}
       />
       <ConfirmDialog
-        close={() => setDialogData({ ...dialogData, open: false })}
+        close={() => setOpenConfirm(false)}
+        startOpen = {openConfirm}
         action={() => {
           emitUpdateChat(editedChat);
           dispatch(updateChat(editedChat));
@@ -118,7 +120,7 @@ export const ChatInfo = (chat) => {
           </Rows>
         </Saparate>
         <div>created at :{chat.createdAt}</div>
-        {didChange && <Button> save </Button>}
+        {didChange && <Button onClick={() => setOpenConfirm(true)}> save </Button>}
       </Rows>
     </div>
   );

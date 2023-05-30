@@ -33,9 +33,12 @@ export const ChatInfo = (chat) => {
   if ((!participants || participants.length == 0) && !error && !isLoading) {
     dispatch(fetchUserList(chat.participants));
   }
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading){
+    return (
+      <div className="ChatInfo">
+        <Loading />
+      </div>
+    );  }
   if (error) {
   }
   return (

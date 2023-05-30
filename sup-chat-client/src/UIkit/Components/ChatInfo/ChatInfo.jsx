@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchUserList } from "../../../store/chatDisplaySlice";
 import { Line, Saparate, Rows } from "../../Layouts/Line/Line";
 import { Loading } from "../Loading/Loading";
@@ -20,7 +20,8 @@ export const ChatInfo = (chat) => {
   );
   const [editedChat, saveChat] = useState(chat);
   const [dialogData, setDialogData] = useState({ open: false });
-  const [didChange, setChange] = useState(false);
+  const didChange = useRef(false);
+  // const [didChange, setChange] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   console.log("did change: ", didChange);
 
@@ -32,6 +33,15 @@ export const ChatInfo = (chat) => {
 
   if ((!participants || participants.length == 0) && !error && !isLoading) {
     dispatch(fetchUserList(chat.participants));
+  }
+
+  const removeParticipant = (removedParticipant) =>{
+    const copy = {...editedChat}
+    copy.participants = copy.participants.filter((p) => {
+      return p != removedParticipant._id
+    });
+    didChange.current = true
+    saveChat(copy);
   }
   if (isLoading){
     return (
@@ -45,7 +55,7 @@ export const ChatInfo = (chat) => {
     <div className="ChatInfo">
       <SetDialog
         startOpen={dialogData.open}
-        action={() => setChange(true)}
+        action={() => didChange.current = true}
         close={() => setDialogData({ ...dialogData, open: false })}
         data={dialogData}
         object={editedChat}
@@ -57,6 +67,7 @@ export const ChatInfo = (chat) => {
         action={() => {
           emitUpdateChat(editedChat);
           dispatch(updateChat(editedChat));
+          didChange.current = false;
         }}
       />
 
@@ -99,13 +110,15 @@ export const ChatInfo = (chat) => {
           <Rows>
             <h3>participants: </h3>
             <ParticipantList
-              participants={participants}
+              participants={participants.filter(p => editedChat.participants.includes(p._id))}
               admins={chat.admins}
+              isAdmin = {isAdmin}
+              onRemove={removeParticipant}
             ></ParticipantList>
           </Rows>
         </Saparate>
         <div>created at :{chat.createdAt}</div>
-        {didChange && (
+        {didChange.current && (
           <Button onClick={() => setOpenConfirm(true)}> save </Button>
         )}
       </Rows>

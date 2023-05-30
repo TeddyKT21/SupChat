@@ -96,9 +96,14 @@ export const userSlice = createSlice({
     },
     removeFromChatRoom(state, action) {
       console.log('in remove from chatroom with: ',action.payload);
-      const chat = state.user.chats.find(c => c._id == action.payload.chat._id);
-      chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
-      chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
+      if(action.payload.user._id == state.user._id){
+        state.user.chats = state.user.chats.filter(c => c._id !== action.payload.chat._id)
+      }
+      else{
+        const chat = state.user.chats.find(c => c._id == action.payload.chat._id);
+        chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
+        chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
+      }
     },
     updateChat(state, action){
       const id = action.payload._id

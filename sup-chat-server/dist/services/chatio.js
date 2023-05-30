@@ -75,8 +75,9 @@ const updateChat = async (data, io, socket, users) => {
             Chat.admins = Chat.admins.filter((p) => p._id.toString() !== user._id.toString());
             user.chats = user.chats.filter((c) => c._id.toString() !== Chat._id.toString());
             await Dal.userRep.update(user._id, user);
-            const userSocket = users.get(user._id);
+            const userSocket = users.get(user._id.toString());
             userSocket?.leave(Chat._id);
+            userSocket?.emit('removeFromRoom', { chat: Chat, user: user });
         }
     });
     Chat.name = data.name;

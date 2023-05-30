@@ -51,19 +51,11 @@ export const MainLayout = () => {
 
   return (
     <div className="MainLayout">
-      {/* <Button onClick={() => setAddChatForm(!addChatForm)} className="addBtn">
-        {addChatForm ? <ArrowBackIosNewIcon /> : <AddIcon />}
-      </Button> */}
       <SpeedDialOptions setView={setView} />
       <LayoutLine>
         {view === "chat" && <AddChat closeCb={() => setView("sidebar")} />}
         {view === "sidebar" && <SideBar />}
         {view === "profile" && <Profile user={user}/>}
-        {/* {addChatForm ? (
-          <AddChat closeCb = {() => setAddChatForm(false)}/>
-        ) : (
-          <SideBar  />
-        )} */}
         {doDisplay ? <ChatInfo chat={selectedChat} /> : <ChatArea />}
       </LayoutLine>
     </div>

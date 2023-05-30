@@ -30,7 +30,7 @@ export const ChatInfo = (chat) => {
   const user_id = useSelector((state) => state?.userSlice?.user?._id);
   const isAdmin = chat?.admins?.includes(user_id);
 
-  if ((!participants || participants.length == 0) && !error && !isLoading) {
+  if ((!participants || participants.length === 0) && !error && !isLoading){
     dispatch(fetchUserList(chat.participants));
   }
   if (isLoading){

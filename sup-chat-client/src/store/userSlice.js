@@ -27,6 +27,16 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
+export const selectNewMessageCount = createSelector(
+  (state) => state.userSlice.lastViewed,
+  (state,chat) => chat,
+  (lastViewed, chat) => {
+    const lastViewedTime = lastViewed[chat._id] || 0;
+    //console.log("lastViewTime", lastViewedTime)
+    return chat.messages.filter((message) => new Date(message.dateTime) > new Date(lastViewedTime)).length;
+  }
+);
+
 export const userSlice = createSlice({
   name: "userSlice",
   initialState: {
@@ -36,6 +46,7 @@ export const userSlice = createSlice({
     loading: false,
     selectedChat: null,
     token: null,
+    lastViewed: {},
   },
   reducers: {
     logOut(state, action) {
@@ -65,12 +76,13 @@ export const userSlice = createSlice({
       console.log("new active chat: ", action.payload);
     },
     sendMessage(state, action) {
-      console.log("sendMessage userSlice :", action.payload);
       const selectedChat = state.user.chats.find(
         (chat) => chat._id === state.selectedChat._id
       );
       selectedChat.messages.push(action.payload);
       state.selectedChat = selectedChat;
+      state.lastViewed[state.selectedChat._id] = Date.now();
+      localStorage.setItem('lastViewed', JSON.stringify(state.lastViewed));
     },
     reciveMessage(state, action) {
       const message = action.payload.message;
@@ -82,11 +94,13 @@ export const userSlice = createSlice({
       if (!chat.typingUsers) {
         chat.typingUsers = [];
       }
-      state.selectedChat = chat;
+      if(!state.selectedChat){
+        state.selectedChat = chat;
+      }
     },
     leaveChat(state, action) {
       const chatToLeave = action.payload;
-      if (chatToLeave == state.selectedChat) {
+      if (chatToLeave === state.selectedChat) {
         state.selectedChat = null;
       }
       state.user.chats = state.user.chats.filter(
@@ -143,6 +157,10 @@ export const userSlice = createSlice({
         state.user.chats[chatIndex] = updatedChat;
       }
     },
+    viewChat(state, action) {
+      state.lastViewed[action.payload.chatId] = Date.now();
+      localStorage.setItem('lastViewed', JSON.stringify(state.lastViewed));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -152,15 +170,13 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        console.log("State: ", state);
-        console.log("Action: ", action);
         state.loading = false;
         state.user = action.payload.user;
         localStorage.setItem("token", action.payload.token);
-        console.log("Action Payload: ", action.payload);
         state.token = action.payload.token;
         state.isLoggedIn = true;
-        console.log("user found !");
+        const lastViewed = JSON.parse(localStorage.getItem('lastViewed')) || {};
+        state.lastViewed = lastViewed;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
@@ -183,5 +199,6 @@ export const {
   typing,
   stoppedTyping,
   removeFromChatRoom,
-  updateChat
+  viewChat,
+  updateChat,
 } = userSlice.actions;

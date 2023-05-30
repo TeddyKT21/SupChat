@@ -115,6 +115,10 @@ export const userSlice = createSlice({
         }
       });
     },
+    updateUser(state,action){
+      state.user.email = action.payload.email;
+      state.user.username = action.payload.username;
+    },
     typing(state, action) {
       const chat = state.user.chats.find(
         (chat) => chat._id === action.payload.chatId
@@ -183,5 +187,6 @@ export const {
   typing,
   stoppedTyping,
   removeFromChatRoom,
-  updateChat
+  updateChat,
+  updateUser
 } = userSlice.actions;

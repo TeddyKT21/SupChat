@@ -110,9 +110,14 @@ export const userSlice = createSlice({
     },
     removeFromChatRoom(state, action) {
       console.log('in remove from chatroom with: ',action.payload);
-      const chat = state.user.chats.find(c => c._id == action.payload.chat._id);
-      chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
-      chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
+      if(action.payload.user._id == state.user._id){
+        state.user.chats = state.user.chats.filter(c => c._id !== action.payload.chat._id)
+      }
+      else{
+        const chat = state.user.chats.find(c => c._id == action.payload.chat._id);
+        chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
+        chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
+      }
     },
     updateChat(state, action){
       const id = action.payload._id
@@ -128,6 +133,10 @@ export const userSlice = createSlice({
           }
         }
       });
+    },
+    updateUser(state,action){
+      state.user.email = action.payload.email;
+      state.user.username = action.payload.username;
     },
     typing(state, action) {
       const chat = state.user.chats.find(
@@ -199,6 +208,7 @@ export const {
   typing,
   stoppedTyping,
   removeFromChatRoom,
-  viewChat,
   updateChat,
+  viewChat,
+  updateUser
 } = userSlice.actions;

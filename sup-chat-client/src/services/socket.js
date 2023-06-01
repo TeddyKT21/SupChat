@@ -26,6 +26,8 @@ export const emitNewChat = (chat) => socket.emit("newChat", chat);
 
 export const emitUpdateChat = (chat) => socket.emit('updateChat',chat);
 
+export const emitUpdateUser = (user) => socket.emit('updateUser',user);
+
 const listenToMessages = () =>
   socket.on("message", (data) => store.dispatch(reciveMessage(data)));
 

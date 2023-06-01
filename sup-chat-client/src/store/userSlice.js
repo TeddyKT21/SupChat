@@ -112,6 +112,9 @@ export const userSlice = createSlice({
       console.log('in remove from chatroom with: ',action.payload);
       if(action.payload.user._id == state.user._id){
         state.user.chats = state.user.chats.filter(c => c._id !== action.payload.chat._id)
+        if (action.payload.chat._id == state.selectedChat._id){
+          state.selectedChat = null;
+        }
       }
       else{
         const chat = state.user.chats.find(c => c._id == action.payload.chat._id);

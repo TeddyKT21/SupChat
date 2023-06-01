@@ -19,6 +19,7 @@ export const ChatInfo = (chat) => {
     (state) => state.chatDisplaySlice.participantList
   );
   const [editedChat, saveChat] = useState(chat);
+  useEffect(() => saveChat(chat),[chat])
   const [dialogData, setDialogData] = useState({ open: false });
   const didChange = useRef(false);
   // const [didChange, setChange] = useState(false);

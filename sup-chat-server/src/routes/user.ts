@@ -1,5 +1,5 @@
 import express from "express";
-import { login, signUp, addContact, addChat, getUserByToken } from "../controllers/user.js"
+import { login, signUp, addContact, addChat, getUserByToken, verifyToken } from "../controllers/user.js"
 
 const UserRouter = express.Router();
 
@@ -13,7 +13,7 @@ UserRouter.route("/signUp")
 .post(signUp);
 
 UserRouter.route("/addContact")
-.put(addContact);
+.put(verifyToken,addContact);
 
 UserRouter.route("/addNewChat")
 .post(addChat);

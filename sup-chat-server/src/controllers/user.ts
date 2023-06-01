@@ -72,15 +72,48 @@ export async function login(request, response) {
   }
 }
 
+
+export function verifyToken(request, response, next) {
+  console.log("req body: ", request.body);
+  const token = request.body.token;
+
+  if (!token) {
+    console.log("******************* Token not found: ",token," *******************")
+    return response.status(401).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, SECRET_KEY, (error, decodedToken) => {
+    if (error) {
+      console.log("******************* Error in verify Token: ",token," *******************")
+      return response.status(403).json({ message: "Invalid token" });
+    }
+
+    // Add the decoded token to the request object for further use
+    request.decodedToken = decodedToken;
+    next();
+  });
+}
+
 export async function addContact(request, response) {
   console.log("adding a contact...");
-  console.log("body:", request.body);
-  const updatedUserData = request.body;
+  console.log("friends: ", request.body.user.friends);
+  const updatedUserData = request.body.user;
   const updatedUser = await Dal.userRep.getById(updatedUserData._id);
   updatedUser.friends = updatedUserData.friends;
   await Dal.userRep.update(updatedUser._id, updatedUser);
+  console.log("User Updated");
   response.status(202).send("user updated");
 }
+
+// export async function addContact(request, response) {
+//   console.log("adding a contact...");
+//   console.log("body:", request.body);
+//   const updatedUserData = request.body;
+//   const updatedUser = await Dal.userRep.getById(updatedUserData._id);
+//   updatedUser.friends = updatedUserData.friends;
+//   await Dal.userRep.update(updatedUser._id, updatedUser);
+//   response.status(202).send("user updated");
+// }
 
 export async function addChat(request, response) {
   console.log("adding a Chat...");

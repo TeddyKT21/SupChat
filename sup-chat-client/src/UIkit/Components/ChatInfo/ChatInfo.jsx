@@ -10,7 +10,6 @@ import CollectionsIcon from "@mui/icons-material/Collections";
 import { useSelector, useDispatch } from "react-redux";
 import EditIcon from "@mui/icons-material/Edit";
 import { SetDialog } from "../SetDialog/SetDialog";
-import { Button } from "../Button/Button";
 import { ConfirmDialog } from "../ConfirmDialog/ConfirmDialog";
 import { emitUpdateChat } from "../../../services/socket";
 import { updateChat } from "../../../store/userSlice";
@@ -41,16 +40,6 @@ export const ChatInfo = (chat) => {
   const handleDrawerClose = () => {
     setDrawerOpen(false);
   }
-  
-  const removeParticipant = (removedParticipant) =>{
-    const copy = {...editedChat}
-    copy.participants = copy.participants.filter((p) => {
-      return p != removedParticipant._id
-    });
-    didChange.current = true
-    saveChat(copy);
-  }
-
   if ((!participants || participants.length === 0) && !error && !isLoading){
     dispatch(fetchUserList(chat.participants));
   }

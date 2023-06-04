@@ -117,6 +117,9 @@ export const userSlice = createSlice({
         state.user.chats = state.user.chats.filter(
           (c) => c._id !== action.payload.chat._id
         );
+        if (action.payload.chat._id == state.selectedChat._id) {
+          state.selectedChat = null;
+        }
       } else {
         const chat = state.user.chats.find(
           (c) => c._id == action.payload.chat._id

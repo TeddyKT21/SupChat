@@ -16,16 +16,9 @@ export const UserCard = (user) => {
     //console.log("loggedInUser:", loggedInUser);
     const dispatch = useDispatch()
     const options = ['message', 'add contact', 'add to chat'];
-    // const [isAddContact,setIsAddContact] = useState(false);                             //version 1
     const newChat = useRef({});
     const storedToken = localStorage.getItem("token");
     
-    // useEffect(() => {
-    //   if (isAddContact) {
-    //     customFetch("addContact", "put", { token: storedToken, user: loggedInUser });   //version 1
-    //   }
-    // }, [isAddContact, loggedInUser, storedToken]);
-
     const messageAction = ()=>{
         console.log('message action pressed');
          newChat.current = {
@@ -40,18 +33,21 @@ export const UserCard = (user) => {
 
     };
     const addContactAction = () =>{
-      // setIsAddContact(true);                                                         //version 1
-      
-        if(storedToken)
-        {
-          dispatch(addContact(user));
-          const updatedUser = {
-            ...loggedInUser,
-            friends: [...loggedInUser.friends, user]             //version 2
-          };
-          customFetch("addContact", "put", {token: storedToken, user: updatedUser});
-        }
-
+  
+    const updatedUser = {
+      ...loggedInUser,
+      friends: [...loggedInUser.friends, user]
+    };
+    customFetch("addContact", "put", {token: storedToken, user: updatedUser})
+    .then((response) => {
+      dispatch(addContact(user));
+      console.log("Response:", response);
+      console.log("Contact added successfully.");
+    })
+    .catch((error) => {
+      console.log("Failed to add contact:", error);
+    });
+        
     };
     const addToChatAction = () =>{
         console.log('menu pressed')
@@ -70,21 +66,5 @@ export const UserCard = (user) => {
         <ListItemText primary={user.username} secondary={user.email}/>
         <DropDown options={options} actions={[messageAction, addContactAction, addToChatAction]}/>
       </ListItem>
-      // <div className="UserCard">
-      //     <Rows>
-      //         <Saparate>
-      //             <div className="image">
-      //                 {user.imageUrl ? <img src={user.imageUrl} alt={user.username}/> : <PersonIcon/>}
-      //             </div>
-      //             <Line>
-      //                 <div>{user.username}</div>
-      //                 <DropDown
-      //                  options={options}
-      //                  actions={[ messageAction, addContactAction, addToChatAction ]}/>
-      //                 </Line>
-      //         </Saparate>
-      //         <div>{user.email}</div>
-      //     </Rows>
-      // </div>
     );
 }

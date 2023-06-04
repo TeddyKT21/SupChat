@@ -110,11 +110,11 @@ export const userSlice = createSlice({
     },
     removeFromChatRoom(state, action) {
       console.log('in remove from chatroom with: ',action.payload);
-      if(action.payload.user._id == state.user._id){
+      if(action.payload.user._id === state.user._id){
         state.user.chats = state.user.chats.filter(c => c._id !== action.payload.chat._id)
       }
       else{
-        const chat = state.user.chats.find(c => c._id == action.payload.chat._id);
+        const chat = state.user.chats.find(c => c._id === action.payload.chat._id);
         chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
         chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
       }
@@ -122,13 +122,14 @@ export const userSlice = createSlice({
     updateChat(state, action){
       const id = action.payload._id
       state.user.chats.forEach(chat => {
-        if (id == chat._id){
+        if (id === chat._id){
           chat.participants = action.payload.participants;
           chat.admins = action.payload.admins;
           chat.description = action.payload.description;
           chat.name = action.payload.name;
+          chat.imageUrl = action.payload.imageUrl;
 
-          if (chat._id == state.selectedChat._id){
+          if (chat._id === state.selectedChat._id){
             state.selectedChat = {...chat};
           }
         }

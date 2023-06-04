@@ -9,7 +9,7 @@ export const Participant = ({ participant, admins, isUserAdmin, onRemove}) => {
   
     const removeParticipant = () =>{
     onRemove(participant);
-  }
+    }
   return (
     <div className="Participant">
         <Line>

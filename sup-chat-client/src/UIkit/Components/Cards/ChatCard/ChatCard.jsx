@@ -65,7 +65,15 @@ export const ChatCard = (chat, key) => {
       <ListItem onClick={onClick} key={key} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar>
-            <GroupsIcon />
+            {chat.imageUrl ? (
+              <img
+                src={`http://localhost:8080${chat.imageUrl}`}
+                alt="chat"
+                className="image"
+              />
+            ) : (
+              <GroupsIcon />
+            )}
           </Avatar>
         </ListItemAvatar>
         <Grid container justifyContent={"space-between"}>
@@ -77,7 +85,11 @@ export const ChatCard = (chat, key) => {
           </Grid>
           <Grid item>
             <Typography variant="body2">{timeStr}</Typography>
-            <Badge badgeContent={newMessages > 100 ? "99+" : newMessages} color="primary" invisible={newMessages === 0}/>
+            <Badge
+              badgeContent={newMessages > 100 ? "99+" : newMessages}
+              color="primary"
+              invisible={newMessages === 0}
+            />
           </Grid>
         </Grid>
         <DropDown options={options} actions={[infoAction, openLeaveDialog]} />

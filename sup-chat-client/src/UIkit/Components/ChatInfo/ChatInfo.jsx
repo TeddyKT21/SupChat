@@ -15,8 +15,7 @@ import { emitUpdateChat } from "../../../services/socket";
 import { updateChat } from "../../../store/userSlice";
 import { Badge, Button, Drawer } from "@mui/material";
 
-export const ChatInfo = (chat) => {
-  chat = chat.chat;
+export const ChatInfo = ({chat}) => {
   const dispatch = useDispatch();
   const participants = useSelector(state => state.chatDisplaySlice.participantList);
   const error = useSelector(state => state.chatDisplaySlice.error);

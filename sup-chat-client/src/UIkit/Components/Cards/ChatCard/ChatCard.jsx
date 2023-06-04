@@ -9,6 +9,7 @@ import { DropDown } from "../../DropDown/DropDown";
 import { ConfirmDialog } from "../../ConfirmDialog/ConfirmDialog";
 import { removeSelfFromChatRoom } from "../../../../services/socket";
 import { Avatar, Badge, Grid, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
+import { viewChatInfo, viewChatMessages } from "../../../../store/displaySlice";
 
 export const ChatCard = (chat, key) => {
   const [dots, setDots] = useState(".");
@@ -39,6 +40,7 @@ export const ChatCard = (chat, key) => {
     dispatch(setSelectedChat(chat));
     dispatch(resetParticipants());
     dispatch(setDisplay(true));
+    dispatch(viewChatInfo(chat));
   };
   const openLeaveDialog = () => {
     setOpenExitChat(true);
@@ -51,6 +53,7 @@ export const ChatCard = (chat, key) => {
     dispatch(setDisplay(false));
     dispatch(setSelectedChat(chat));
     dispatch(viewChat({chatId: chat._id}))
+    dispatch(viewChatMessages(chat));
   };
   const shorter = (item) => {
     return item.length > 15 ? item.substring(0, 15) + "..." : item

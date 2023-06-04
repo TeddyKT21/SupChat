@@ -8,13 +8,14 @@ import { useState, useRef } from "react";
 import { addContact, addNewChat } from "../../../../store/userSlice";
 import { emitNewChat } from "../../../../services/socket";
 import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { viewUserInfo } from "../../../../store/displaySlice";
 
 export const UserCard = (user) => {
     //console.log(user);
     const loggedInUser = useSelector(state => state.userSlice.user);
     //console.log("state:",logeedInUser)
     const dispatch = useDispatch()
-    const options = ['message', 'add contact', 'add to chat'];
+    const options = ['message', 'add contact', 'add to chat', 'details'];
     const [isAddContact,setIsAddContact] = useState(false);
     const newChat = useRef({});
     UseFetch('addContact', 'put',loggedInUser,[isAddContact],isAddContact);
@@ -39,6 +40,9 @@ export const UserCard = (user) => {
     const addToChatAction = () =>{
         console.log('menu pressed')
     };
+    const detailsAction = () =>{
+      dispatch(viewUserInfo(user));
+    }
     return (
       <ListItem>
         <ListItemAvatar>
@@ -51,7 +55,7 @@ export const UserCard = (user) => {
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary={user.username} secondary={user.email}/>
-        <DropDown options={options} actions={[messageAction, addContactAction, addToChatAction]}/>
+        <DropDown options={options} actions={[messageAction, addContactAction, addToChatAction,detailsAction]}/>
       </ListItem>
       // <div className="UserCard">
       //     <Rows>

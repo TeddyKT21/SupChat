@@ -80,6 +80,10 @@ const updateChat = async (data, io, socket, users) => {
             userSocket?.emit('removeFromRoom', { chat: Chat, user: user });
         }
     });
+    if (data.imageUrl) {
+        Chat.imageUrl = data.imageUrl;
+        io.emit("chatImageUpdated", { chatId: data._id, newImageUrl: data.imageUrl });
+    }
     Chat.name = data.name;
     Chat.description = data.description;
     await Dal.chatRep.update(Chat._id, Chat);

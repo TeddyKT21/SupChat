@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchUserList } from "../../../store/chatDisplaySlice";
 import { Line, Saparate, Rows } from "../../Layouts/Line/Line";
 import { Loading } from "../Loading/Loading";
@@ -14,6 +14,8 @@ import { ConfirmDialog } from "../ConfirmDialog/ConfirmDialog";
 import { emitUpdateChat } from "../../../services/socket";
 import { updateChat } from "../../../store/userSlice";
 import { Badge, Button, Drawer } from "@mui/material";
+import { Input } from "../Input/Input/Input"
+import { customFetch } from "../../utils/customFetch";
 
 export const ChatInfo = (chat) => {
   chat = chat.chat;
@@ -21,17 +23,31 @@ export const ChatInfo = (chat) => {
   const participants = useSelector(state => state.chatDisplaySlice.participantList);
   const error = useSelector(state => state.chatDisplaySlice.error);
   const isLoading = useSelector(state => state.chatDisplaySlice.isLoading);
+  const user_id = useSelector((state) => state?.userSlice?.user?._id);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editedChat, saveChat] = useState(chat);
   useEffect(() => saveChat(chat),[chat])
   const [dialogData, setDialogData] = useState({ open: false });
-  const didChange = useRef(false);
-  // const [didChange, setChange] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  console.log("did change: ", didChange);
-
-  const user_id = useSelector((state) => state?.userSlice?.user?._id);
+  const didChange = useRef(false);
+  const fileInput = useRef(null);
   const isAdmin = chat?.admins?.includes(user_id);
+
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  }
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  }
+
+  const handleFileInput = () => {
+    if(fileInput.current){
+      fileInput.current.click();
+    }else {
+      console.log("cant do that")
+    }
+  }
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -47,24 +63,49 @@ export const ChatInfo = (chat) => {
   const removeParticipant = (removedParticipant) =>{
     const copy = {...editedChat}
     copy.participants = copy.participants.filter((p) => {
-      return p != removedParticipant._id
+      return p !== removedParticipant._id
     });
     didChange.current = true
     saveChat(copy);
   }
+
+  const handleChange = useCallback(async (event) => {
+    if(event.target.files && event.target.files.length > 0){
+      const file = event.target.files[0];
+      try {
+        const formData = new FormData();
+        formData.append('image', file);
+        const response = await customFetch(`data/upload/${chat._id}`, "POST", formData);
+        console.log("upload successful",response);
+
+        const updatedCChatData = {
+          ...chat,
+          imageUrl: response.imageUrl,
+        };
+        dispatch(updateChat(updatedCChatData));
+      } catch (error) {
+        console.error("upload failed", error);
+      }
+    }else{
+      console.log("no file chosen!!!");
+    }
+  }, [chat._id, dispatch]);
+
   if (isLoading){
     return (
       <div className="ChatInfo">
         <Loading />
       </div>
-    );  }
+    );  
+  }
+
   if (error) {
   }
   return (
     <div className="ChatInfo">
        <SetDialog
         startOpen={dialogData.open}
-        action={() => didChange.current = true}
+        action={() => (didChange.current = true)}
         close={() => setDialogData({ ...dialogData, open: false })}
         data={dialogData}
         object={editedChat}
@@ -88,25 +129,29 @@ export const ChatInfo = (chat) => {
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
           onClick={handleDrawerOpen}
         >
-          <GroupsIcon className="imageDetails" />
+          {chat.imageUrl ? <img src={`http://localhost:8080${chat.imageUrl}`} alt="chat" className="imageDetails"/> :<GroupsIcon className="imageDetails" />}
         </Badge>
         <Drawer anchor="bottom" open={drawerOpen} onClose={handleDrawerClose}>
           <div className="cameraDrawer">
             <CameraAltIcon style={{ fontSize: 40 }} />
-            <CollectionsIcon style={{fontSize: 40}}/>
+            <CollectionsIcon style={{ fontSize: 40 }} onClick={handleFileInput}/>
+            <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/>
           </div>
         </Drawer>
-        
-        <h1>{editedChat.name}</h1>
-        {isAdmin && (
+
+        <h1>
+          {editedChat.name}
+          {isAdmin && (
             <Button
               onClick={() => setDialogData({ open: true, field: "name" })}
             >
               <EditIcon />
             </Button>
-         )}
-        <h3>{editedChat.description} </h3>
-        {isAdmin && (
+          )}
+        </h1>
+        <h3>
+          {editedChat.description}
+          {isAdmin && (
             <Button
               onClick={() =>
                 setDialogData({ open: true, field: "description" })
@@ -114,15 +159,16 @@ export const ChatInfo = (chat) => {
             >
               <EditIcon />
             </Button>
-        )}
+          )}
+        </h3>
         <h3>participants: </h3>
         <ParticipantList
-          participants={participants.filter(p => editedChat.participants.includes(p._id))}
+          participants={participants.filter((p) => editedChat.participants.includes(p._id)
+          )}
           admins={chat.admins}
           isAdmin={isAdmin}
           onRemove={removeParticipant}
         ></ParticipantList>
-
         <div>created at :{chat.createdAt}</div>
         {didChange.current && (
           <Button onClick={() => setOpenConfirm(true)}> save </Button>

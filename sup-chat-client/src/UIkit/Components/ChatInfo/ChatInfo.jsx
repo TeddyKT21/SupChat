@@ -49,13 +49,6 @@ export const ChatInfo = (chat) => {
     }
   }
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  }
-
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  }
   if ((!participants || participants.length === 0) && !error && !isLoading){
     dispatch(fetchUserList(chat.participants));
   }

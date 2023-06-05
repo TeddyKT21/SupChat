@@ -1,3 +1,5 @@
+import path from "path";
+import fs from "fs";
 import { Sup } from "../repository/Sup.js";
 import { Chat } from "../schemas/chat.js";
 import { Message } from "../schemas/message.js";
@@ -79,5 +81,29 @@ export const fetchAllChats = async (req, res) => {
         console.error(error);
         res.status(500).send("Internal server error");
     }
+};
+export const uploadChatImage = async (req, res) => {
+    if (!req.file) {
+        res.status(400).json({ error: 'No file uploaded' });
+    }
+    const chatId = req.params.id;
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+        res.status(404).json({ error: 'Chat not found' });
+    }
+    // Delete the existing image file if one exists
+    if (chat.imageUrl) {
+        const oldImagePath = path.join(process.cwd(), "..", "..", "public", "images", "chats", path.basename(chat.imageUrl));
+        fs.unlink(oldImagePath, (err) => {
+            if (err)
+                console.log(err);
+        });
+    }
+    const imageUrl = `/images/chats/${req.file.filename}`;
+    const updatedChat = await Chat.findByIdAndUpdate(chatId, { imageUrl }, { new: true });
+    if (!updatedChat) {
+        return res.status(404).json({ error: 'Chat not found' });
+    }
+    return res.status(200).json({ imageUrl });
 };
 //# sourceMappingURL=data.js.map

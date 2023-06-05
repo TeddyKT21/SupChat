@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import http from "http";
 import bodyparser from 'body-parser';
 import cors from "cors";
@@ -15,6 +16,7 @@ const MONGODB_URI = "mongodb://127.0.0.1:27017/supChat";
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cors());
+app.use('/images', express.static(path.join(process.cwd(), 'public', 'images')));
 app.use("/", UserRouter);
 app.use("/data", DataRouter);
 app.use("/messages", MessageRouter);

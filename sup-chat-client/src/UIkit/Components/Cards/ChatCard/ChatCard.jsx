@@ -68,7 +68,15 @@ export const ChatCard = (chat, key) => {
       <ListItem onClick={onClick} key={key} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar>
-            <GroupsIcon />
+            {chat.imageUrl ? (
+              <img
+                src={`http://localhost:8080${chat.imageUrl}`}
+                alt="chat"
+                className="image"
+              />
+            ) : (
+              <GroupsIcon />
+            )}
           </Avatar>
         </ListItemAvatar>
         <Grid container justifyContent={"space-between"}>

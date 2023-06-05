@@ -11,14 +11,16 @@ import { connectSocket, disconnectSocket } from "../../../services/socket";
 import { logOut ,fetchUser} from "../../../store/userSlice";
 import { ChatInfo } from "../../Components/ChatInfo/ChatInfo";
 import { Profile } from "../../../pages/profile";
+import { UserInfo } from "../../Components/UserInfo/UserInfo";
 
 export const MainLayout = () => {
   const [view, setView] = useState('sidebar');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userSlice.user);
-  const doDisplay = useSelector((state) => state.chatDisplaySlice.doDisplay);
-  console.log('do display:', doDisplay)
+  const doDisplayChat = useSelector((state) => state.chatDisplaySlice.doDisplay);
+  const display = useSelector((state) => state.displaySlice.display);
+  console.log('do display:', doDisplayChat)
   const selectedChat = useSelector((state) => state.userSlice.selectedChat);
   useEffect(() => {
     if (user) {
@@ -49,8 +51,9 @@ export const MainLayout = () => {
         {view === "chat" && <AddChat closeCb={() => setView("sidebar")} />}
         {view === "sidebar" && <SideBar />}
         {view === "profile" && <Profile user={user}/>}
-        {doDisplay && selectedChat ? <ChatInfo chat={selectedChat} /> : <ChatArea />}
-        {/* {(doDisplay && selectedChat) || currentView === "chat" ? <ChatInfo chat={selectedChat} /> : <ChatArea />} */}
+        {display === 'chatInfo' && selectedChat && <ChatInfo chat={selectedChat} />}
+        {display === 'chat' && selectedChat && < ChatArea />}
+        {display === 'userInfo' && <UserInfo />}
       </LayoutLine>
     </div>
   );

@@ -3,11 +3,11 @@ import { DropDown } from "../../DropDown/DropDown";
 import PersonIcon from '@mui/icons-material/Person';
 import "./UserCard.css"
 import { useSelector, useDispatch } from "react-redux";
-import { UseFetch } from "../../../../CustomHooks/useFetch";
 import { useState, useRef, useEffect } from "react";
 import { addContact, addNewChat } from "../../../../store/userSlice";
 import { emitNewChat } from "../../../../services/socket";
 import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { viewUserInfo } from "../../../../store/displaySlice";
 import { customFetch } from "../../../utils/customFetch";
 
 export const UserCard = (user) => {
@@ -15,7 +15,7 @@ export const UserCard = (user) => {
     const loggedInUser = useSelector(state => state.userSlice.user);
     //console.log("loggedInUser:", loggedInUser);
     const dispatch = useDispatch()
-    const options = ['message', 'add contact', 'add to chat'];
+    const options = ['message', 'add contact', 'add to chat', 'details'];
     const newChat = useRef({});
     const storedToken = localStorage.getItem("token");
     
@@ -52,6 +52,9 @@ export const UserCard = (user) => {
     const addToChatAction = () =>{
         console.log('menu pressed')
     };
+    const detailsAction = () =>{
+      dispatch(viewUserInfo(user));
+    }
     return (
       <ListItem>
         <ListItemAvatar>
@@ -64,7 +67,7 @@ export const UserCard = (user) => {
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary={user.username} secondary={user.email}/>
-        <DropDown options={options} actions={[messageAction, addContactAction, addToChatAction]}/>
+        <DropDown options={options} actions={[messageAction, addContactAction, addToChatAction,detailsAction]}/>
       </ListItem>
     );
 }

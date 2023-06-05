@@ -33,9 +33,9 @@ export const selectNewMessageCount = createSelector(
   (lastViewed, chat) => {
     const lastViewedTime = lastViewed[chat._id] || 0;
     //console.log("lastViewTime", lastViewedTime)
-    return chat.messages.filter(
+    return chat?.messages?.filter(
       (message) => new Date(message.dateTime) > new Date(lastViewedTime)
-    ).length;
+    )?.length;
   }
 );
 

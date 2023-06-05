@@ -17,8 +17,7 @@ import { Badge, Button, Drawer } from "@mui/material";
 import { Input } from "../Input/Input/Input"
 import { customFetch } from "../../utils/customFetch";
 
-export const ChatInfo = (chat) => {
-  chat = chat.chat;
+export const ChatInfo = ({chat}) => {
   const dispatch = useDispatch();
   const participants = useSelector(state => state.chatDisplaySlice.participantList);
   const error = useSelector(state => state.chatDisplaySlice.error);
@@ -32,14 +31,6 @@ export const ChatInfo = (chat) => {
   const didChange = useRef(false);
   const fileInput = useRef(null);
   const isAdmin = chat?.admins?.includes(user_id);
-
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  }
-
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  }
 
   const handleFileInput = () => {
     if(fileInput.current){

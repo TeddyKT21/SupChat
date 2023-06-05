@@ -21,7 +21,7 @@ export class UserRepository extends Repository {
         return user;
     }
     async findById(id) {
-        console.log("in findById id: ", id);
+        //console.log("in findById id: ", id);
         const { ObjectId } = mongoose.Types;
         const user = await User.findOne({ _id: new ObjectId(id) })
             .populate('friends')
@@ -34,7 +34,7 @@ export class UserRepository extends Repository {
                 model: 'Message'
             }
         });
-        console.log("in findById user: ", user);
+        //console.log("in findById user: ", user);
         return user;
     }
 }

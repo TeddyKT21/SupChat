@@ -85,11 +85,7 @@ export const ChatCard = (chat, key) => {
           </Grid>
           <Grid item>
             <Typography variant="body2">{timeStr}</Typography>
-            <Badge
-              badgeContent={newMessages > 100 ? "99+" : newMessages}
-              color="primary"
-              invisible={newMessages === 0}
-            />
+            <Badge badgeContent={newMessages > 100 ? "99+" : newMessages} color="primary" invisible={newMessages === 0}/>
           </Grid>
         </Grid>
         <DropDown options={options} actions={[infoAction, openLeaveDialog]} />

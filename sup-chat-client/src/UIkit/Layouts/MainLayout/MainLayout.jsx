@@ -20,7 +20,6 @@ import { Profile } from "../../../pages/profile";
 
 export const MainLayout = () => {
   const [view, setView] = useState('sidebar');
-  //const [addChatForm, setAddChatForm] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userSlice.user);
@@ -56,7 +55,7 @@ export const MainLayout = () => {
         {view === "chat" && <AddChat closeCb={() => setView("sidebar")} />}
         {view === "sidebar" && <SideBar />}
         {view === "profile" && <Profile user={user}/>}
-        {doDisplay ? <ChatInfo chat={selectedChat} /> : <ChatArea />}
+        {doDisplay && selectedChat ? <ChatInfo chat={selectedChat} /> : <ChatArea />}
       </LayoutLine>
     </div>
   );

@@ -26,6 +26,7 @@ export const ChatInfo = (chat) => {
   const user_id = useSelector((state) => state?.userSlice?.user?._id);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editedChat, saveChat] = useState(chat);
+  useEffect(() => saveChat(chat),[chat])
   const [dialogData, setDialogData] = useState({ open: false });
   const [openConfirm, setOpenConfirm] = useState(false);
   const didChange = useRef(false);
@@ -48,6 +49,13 @@ export const ChatInfo = (chat) => {
     }
   }
 
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  }
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  }
   if ((!participants || participants.length === 0) && !error && !isLoading){
     dispatch(fetchUserList(chat.participants));
   }
@@ -95,7 +103,7 @@ export const ChatInfo = (chat) => {
   }
   return (
     <div className="ChatInfo">
-      <SetDialog
+       <SetDialog
         startOpen={dialogData.open}
         action={() => (didChange.current = true)}
         close={() => setDialogData({ ...dialogData, open: false })}
@@ -112,7 +120,7 @@ export const ChatInfo = (chat) => {
           didChange.current = false;
         }}
       />
-
+    
       <Rows>
         <Badge
           color="secondary"
@@ -155,8 +163,7 @@ export const ChatInfo = (chat) => {
         </h3>
         <h3>participants: </h3>
         <ParticipantList
-          participants={participants.filter((p) =>
-            editedChat.participants.includes(p._id)
+          participants={participants.filter((p) => editedChat.participants.includes(p._id)
           )}
           admins={chat.admins}
           isAdmin={isAdmin}

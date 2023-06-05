@@ -59,23 +59,23 @@ export async function login(request, response) {
         response.response.status(500).send("Internal server error");
     }
 }
-export function verifyToken(request, response, next) {
-    console.log("req body: ", request.body);
-    const token = request.body.token;
-    if (!token) {
-        console.log("******************* Token not found: ", token, " *******************");
-        return response.status(401).json({ message: "No token provided" });
-    }
-    jwt.verify(token, SECRET_KEY, (error, decodedToken) => {
-        if (error) {
-            console.log("******************* Error in verify Token: ", token, " *******************");
-            return response.status(403).json({ message: "Invalid token" });
-        }
-        // Add the decoded token to the request object for further use
-        request.decodedToken = decodedToken;
-        next();
-    });
-}
+// export function verifyToken(request, response, next) {
+//   console.log("req body: ", request.body);
+//   const token = request.body.token;
+//   if (!token) {
+//     console.log("******************* Token not found: ",token," *******************")
+//     return response.status(401).json({ message: "No token provided" });
+//   }
+//   jwt.verify(token, SECRET_KEY, (error, decodedToken) => {
+//     if (error) {
+//       console.log("******************* Error in verify Token: ",token," *******************")
+//       return response.status(403).json({ message: "Invalid token" });
+//     }
+//     // Add the decoded token to the request object for further use
+//     request.decodedToken = decodedToken;
+//     next();
+//   });
+// }
 export async function addContact(request, response) {
     console.log("adding a contact...");
     console.log("friends: ", request.body.user.friends);

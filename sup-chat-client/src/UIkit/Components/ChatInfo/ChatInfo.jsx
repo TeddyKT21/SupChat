@@ -37,9 +37,6 @@ export const ChatInfo = (chat) => {
     setDrawerOpen(true);
   }
 
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  }
 
   const handleFileInput = () => {
     if(fileInput.current){
@@ -49,9 +46,6 @@ export const ChatInfo = (chat) => {
     }
   }
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  }
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);

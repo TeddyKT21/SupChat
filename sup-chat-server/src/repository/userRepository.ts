@@ -60,4 +60,16 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
       next();
     });
   }
+
+  async isValidToken(token: string){
+
+    jwt.verify(token, "mySecretKey", (error) => {
+      if (error) {
+        console.log("******************* Error in verify Token: ",token," *******************")
+        return false;
+      }
+    });
+
+    return true;
+  }
 }

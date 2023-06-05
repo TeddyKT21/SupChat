@@ -32,14 +32,6 @@ export const ChatInfo = ({chat}) => {
   const fileInput = useRef(null);
   const isAdmin = chat?.admins?.includes(user_id);
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  }
-
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  }
-
   const handleFileInput = () => {
     if(fileInput.current){
       fileInput.current.click();

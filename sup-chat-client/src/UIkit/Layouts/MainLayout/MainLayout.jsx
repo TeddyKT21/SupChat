@@ -60,7 +60,6 @@ export const MainLayout = () => {
         {display === 'chatInfo' && selectedChat && <ChatInfo chat={selectedChat} />}
         {display === 'chat' && selectedChat && < ChatArea />}
         {display === 'userInfo' && <UserInfo />}
-        {/* {doDisplayChat && selectedChat ? <ChatInfo chat={selectedChat} /> : <ChatArea />} */}
       </LayoutLine>
     </div>
   );

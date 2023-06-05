@@ -21,7 +21,7 @@ export const fetchNonFriendUsers = async (req, res) => {
         const searchTerm = req.body.text;
         const allUsers = await User.find(User.find({
             $or: [
-                { name: { $regex: searchTerm, $options: 'i' } },
+                { username: { $regex: searchTerm, $options: 'i' } },
                 { email: { $regex: searchTerm, $options: 'i' } }
             ]
         })).select('_id');

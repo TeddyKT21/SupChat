@@ -2,31 +2,41 @@ import { Sup } from "../repository/Sup.js";
 import { IUser, User } from "../schemas/user.js";
 import { Chat } from "../schemas/chat.js";
 import bcrypt from "bcrypt";
-import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import { Schema } from "mongoose";
 const Dal = new Sup();
 
-
-
-export async function signUp(request, response){
+export async function signUp(request, response) {
   try {
     const saltRounds = 12;
     const { email, username, password } = request.body;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    console.log("email:",email,"username:",username,"password:",hashedPassword);
-    const newUser = new User({ email, username, password: hashedPassword });
+    console.log(
+      "email:",
+      email,
+      "username:",
+      username,
+      "password:",
+      hashedPassword
+    );
+    const newUser = new User({
+      email,
+      username,
+      password: hashedPassword,
+      createdAt: Date.now(),
+      imageUrl: `/images/chats/${request.file?.filename}`,
+    });
     const signUpUser = await Dal.userRep.add(newUser);
     response.sendStatus(201);
   } catch (error) {
     console.log("signUp error:", error);
-    response.redirect('signUp');
+    response.redirect("signUp");
   }
 }
 
-export const SECRET_KEY = 'mySecretKey';
+export const SECRET_KEY = "mySecretKey";
 
-
-export async function getUserByToken(request, response)  {
+export async function getUserByToken(request, response) {
   try {
     const token = request.body.token;
     //console.log("token:", token);
@@ -40,8 +50,7 @@ export async function getUserByToken(request, response)  {
     console.log("Token error: ", error);
     response.status(404).send("Token not Valid");
   }
-};
-
+}
 
 export async function login(request, response) {
   try {
@@ -55,23 +64,20 @@ export async function login(request, response) {
       const IsValid = !(foundUser == null || !isPasswordMatch);
       if (IsValid) {
         // Generate a new token
-        const newToken = jwt.sign({ userId : foundUser.id},SECRET_KEY, {
+        const newToken = jwt.sign({ userId: foundUser.id }, SECRET_KEY, {
           expiresIn: "1h",
         });
-        
+
         response.json({ token: newToken, user: foundUser });
       }
-    }
-    else {
+    } else {
       response.status(404).send("user not found");
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log("Login error:", error);
     response.response.status(500).send("Internal server error");
   }
 }
-
 
 // export function verifyToken(request, response, next) {
 //   console.log("req body: ", request.body);

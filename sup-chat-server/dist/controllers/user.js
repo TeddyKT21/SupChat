@@ -2,7 +2,7 @@ import { Sup } from "../repository/Sup.js";
 import { User } from "../schemas/user.js";
 import { Chat } from "../schemas/chat.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 const Dal = new Sup();
 export async function signUp(request, response) {
     try {
@@ -10,16 +10,22 @@ export async function signUp(request, response) {
         const { email, username, password } = request.body;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         console.log("email:", email, "username:", username, "password:", hashedPassword);
-        const newUser = new User({ email, username, password: hashedPassword });
+        const newUser = new User({
+            email,
+            username,
+            password: hashedPassword,
+            createdAt: Date.now(),
+            imageUrl: `/images/chats/${request.file?.filename}`,
+        });
         const signUpUser = await Dal.userRep.add(newUser);
         response.sendStatus(201);
     }
     catch (error) {
         console.log("signUp error:", error);
-        response.redirect('signUp');
+        response.redirect("signUp");
     }
 }
-export const SECRET_KEY = 'mySecretKey';
+export const SECRET_KEY = "mySecretKey";
 export async function getUserByToken(request, response) {
     try {
         const token = request.body.token;
@@ -34,7 +40,6 @@ export async function getUserByToken(request, response) {
         response.status(404).send("Token not Valid");
     }
 }
-;
 export async function login(request, response) {
     try {
         const { email, password } = request.body;

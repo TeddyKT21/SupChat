@@ -16,6 +16,7 @@ import { updateChat } from "../../../store/userSlice";
 import { Badge, Button, Drawer } from "@mui/material";
 import { Input } from "../Input/Input/Input"
 import { customFetch } from "../../utils/customFetch";
+import { FileInput } from "../Input/FileInput/FileInput";
 
 export const ChatInfo = ({chat}) => {
   const dispatch = useDispatch();
@@ -32,6 +33,14 @@ export const ChatInfo = ({chat}) => {
   const fileInput = useRef(null);
   const isAdmin = chat?.admins?.includes(user_id);
 
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
+
   const handleFileInput = () => {
     if(fileInput.current){
       fileInput.current.click();
@@ -40,13 +49,6 @@ export const ChatInfo = ({chat}) => {
     }
   }
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  }
-
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  }
   if ((!participants || participants.length === 0) && !error && !isLoading){
     dispatch(fetchUserList(chat.participants));
   }
@@ -126,7 +128,8 @@ export const ChatInfo = ({chat}) => {
           <div className="cameraDrawer">
             <CameraAltIcon style={{ fontSize: 40 }} />
             <CollectionsIcon style={{ fontSize: 40 }} onClick={handleFileInput}/>
-            <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/>
+            <FileInput className={"file"} forwardedref={fileInput} onTextChange={handleChange}/>
+            {/* <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/> */}
           </div>
         </Drawer>
 

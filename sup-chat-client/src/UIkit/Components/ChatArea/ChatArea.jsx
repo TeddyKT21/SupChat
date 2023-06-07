@@ -69,7 +69,7 @@ export const ChatArea = () => {
             clearTimeout(typingTimeoutRef.current);
           }
         }
-    }, [])
+    }, []);
 
     if (!chat || !chat._id) {
       return (

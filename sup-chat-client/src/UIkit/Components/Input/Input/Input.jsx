@@ -6,7 +6,7 @@ export const Input = ({ type, onTextChange = (v) => {}, placeholder, name, value
   const inputType = showPassword ? "text" : type || "text";
 
   const handleChange = useCallback((e) => {
-    onTextChange(e);
+    onTextChange(e.target.value);
   }, [onTextChange]);
 
   return (

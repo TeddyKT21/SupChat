@@ -1,20 +1,14 @@
 import { LayoutLine } from "../Line/Line";
 import { SideBar } from "../../Components/SideBar/SideBar";
 import { ChatArea } from "../../Components/ChatArea/ChatArea";
-import { Button } from "../../Components/Button/Button";
 import { SpeedDialOptions } from "../../Components/Button/SpeedDial/SpeedDialOptions";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import AddIcon from "@mui/icons-material/Add";
 import "./MainLayout.css";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import { AddChat } from "../../../pages/addChat";
 import { connectSocket, disconnectSocket } from "../../../services/socket";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { logOut ,fetchUser} from "../../../store/userSlice";
-
 import { ChatInfo } from "../../Components/ChatInfo/ChatInfo";
 import { Profile } from "../../../pages/profile";
 import { UserInfo } from "../../Components/UserInfo/UserInfo";
@@ -35,7 +29,7 @@ export const MainLayout = () => {
     return () => {
       disconnectSocket();
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

@@ -23,8 +23,7 @@ export const PrivateChatCard = ({chat, key}) => {
   const newMessages = useSelector(state => selectNewMessageCount(state,chat));
 
   const user_id = useSelector(state => state.userSlice.user._id);
-  const otherUser_id = chat.participants.filter(id => id !== user_id)[0];
-  const otherUser = {username:'bob', email:'bobson'};
+  const otherUser = chat.participants.filter(user => user._id !== user_id)[0];
 
   useEffect(() => {
     let typingInterval;

@@ -60,6 +60,7 @@ export const Profile = ({ user }) => {
         src={user.imageUrl}
         style={{ height: "100px", width: "100px" }}
       />
+      <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/>
       <ListItem>
         <ListItemAvatar>
           <Avatar />

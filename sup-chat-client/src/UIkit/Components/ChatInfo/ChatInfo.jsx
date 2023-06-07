@@ -16,6 +16,7 @@ import { updateChat } from "../../../store/userSlice";
 import { Badge, Button, Drawer } from "@mui/material";
 import { Input } from "../Input/Input/Input"
 import { customFetch } from "../../utils/customFetch";
+import { FileInput } from "../Input/FileInput/FileInput";
 
 export const ChatInfo = ({chat}) => {
   const dispatch = useDispatch();
@@ -127,7 +128,8 @@ export const ChatInfo = ({chat}) => {
           <div className="cameraDrawer">
             <CameraAltIcon style={{ fontSize: 40 }} />
             <CollectionsIcon style={{ fontSize: 40 }} onClick={handleFileInput}/>
-            <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/>
+            <FileInput className={"file"} forwardedref={fileInput} onTextChange={handleChange}/>
+            {/* <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/> */}
           </div>
         </Drawer>
 

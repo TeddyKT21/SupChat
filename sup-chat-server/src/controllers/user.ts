@@ -4,6 +4,9 @@ import { Chat } from "../schemas/chat.js";
 import bcrypt from "bcrypt";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import { Schema } from "mongoose";
+import { Request,Response } from "express";
+import path from "path";
+import fs from "fs";
 const Dal = new Sup();
 
 export async function signUp(request, response) {
@@ -79,26 +82,6 @@ export async function login(request, response) {
   }
 }
 
-// export function verifyToken(request, response, next) {
-//   console.log("req body: ", request.body);
-//   const token = request.body.token;
-
-//   if (!token) {
-//     console.log("******************* Token not found: ",token," *******************")
-//     return response.status(401).json({ message: "No token provided" });
-//   }
-
-//   jwt.verify(token, SECRET_KEY, (error, decodedToken) => {
-//     if (error) {
-//       console.log("******************* Error in verify Token: ",token," *******************")
-//       return response.status(403).json({ message: "Invalid token" });
-//     }
-
-//     // Add the decoded token to the request object for further use
-//     request.decodedToken = decodedToken;
-//     next();
-//   });
-// }
 
 export async function addContact(request, response) {
   console.log("adding a contact...");
@@ -111,15 +94,6 @@ export async function addContact(request, response) {
   response.status(202).send("user updated");
 }
 
-// export async function addContact(request, response) {
-//   console.log("adding a contact...");
-//   console.log("body:", request.body);
-//   const updatedUserData = request.body;
-//   const updatedUser = await Dal.userRep.getById(updatedUserData._id);
-//   updatedUser.friends = updatedUserData.friends;
-//   await Dal.userRep.update(updatedUser._id, updatedUser);
-//   response.status(202).send("user updated");
-// }
 
 export async function addChat(request, response) {
   console.log("adding a Chat...");
@@ -134,4 +108,34 @@ export async function addChat(request, response) {
     await Dal.userRep.update(user._id, user);
   });
   response.status(202).send("chat updated");
+}
+
+
+export const uploadUserImage = async (req: Request,res: Response) => {
+  if(!req.file){
+    res.status(400).json({error: 'No file uploaded'});
+  }
+
+  const userId = req.params.id;
+  const user = await User.findById(userId);
+  if(!user){
+    res.status(404).json({error: 'Chat not found'});
+  }
+
+  // Delete the existing image file if one exists
+  if(user.imageUrl) {
+    const oldImagePath = path.join(process.cwd(), "..", "..", "public", "images", "Users", path.basename(user.imageUrl));
+    fs.unlink(oldImagePath, (err) => {
+      if (err) console.log(err);
+    });
+  }
+
+  const imageUrl = `/images/chats/${req.file.filename}`;
+  const updatedUser = await User.findByIdAndUpdate(userId, { imageUrl }, { new: true });
+
+  if(!updatedUser){
+    return res.status(404).json({error: 'User not found'});
+  }
+  
+  return res.status(200).json({imageUrl});
 }

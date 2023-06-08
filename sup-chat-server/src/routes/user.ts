@@ -1,5 +1,6 @@
 import express from "express";
-import { login, signUp, addContact, addChat, getUserByToken/* , verifyToken */ } from "../controllers/user.js"
+import { login, signUp, addContact, addChat, getUserByToken,/* , verifyToken */ 
+uploadUserImage} from "../controllers/user.js"
 import { Sup } from "../repository/Sup.js";
 import { UserImageStorage } from "..//middlewares/multer.js";
 const Dal = new Sup();
@@ -13,6 +14,9 @@ UserRouter.route("/login")
 
 UserRouter.route("/signUp")
 .post(UserImageStorage.single('image'), signUp);
+
+UserRouter.route("/uploadUserImage/:id")
+.post(UserImageStorage.single('image'),uploadUserImage)
 
 UserRouter.route("/addContact")
 .put(Dal.userRep.verifyToken,addContact);

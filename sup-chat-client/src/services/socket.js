@@ -40,9 +40,10 @@ export const listenToChatUpdates = () => {
   socket.on("updateChat", (data) => store.dispatch(updateChat(data)));
 };
 export const listenToUserRemove = () => {
-  socket.on("removeFromRoom", (data) =>
-    store.dispatch(removeFromChatRoom(data))
-  );
+  socket.on("removeFromRoom", (data) => {
+    console.log("listenToUserRemove data: ", data);
+    store.dispatch(removeFromChatRoom(data));
+  });
 };
 
 export const connectSocket = (user) => {
@@ -72,6 +73,7 @@ export const removeSelfFromChatRoom = (chat) => {
     user_id: user._id,
     token: storedToken,
   });
+  //console.log("removeSelfFromChatRoom token: ", storedToken);
   store.dispatch(leaveChat(chat, user));
 };
 

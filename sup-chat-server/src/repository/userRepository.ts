@@ -61,15 +61,28 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
     });
   }
 
-  async isValidToken(token: string){
-
-    jwt.verify(token, "mySecretKey", (error) => {
-      if (error) {
-        console.log("******************* Error in verify Token: ",token," *******************")
-        return false;
-      }
+  async isValidToken(token: string) {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, "mySecretKey", (error) => {
+        if (error) {
+          console.log("******************* Error in verify Token: ", token, " *******************");
+          resolve(false); // Token verification failed
+        } else {
+          resolve(true); // Token verification succeeded
+        }
+      });
     });
-
-    return true;
   }
+  
+  // async isValidToken(token: string){
+
+  //   jwt.verify(token, "mySecretKey", (error) => {
+  //     if (error) {
+  //       console.log("******************* Error in verify Token: ",token," *******************")
+  //       return false;
+  //     }
+  //   });
+
+  //   return true;
+  // }
 }

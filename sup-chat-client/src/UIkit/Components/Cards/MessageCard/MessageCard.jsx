@@ -26,12 +26,12 @@ export const MessageCard = forwardRef(({message, key, className}, ref) => {
     return (
         <div className={`messageCard ${className}`} key={key} ref={ref}>
             <Rows>  
-                <Line>
+                <Saparate>
                     <div>{message.user?.username}</div>
                     <div>{message.user?.email} </div>
-                </Line>
+                </Saparate>
                 <Saparate>
-                    <div>{message.text}</div>
+                    <div className="messageContent">{message.text}</div>
                     <div>{timeStr}</div>
                 </Saparate>
             </Rows>

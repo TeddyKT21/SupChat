@@ -4,7 +4,7 @@ import "./ChatCard.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectNewMessageCount, setSelectedChat, viewChat } from "../../../../store/userSlice";
 import { useEffect, useState } from "react";
-import { resetParticipants, setDisplay } from "../../../../store/chatDisplaySlice";
+import { resetParticipants, setDisplay, setIsChatVisible, setViewChat } from "../../../../store/chatDisplaySlice";
 import { DropDown } from "../../DropDown/DropDown";
 import { ConfirmDialog } from "../../ConfirmDialog/ConfirmDialog";
 import { removeSelfFromChatRoom } from "../../../../services/socket";
@@ -22,6 +22,7 @@ export const ChatCard = (chat, key) => {
   const options = ["details", "exit chat"];
   const [openExitChat, setOpenExitChat] = useState(false);
   const newMessages = useSelector(state => selectNewMessageCount(state,chat));
+  const isMobile = useSelector((state) => state.chatDisplaySlice.isMobile);
 
   useEffect(() => {
     let typingInterval;
@@ -52,6 +53,10 @@ export const ChatCard = (chat, key) => {
   const onClick = () => {
     dispatch(setSelectedChat(chat));
     dispatch(viewChatMessages(chat));
+    dispatch(setIsChatVisible(true));
+    if(isMobile){
+      dispatch(setViewChat('chat'));
+    }
   };
   const shorter = (item) => {
     return item.length > 15 ? item.substring(0, 15) + "..." : item

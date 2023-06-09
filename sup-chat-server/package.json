@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon ./dist/app.js",
     "build": "tsc",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --config jest.config.cjs --detectOpenHandles",
     "test-watch": "jest --watch"
   },
   "author": "",

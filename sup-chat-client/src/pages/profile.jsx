@@ -52,7 +52,7 @@ export const Profile = ({ user }) => {
         alignItems: "center",
         justifyContent: "center",
         minWidth: "300px",
-        paddingTop:"100px",
+        // paddingTop:"100px",
       }}
     >
       <Avatar

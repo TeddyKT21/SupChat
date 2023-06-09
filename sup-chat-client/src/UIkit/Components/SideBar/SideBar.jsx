@@ -39,7 +39,7 @@ function checkTextFieldsAny(item, text) {
   const keyWords = text
     .trim()
     .split(" ")
-    .filter((word) => word != " " && word != "");
+    .filter((word) => word !== " " && word !== "");
   const stringValues = Object.values(item).filter((v) => typeof v == "string");
   let found = false;
   stringValues.forEach((v) => {

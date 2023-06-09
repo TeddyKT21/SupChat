@@ -1,7 +1,7 @@
 .chatArea{
     background-color: var(--primary);
     height: 100%;
-    width: 100%
+    width: 100%;
 }
 
 .chatArea > p {

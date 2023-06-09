@@ -3,7 +3,6 @@ import path from "path";
 import fs from "fs";
 
 const dirPath = path.join(process.cwd(), "public", "images","chats");  //current working directory
-console.log("images will be stored in:", dirPath);
 if(!fs.existsSync(dirPath)){
     fs.mkdirSync(dirPath, {recursive: true}); //allows creation of nested directories
 }

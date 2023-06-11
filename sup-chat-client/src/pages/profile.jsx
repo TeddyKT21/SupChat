@@ -90,7 +90,7 @@ export const Profile = ({ user }) => {
         // paddingTop:"100px",
       }}
     >
-      <img
+      <Avatar
         alt={username}
         src={`http://localhost:8080${user.imageUrl}`}
         style={{ height: "100px", width: "100px" }}

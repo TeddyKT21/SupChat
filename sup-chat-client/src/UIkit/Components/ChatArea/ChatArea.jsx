@@ -32,7 +32,8 @@ export const ChatArea = () => {
   const [isTyping, setIsTyping] = useState(false);
   const newMessage = { user, text, dateTime: null };
 
-  const sendNewMessage = () => {
+  const sendNewMessage = (e) => {
+    if (e) e.preventDefault();
     newMessage.dateTime = Date.now();
     dispatch(sendMessage(newMessage));
     emitMessage(newMessage, chat);
@@ -85,7 +86,7 @@ export const ChatArea = () => {
           <Rows>
             <h1>{chat.name ? chat.name : "Chat Area"}</h1>
             <MessageList messages={messages}/>
-            <form className="form">
+            <form className="form" onSubmit={sendNewMessage}>
               <Saparate>
                 <Input
                   type={"text"}

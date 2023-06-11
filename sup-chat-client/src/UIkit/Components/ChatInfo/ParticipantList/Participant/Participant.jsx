@@ -12,18 +12,18 @@ export const Participant = ({ participant, admins, isUserAdmin, onRemove}) => {
     }
   return (
     <div className="Participant">
-        <Line>
-      <div className="participant" key={participant._id}>
-          <Saparate>
-            <div>{participant.email}</div>
-            <div>{participant.username}</div>
-          </Saparate>
-      </div>
-      {isUserAdmin && (
-            <Button onClick={removeParticipant}>
-              <RemoveCircleOutlineIcon />
-            </Button>
-          )}
+      <Line>
+        <div className="participant" key={participant._id}>
+            <Saparate>
+              <div>{participant.username}</div>
+              <div>{participant.email}</div>
+            </Saparate>
+        </div>
+        {isUserAdmin && (
+              <Button className={"minus"} onClick={removeParticipant}>
+                <RemoveCircleOutlineIcon />
+              </Button>
+            )}
       </Line>
     </div>
   );

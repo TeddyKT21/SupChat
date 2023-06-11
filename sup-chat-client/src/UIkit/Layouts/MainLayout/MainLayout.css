@@ -30,11 +30,12 @@
     width: 100%;
 }
 
-.chatArea, .chatInfo {
+.chatArea, .ChatInfo {
+    width: 100%;
     min-width: 390px;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 769px) {
     .sideBar,
     .profile,
     .addChatForm {
@@ -43,7 +44,7 @@
         min-width: 300px;
     }
 
-    .chatArea {
+    .chatArea,.ChatInfo {
         width: 80%;
         display: block;
     }

@@ -11,6 +11,7 @@ export const chatDisplaySlice = createSlice({
     viewChat: 'sidebar',
     isMobile: window.innerWidth <= 768,
     isChatVisible: false,
+    isInfoVisible: false,
   },
   reducers: {
     setDisplay(state, action) {
@@ -24,6 +25,9 @@ export const chatDisplaySlice = createSlice({
     },
     setIsChatVisible(state,action){
       state.isChatVisible = action.payload;
+    },
+    setIsInfoVisible(state,action){
+      state.isInfoVisible = action.payload;
     },
     resetParticipants(state, action){
       state.error = null;
@@ -52,4 +56,4 @@ export const chatDisplaySlice = createSlice({
 });
 
 export const chatDisplayreucer = chatDisplaySlice.reducer;
-export const { setDisplay,resetParticipants, setViewChat, setIsMobile,setIsChatVisible } = chatDisplaySlice.actions;
+export const { setDisplay,resetParticipants, setViewChat, setIsMobile,setIsChatVisible,setIsInfoVisible } = chatDisplaySlice.actions;

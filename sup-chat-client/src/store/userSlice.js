@@ -144,6 +144,7 @@ export const userSlice = createSlice({
     updateUser(state, action) {
       state.user.email = action.payload.email;
       state.user.username = action.payload.username;
+      state.user.imageUrl = action.payload.imageUrl;
     },
     typing(state, action) {
       const chat = state.user.chats.find(

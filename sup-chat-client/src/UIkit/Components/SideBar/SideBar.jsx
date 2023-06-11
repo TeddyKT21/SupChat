@@ -84,12 +84,12 @@ export const SideBar = () => {
     navigate("/login");
   };
 
-  const onSearch = (e) => {
+  const onSearch = (text) => {
     if(reFetch) { 
-      dispatch(fetchUsers({user, text:e?.target?.value || '..................'}));
+      dispatch(fetchUsers({user, text:text || '..................'}));
 
     }
-    setSearchTerm(e.target?.value);
+    setSearchTerm(text);
   }
 
   return (

@@ -10,7 +10,7 @@ import {
   updateChat,
 } from "../store/userSlice";
 const URL = require("../URL.json").url;
-
+const token = localStorage.getItem("token");
 const socket = io(URL, {
   transports: ["websocket"],
   autoConnect: false,
@@ -22,7 +22,7 @@ export const emitMessage = (message, chat) => {
   }
 };
 
-export const emitNewChat = (chat) => socket.emit("newChat", chat);
+export const emitNewChat = (chat) => socket.emit("newChat", { chat, token });
 
 export const emitUpdateChat = (chat) => socket.emit("updateChat", chat);
 

@@ -87,18 +87,44 @@ const removeFromRoom = async (data, io, socket, users) => {
         console.log("removeFromRoom failed: Token is invalid");
     }
 };
+// const createChat = async (
+//   data: any,
+//   io: Server,
+//   socket: Socket,
+//   users: Map<string, Socket>
+// ) => {
+//   const newChat = new Chat({ ...data });
+//   await Dal.chatRep.add(newChat);
+//   newChat.participants.forEach(async (p) => {
+//     const user = await Dal.userRep.getById(p._id);
+//     user.chats.push(newChat);
+//     await Dal.userRep.update(user._id, user);
+//   });
+//   newChat.participants.forEach(async (u) => {
+//     const pSocket = users.get(u._id.toString());
+//     pSocket?.emit("newChat", newChat);
+//   });
+// };
 const createChat = async (data, io, socket, users) => {
-    const newChat = new Chat({ ...data });
-    await Dal.chatRep.add(newChat);
-    newChat.participants.forEach(async (p) => {
-        const user = await Dal.userRep.getById(p._id);
-        user.chats.push(newChat);
-        await Dal.userRep.update(user._id, user);
-    });
-    newChat.participants.forEach(async (u) => {
-        const pSocket = users.get(u._id.toString());
-        pSocket?.emit("newChat", newChat);
-    });
+    console.log("Token in removeFromRoom: ", data.token);
+    const isValidToken = await Dal.userRep.isValidToken(data.token);
+    console.log("isValidToken: ", isValidToken);
+    if (isValidToken) {
+        const newChat = new Chat({ ...data.chat });
+        await Dal.chatRep.add(newChat);
+        newChat.participants.forEach(async (p) => {
+            const user = await Dal.userRep.getById(p._id);
+            user.chats.push(newChat);
+            await Dal.userRep.update(user._id, user);
+        });
+        newChat.participants.forEach(async (u) => {
+            const pSocket = users.get(u._id.toString());
+            pSocket?.emit("newChat", newChat);
+        });
+    }
+    else {
+        console.log("createChat failed: Token is invalid");
+    }
 };
 const updateChat = async (data, io, socket, users) => {
     const Chat = await Dal.chatRep.getById(data._id);

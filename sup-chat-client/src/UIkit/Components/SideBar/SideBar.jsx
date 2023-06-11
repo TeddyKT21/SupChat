@@ -86,10 +86,10 @@ export const SideBar = () => {
 
   const onSearch = (e) => {
     if(reFetch) { 
-      dispatch(fetchUsers({user, text:e?.target?.value || '..................'}));
+      dispatch(fetchUsers({user, text:e || '..................'}));
 
     }
-    setSearchTerm(e.target?.value);
+    setSearchTerm(e);
   }
 
   return (

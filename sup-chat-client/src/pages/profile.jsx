@@ -7,6 +7,7 @@ import {
   Divider,
   TextField,
   Typography,
+  Badge,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import { Button } from "../UIkit/Components/Button/Button";
@@ -90,19 +91,28 @@ export const Profile = ({ user }) => {
         // paddingTop:"100px",
       }}
     >
-      <Avatar
-        alt={username}
-        src={`http://localhost:8080${user.imageUrl}`}
-        style={{ height: "100px", width: "100px" }}
-      />
-      <ListItem>
+      <Badge
+        color="secondary"
+        style={{ fontSize: 40 }}
+        badgeContent={<CollectionsIcon />}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        onClick={handleFileInput}
+      >
+        <Avatar
+          alt={username}
+          src={`http://localhost:8080${user.imageUrl}`}
+          style={{ height: "100px", width: "100px" }}
+        />
+        <FileInput className={"file"} forwardedref={fileInput} onTextChange={handleChange}/>
+      </Badge>
+      {/* <ListItem>
         <CollectionsIcon style={{ fontSize: 40 }} onClick={handleFileInput} />
         <FileInput
           className={"file"}
           forwardedref={fileInput}
           onTextChange={handleChange}
         />
-      </ListItem>
+      </ListItem> */}
       <ListItem>
         <ListItemAvatar>
           <Avatar />

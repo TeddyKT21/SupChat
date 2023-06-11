@@ -85,7 +85,11 @@ export const ChatCard = (chat, key) => {
       <Grid item>
         <ListItemText
           primary={shorter(chat.name)}
-          secondary={isTyping ? `Typing${dots}` : shorter(lastMessage.text)}
+          secondary={
+            <Typography sx={{color: isTyping ? "blue" : "inherit"}}>
+              {isTyping ? `Typing${dots}` : shorter(lastMessage.text)} 
+            </Typography>
+          }
         />
       </Grid>
       <Grid item>

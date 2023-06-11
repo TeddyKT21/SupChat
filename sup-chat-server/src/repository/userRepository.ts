@@ -19,12 +19,31 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
         path: 'messages',
         populate:{ path: 'user',select:'username email'},
         model:'Message'
-        }});
+      }});
+
+    const privateChatsUser = await User.findOne({email})
+    .populate({
+      path: 'chats',
+      model: 'Chat',
+      match: { name: 'private chat' },
+      populate: {
+        path: 'participants',
+        model:'User'
+      }
+    });
+    let chatIndex = 0;
+    let privateIndex = 0
+    while (chatIndex < user.chats.length && privateIndex < privateChatsUser.chats.length){
+      if (privateChatsUser.chats[privateIndex]._id.toString() !== user.chats[chatIndex]._id.toString()) chatIndex += 1;
+      else{
+        user.chats[chatIndex].participants = privateChatsUser.chats[privateIndex].participants;
+        privateIndex += 1;
+      }
+    }
     return user;
   }
   
   async findById(id: string){
-    //console.log("in findById id: ", id);
     const { ObjectId } = mongoose.Types;
     const user = await User.findOne({_id: new ObjectId(id)})
     .populate('friends')
@@ -36,7 +55,26 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
         populate:{ path: 'user',select:'username email'},
         model:'Message'
       }});
-      //console.log("in findById user: ", user);
+
+    const privateChatsUser = await User.findOne({_id: new ObjectId(id)})
+    .populate({
+      path: 'chats',
+      model: 'Chat',
+      match: { name: 'private chat' },
+      populate: {
+        path: 'participants',
+        model:'User'
+      }
+    });
+    let chatIndex = 0;
+    let privateIndex = 0
+    while (chatIndex < user.chats.length && privateIndex < privateChatsUser.chats.length){
+      if (privateChatsUser.chats[privateIndex]._id.toString() !== user.chats[chatIndex]._id.toString()) chatIndex += 1;
+      else{
+        user.chats[chatIndex].participants = privateChatsUser.chats[privateIndex].participants;
+        privateIndex += 1;
+      }
+    }
     return user;
   }
   

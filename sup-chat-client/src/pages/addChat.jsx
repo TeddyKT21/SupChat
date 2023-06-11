@@ -71,12 +71,12 @@ export const AddChat = ({closeCb}) => {
         <Rows>
           <Input
             placeholder={"Name of Chat"}
-            onTextChange={setName}
+            onTextChange={(e) => setName(e.target.name)}
             name="name"
           />
           <Input
             placeholder={"Description"}
-            onTextChange={setDescription}
+            onTextChange={(e) => setDescription(e.target.value)}
             name="description"
           />
           <Select

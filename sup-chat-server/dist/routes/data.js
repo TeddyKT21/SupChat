@@ -1,6 +1,6 @@
 import express from "express";
 import { fetchAllChats, fetchAllMessages, fetchAllUsers, fetchNonFriendUsers, findUserList, uploadChatImage } from "../controllers/data.js";
-import upload from "../middlewares/multer.js";
+import { ChatImageStorage } from "../middlewares/multer.js";
 const DataRouter = express.Router();
 DataRouter.route("/users")
     .get(fetchAllUsers);
@@ -13,6 +13,6 @@ DataRouter.route("/chats")
 DataRouter.route("/findUserList")
     .post(findUserList);
 DataRouter.route("/upload/:id")
-    .post(upload.single('image'), uploadChatImage);
+    .post(ChatImageStorage.single('image'), uploadChatImage);
 export default DataRouter;
 //# sourceMappingURL=data.js.map

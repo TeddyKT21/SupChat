@@ -43,7 +43,7 @@ export const MainLayout = () => {
     return () => {
       disconnectSocket();
     };
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -106,7 +106,7 @@ export const MainLayout = () => {
         {isInfoVisible && display === "chatInfo" && selectedChat && (
           <ChatInfo chat={selectedChat} />
         )}
-        {isChatVisible && display === "chat" && selectedChat && <ChatArea />}
+        {isChatVisible && display === "chat" && selectedChat && <ChatArea chat={selectedChat}/>}
         {display === "userInfo" && <UserInfo />}
       </LayoutLine>
     </div>

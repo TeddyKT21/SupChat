@@ -18,12 +18,12 @@ import socket, {
 //import "emoji-mart/css/emoji-mart.css";
 import "./ChatArea.css";
 
-export const ChatArea = () => {
+export const ChatArea = ({chat}) => {
   let typingTimeoutRef = useRef(null);
   const dispatch = useDispatch();
-  const chat = useSelector((state) => state.userSlice.selectedChat) || {
-    messages: [],
-  };
+  // const chat = useSelector((state) => state.userSlice.selectedChat) || {
+  //   messages: [],
+  // };
   const messages = useSelector(
     (state) => state.userSlice.selectedChat?.messages
   );

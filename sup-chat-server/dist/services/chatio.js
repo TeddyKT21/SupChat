@@ -127,27 +127,30 @@ const createChat = async (data, io, socket, users) => {
     }
 };
 const updateChat = async (data, io, socket, users) => {
-    const Chat = await Dal.chatRep.getById(data._id);
-    Chat.participants.forEach(async (p) => {
-        if (!data.participants.includes(p._id.toString())) {
-            const user = await Dal.userRep.getById(p._id);
-            Chat.participants = Chat.participants.filter((p) => p._id.toString() !== user._id.toString());
-            Chat.admins = Chat.admins.filter((p) => p._id.toString() !== user._id.toString());
-            user.chats = user.chats.filter((c) => c._id.toString() !== Chat._id.toString());
-            await Dal.userRep.update(user._id, user);
-            const userSocket = users.get(user._id.toString());
-            userSocket?.leave(Chat._id);
-            userSocket?.emit('removeFromRoom', { chat: Chat, user: user });
+    const isValidToken = await Dal.userRep.isValidToken(data.token);
+    if (isValidToken) {
+        const Chat = await Dal.chatRep.getById(data.chat._id);
+        Chat.participants.forEach(async (p) => {
+            if (!data.chat.participants.includes(p._id.toString())) {
+                const user = await Dal.userRep.getById(p._id);
+                Chat.participants = Chat.participants.filter((p) => p._id.toString() !== user._id.toString());
+                Chat.admins = Chat.admins.filter((p) => p._id.toString() !== user._id.toString());
+                user.chats = user.chats.filter((c) => c._id.toString() !== Chat._id.toString());
+                await Dal.userRep.update(user._id, user);
+                const userSocket = users.get(user._id.toString());
+                userSocket?.leave(Chat._id);
+                userSocket?.emit('removeFromRoom', { chat: Chat, user: user });
+            }
+        });
+        if (data.chat.imageUrl) {
+            Chat.imageUrl = data.chat.imageUrl;
+            io.emit("chatImageUpdated", { chatId: data.chat._id, newImageUrl: data.chat.imageUrl });
         }
-    });
-    if (data.imageUrl) {
-        Chat.imageUrl = data.imageUrl;
-        io.emit("chatImageUpdated", { chatId: data._id, newImageUrl: data.imageUrl });
+        Chat.name = data.chat.name;
+        Chat.description = data.chat.description;
+        await Dal.chatRep.update(Chat._id, Chat);
+        socket.broadcast.to(data.chat._id).emit("updateChat", Chat);
     }
-    Chat.name = data.name;
-    Chat.description = data.description;
-    await Dal.chatRep.update(Chat._id, Chat);
-    socket.broadcast.to(data._id).emit("updateChat", Chat);
 };
 const chatEvents = {
     functions: [

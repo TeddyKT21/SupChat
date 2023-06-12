@@ -29,7 +29,7 @@ export const MainLayout = () => {
     return () => {
       disconnectSocket();
     };
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

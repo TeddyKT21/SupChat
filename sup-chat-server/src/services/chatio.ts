@@ -165,9 +165,13 @@ const updateChat = async (
   socket: Socket,
   users: Map<string, Socket>
 ) => {
-  const Chat = await Dal.chatRep.getById(data._id);
-  Chat.participants.forEach(async (p) => {
-    if (!data.participants.includes(p._id.toString())) {
+  const isValidToken = await Dal.userRep.isValidToken(data.token);
+
+  if(isValidToken)
+  {
+    const Chat = await Dal.chatRep.getById(data.chat._id);
+    Chat.participants.forEach(async (p) => {
+    if (!data.chat.participants.includes(p._id.toString())) {
       const user = await Dal.userRep.getById(p._id);
       Chat.participants = Chat.participants.filter(
         (p) => p._id.toString() !== user._id.toString()
@@ -183,18 +187,20 @@ const updateChat = async (
       userSocket?.leave(Chat._id);
       userSocket?.emit('removeFromRoom',{chat:Chat, user:user})
     }
-  });
+    });
 
-  if(data.imageUrl){
-    Chat.imageUrl = data.imageUrl;
-    io.emit("chatImageUpdated", {chatId: data._id, newImageUrl: data.imageUrl});
+    if(data.chat.imageUrl){
+      Chat.imageUrl = data.chat.imageUrl;
+      io.emit("chatImageUpdated", {chatId: data.chat._id, newImageUrl: data.chat.imageUrl});
+    }
+  
+    Chat.name = data.chat.name
+    Chat.description = data.chat.description;
+    await Dal.chatRep.update(Chat._id, Chat);
+
+    socket.broadcast.to(data.chat._id).emit("updateChat", Chat);
   }
   
-  Chat.name = data.name
-  Chat.description = data.description;
-  await Dal.chatRep.update(Chat._id, Chat);
-
-  socket.broadcast.to(data._id).emit("updateChat", Chat);
 };
 
 const chatEvents = {

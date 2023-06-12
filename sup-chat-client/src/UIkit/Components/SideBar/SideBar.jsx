@@ -39,7 +39,7 @@ function checkTextFieldsAny(item, text) {
   const keyWords = text
     .trim()
     .split(" ")
-    .filter((word) => word != " " && word != "");
+    .filter((word) => word !== " " && word !== "");
   const stringValues = Object.values(item).filter((v) => typeof v == "string");
   let found = false;
   stringValues.forEach((v) => {
@@ -84,12 +84,11 @@ export const SideBar = () => {
     navigate("/login");
   };
 
-  const onSearch = (e) => {
+  const onSearch = (text) => {
     if(reFetch) { 
-      dispatch(fetchUsers({user, text:e || '..................'}));
-
+      dispatch(fetchUsers({user, text:text || '..................'}));
     }
-    setSearchTerm(e);
+    setSearchTerm(text);
   }
 
   return (

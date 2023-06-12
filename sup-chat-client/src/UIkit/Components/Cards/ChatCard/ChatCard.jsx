@@ -1,10 +1,10 @@
-import { Line, Saparate, Rows } from "../../../Layouts/Line/Line";
+// import { Line, Saparate, Rows } from "../../../Layouts/Line/Line";
 import GroupsIcon from "@mui/icons-material/Groups";
 import "./ChatCard.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectNewMessageCount, setSelectedChat, viewChat } from "../../../../store/userSlice";
 import { useEffect, useState } from "react";
-import { resetParticipants, setDisplay } from "../../../../store/chatDisplaySlice";
+import { resetParticipants, setIsChatVisible, setIsInfoVisible, setViewChat } from "../../../../store/chatDisplaySlice";
 import { DropDown } from "../../DropDown/DropDown";
 import { ConfirmDialog } from "../../ConfirmDialog/ConfirmDialog";
 import { removeSelfFromChatRoom } from "../../../../services/socket";
@@ -22,6 +22,7 @@ export const ChatCard = (chat, key) => {
   const options = ["details", "exit chat"];
   const [openExitChat, setOpenExitChat] = useState(false);
   const newMessages = useSelector(state => selectNewMessageCount(state,chat));
+  const isMobile = useSelector((state) => state.chatDisplaySlice.isMobile);
 
   useEffect(() => {
     let typingInterval;
@@ -41,6 +42,10 @@ export const ChatCard = (chat, key) => {
     dispatch(setSelectedChat(chat));
     dispatch(resetParticipants());
     dispatch(viewChatInfo(chat));
+    dispatch(setIsInfoVisible(true));
+    if(isMobile){
+      dispatch(setViewChat("chatInfo"));
+    }
   };
   const openLeaveDialog = () => {
     setOpenExitChat(true);
@@ -52,6 +57,11 @@ export const ChatCard = (chat, key) => {
   const onClick = () => {
     dispatch(setSelectedChat(chat));
     dispatch(viewChatMessages(chat));
+    dispatch(setIsChatVisible(true));
+    if(isMobile){
+      dispatch(setViewChat('chat'));
+    }
+    dispatch(viewChat({ chatId: chat._id }));
   };
   const shorter = (item) => {
     return item.length > 15 ? item.substring(0, 15) + "..." : item
@@ -80,7 +90,11 @@ export const ChatCard = (chat, key) => {
       <Grid item>
         <ListItemText
           primary={shorter(chat.name)}
-          secondary={isTyping ? `Typing${dots}` : shorter(lastMessage.text)}
+          secondary={
+            <Typography sx={{color: isTyping ? "blue" : "inherit"}}>
+              {isTyping ? `Typing${dots}` : shorter(lastMessage.text)} 
+            </Typography>
+          }
         />
       </Grid>
       <Grid item>

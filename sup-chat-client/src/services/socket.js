@@ -55,7 +55,7 @@ export const connectSocket = (user) => {
     const username = user.username;
     socket.auth = { username };
     socket.connect();
-    console.log("connecting to the server...");
+    // console.log("connecting to the server...",socket.connect);
     user.chats.forEach((chat) => socket.emit("joinRoom", chat._id));
     socket.emit("subscribe", user._id);
     if(socket.listeners('message').length === 0){

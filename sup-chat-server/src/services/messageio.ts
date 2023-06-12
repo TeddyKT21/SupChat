@@ -15,7 +15,7 @@ async function sent() {}
 
 function typing(data: any,io: Server, socket: Socket) {
     const {chatId, userId} = data;
-    console.log('Server received typing event', {chatId, userId}); 
+    console.log('Server received typing event', {chatId, userId}, 'from socket: ',socket.id); 
     let typingUsers = typingUsersMap.get(chatId) || new Set();
     typingUsers.add(userId);
     typingUsersMap.set(chatId, typingUsers);

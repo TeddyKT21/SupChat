@@ -7,9 +7,7 @@ import { Button } from "../Button/Button";
 import { sendMessage } from "../../../store/userSlice";
 import { MessageList } from "../MessageList/MessageList";
 import SendIcon from "@mui/icons-material/Send";
-import socket, {
-  connectSocket,
-  disconnectSocket,
+import {
   emitMessage,
   emitTyping,
   emitStopTyping,

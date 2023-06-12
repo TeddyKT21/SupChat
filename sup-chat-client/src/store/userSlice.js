@@ -97,8 +97,8 @@ export const userSlice = createSlice({
       if (!chat.typingUsers) {
         chat.typingUsers = [];
       }
-      if (!state.selectedChat) {
-        state.selectedChat = chat;
+      if (!state.selectedChat || chat._id === state.selectedChat._id) {
+        state.selectedChat = {...chat};
       }
     },
     leaveChat(state, action) {
@@ -144,6 +144,7 @@ export const userSlice = createSlice({
     updateUser(state, action) {
       state.user.email = action.payload.email;
       state.user.username = action.payload.username;
+      state.user.imageUrl = action.payload.imageUrl;
     },
     typing(state, action) {
       const chat = state.user.chats.find(

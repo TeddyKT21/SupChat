@@ -97,7 +97,7 @@ export const userSlice = createSlice({
       if (!chat.typingUsers) {
         chat.typingUsers = [];
       }
-      if (!state.selectedChat) {
+      if (!state.selectedChat || chat._id === state.selectedChat._id) {
         state.selectedChat = {...chat};
       }
     },

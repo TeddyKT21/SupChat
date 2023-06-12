@@ -73,9 +73,9 @@ export const userSlice = createSlice({
       state.selectedChat = state.user.chats.find(
         (chat) => chat._id === action.payload._id
       );
-      if (state.selectedChat && !state.selectedChat.typingUsers) {
-        state.selectedChat.typingUsers = [];
-      }
+      // if (state.selectedChat && !state.selectedChat.typingUsers) {
+      //   state.selectedChat.typingUsers = [];
+      // }
       console.log("new active chat: ", action.payload);
     },
     sendMessage(state, action) {
@@ -189,6 +189,7 @@ export const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
+        state.user.chats.forEach(chat => chat.typingUsers = [])
         localStorage.setItem("token", action.payload.token);
         state.token = action.payload.token;
         state.isLoggedIn = true;

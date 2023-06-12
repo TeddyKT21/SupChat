@@ -28,8 +28,12 @@ export const emitUpdateChat = (chat) => socket.emit('updateChat',chat);
 
 export const emitUpdateUser = (user) => socket.emit('updateUser',user);
 
-const listenToMessages = () =>
-  socket.on("message", (data) => store.dispatch(reciveMessage(data)));
+const listenToMessages = () =>{
+  socket.on("message", (data) => {
+    console.log('socket id: ',socket.id );
+    store.dispatch(reciveMessage(data))
+  });
+}
 
 const listenToNewChats = () =>
   socket.on("newChat", (data) => {
@@ -51,12 +55,14 @@ export const connectSocket = (user) => {
     console.log("connecting to the server...");
     user.chats.forEach((chat) => socket.emit("joinRoom", chat._id));
     socket.emit("subscribe", user._id);
-    listenToMessages();
-    listenToNewChats();
-    listenToUserRemove();
-    listenToChatUpdates();
-    typingMessage();
-    stopTyping();
+    if(socket.listeners('message').length === 0){
+      listenToMessages();
+      listenToNewChats();
+      listenToUserRemove();
+      listenToChatUpdates();
+      typingMessage();
+      stopTyping();
+    }
   }
 };
 

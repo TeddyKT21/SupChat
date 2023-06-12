@@ -124,7 +124,6 @@ const updateChat = async (
       addedParticipant?.chats?.push(Chat)
       Chat.participants?.push(addedParticipant);
       await Dal.userRep.update(addedParticipant._id,addedParticipant);
-      socket.broadcast.to(Chat._id.toString()).emit("addToRoom", addedParticipant);
     }
   });
   if(data.imageUrl){

@@ -98,7 +98,7 @@ export const userSlice = createSlice({
         chat.typingUsers = [];
       }
       if (!state.selectedChat) {
-        state.selectedChat = chat;
+        state.selectedChat = {...chat};
       }
     },
     leaveChat(state, action) {

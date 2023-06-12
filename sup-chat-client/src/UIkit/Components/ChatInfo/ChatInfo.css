@@ -2,7 +2,6 @@
     background-color: var(--primary);
     height: 100vh;
     width: 100%;
-    /* display: none; */
 }
 
 .ChatInfo>.Rows {
@@ -29,11 +28,4 @@
 
 .file {
     display: none;
-}
-
-@media screen and (min-width: 768px) {
-    .ChatInfo {
-        width: 80%;
-        display: block;
-    }
 }

@@ -54,4 +54,4 @@ export const SideBarDisplaySlice = createSlice({
 });
 
 export const SideBarDisplayReducer = SideBarDisplaySlice.reducer;
-export const { updateDisplayParams } = SideBarDisplaySlice.actions;
+export const { updateDisplayParams,setIsSideBarVisible } = SideBarDisplaySlice.actions;

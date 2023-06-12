@@ -16,12 +16,12 @@ import {
 //import "emoji-mart/css/emoji-mart.css";
 import "./ChatArea.css";
 
-export const ChatArea = () => {
+export const ChatArea = ({chat}) => {
   let typingTimeoutRef = useRef(null);
   const dispatch = useDispatch();
-  const chat = useSelector((state) => state.userSlice.selectedChat) || {
-    messages: [],
-  };
+  // const chat = useSelector((state) => state.userSlice.selectedChat) || {
+  //   messages: [],
+  // };
   const messages = useSelector(
     (state) => state.userSlice.selectedChat?.messages
   );
@@ -30,7 +30,8 @@ export const ChatArea = () => {
   const [isTyping, setIsTyping] = useState(false);
   const newMessage = { user, text, dateTime: null };
 
-  const sendNewMessage = () => {
+  const sendNewMessage = (e) => {
+    if (e) e.preventDefault();
     newMessage.dateTime = Date.now();
     dispatch(sendMessage(newMessage));
     emitMessage(newMessage, chat);
@@ -83,7 +84,7 @@ export const ChatArea = () => {
           <Rows>
             <h1>{chat.name ? chat.name : "Chat Area"}</h1>
             <MessageList messages={messages}/>
-            <form className="form">
+            <form className="form" onSubmit={sendNewMessage}>
               <Saparate>
                 <Input
                   type={"text"}

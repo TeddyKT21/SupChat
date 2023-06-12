@@ -14,17 +14,16 @@ async function seen() {}
 async function sent() {}
 
 function typing(data: any,io: Server, socket: Socket) {
-    const {chatId, userId} = data
+    const {chatId, userId} = data;
     console.log('Server received typing event', {chatId, userId}, 'from socket: ',socket.id); 
     let typingUsers = typingUsersMap.get(chatId) || new Set();
     typingUsers.add(userId);
     typingUsersMap.set(chatId, typingUsers);
     socket.to(chatId).emit("typing", {userId, chatId});
-    
 }
 
 function stoppedTyping(data: any,io: Server, socket: Socket) {
-    const {chatId, userId} = data
+    const {chatId, userId} = data;
     console.log('Server received stopped typing event', {chatId, userId});
     let typingUsers = typingUsersMap.get(chatId) || new Set();
     typingUsers.delete(userId);
@@ -34,7 +33,6 @@ function stoppedTyping(data: any,io: Server, socket: Socket) {
         typingUsersMap.set(chatId, typingUsers);
     }
     socket.to(chatId).emit("stopped typing", {userId, chatId});
-   
 }
 
 const messageEvents = {functions:[seen, sent, typing, stoppedTyping],

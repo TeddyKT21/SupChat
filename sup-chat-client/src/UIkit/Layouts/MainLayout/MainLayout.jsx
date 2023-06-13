@@ -89,6 +89,7 @@ export const MainLayout = () => {
   // console.log(isMobile)
   // console.log(viewChat)
   // console.log(display)
+  // console.log(selectedChat)
   return (
     <div className="MainLayout">
       {(isChatVisible || isInfoVisible) && isMobile && (viewChat === "chat" || viewChat === "chatInfo") ? (

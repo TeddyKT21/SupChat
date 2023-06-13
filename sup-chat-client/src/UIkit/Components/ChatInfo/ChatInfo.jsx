@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchUserList } from "../../../store/chatDisplaySlice";
-import { Line, Saparate, Rows } from "../../Layouts/Line/Line";
+import { Rows } from "../../Layouts/Line/Line";
 import { Loading } from "../Loading/Loading";
 import "./ChatInfo.css";
 import { ParticipantList } from "./ParticipantList/ParticipantList";
@@ -14,16 +14,20 @@ import { ConfirmDialog } from "../ConfirmDialog/ConfirmDialog";
 import { emitUpdateChat } from "../../../services/socket";
 import { updateChat } from "../../../store/userSlice";
 import { Badge, Button, Drawer } from "@mui/material";
-import { Input } from "../Input/Input/Input";
 import { customFetch } from "../../utils/customFetch";
 import { FileInput } from "../Input/FileInput/FileInput";
 import Select from "react-select";
 
 export const ChatInfo = ({ chat }) => {
   const dispatch = useDispatch();
-  const participants = useSelector(
+  const currentParticipants = useSelector(
     (state) => state.chatDisplaySlice.participantList
   );
+  const displayedParticipants = useRef([]);
+  if (!displayedParticipants.current.length || !currentParticipants.length) {
+    displayedParticipants.current = [...currentParticipants];
+  }
+  
   const error = useSelector((state) => state.chatDisplaySlice.error);
   const isLoading = useSelector((state) => state.chatDisplaySlice.isLoading);
   const user_id = useSelector((state) => state?.userSlice?.user?._id);
@@ -35,7 +39,6 @@ export const ChatInfo = ({ chat }) => {
   const didChange = useRef(false);
   const fileInput = useRef(null);
   const isAdmin = chat?.admins?.includes(user_id);
-  const [newParticipants, setNewParticipants] = useState([]);
   const contacts = useSelector((state) => state.userSlice.user?.friends);
 
   const newParticipantOptions = contacts
@@ -43,13 +46,22 @@ export const ChatInfo = ({ chat }) => {
       value: contact._id,
       label: contact.username,
     }))
-    .filter((o) => !participants.includes(o.value));
+    .filter(
+      (o) => !displayedParticipants.current.find((p) => p._id === o.value)
+    );
 
   const handleParticipantsAdd = (selected) => {
     const selectedValues = selected.map((o) => o.value);
     const copy = { ...editedChat };
     copy.participants = [...chat.participants, ...selectedValues];
     didChange.current = true;
+    const newParticipants = newParticipantOptions.filter((po) =>
+      selectedValues.includes(po._id)
+    );
+    displayedParticipants.current = [
+      ...displayedParticipants.current,
+      ...newParticipants,
+    ];
     saveChat(copy);
   };
   const handleDrawerOpen = () => {
@@ -68,7 +80,12 @@ export const ChatInfo = ({ chat }) => {
     }
   };
 
-  if ((!participants || participants.length === 0) && !error && !isLoading) {
+  if (
+    (!currentParticipants ||
+      currentParticipants.length === 0) &&
+    !error &&
+    !isLoading
+  ) {
     dispatch(fetchUserList(chat.participants));
   }
 
@@ -77,6 +94,11 @@ export const ChatInfo = ({ chat }) => {
     copy.participants = copy.participants.filter((p) => {
       return p !== removedParticipant._id;
     });
+    displayedParticipants.current = displayedParticipants.current.filter(
+      (p) => {
+        return p._id !== removedParticipant._id;
+      }
+    );
     didChange.current = true;
     saveChat(copy);
   };
@@ -198,9 +220,7 @@ export const ChatInfo = ({ chat }) => {
         </h3>
         <h3>participants: </h3>
         <ParticipantList
-          participants={participants.filter((p) =>
-            editedChat.participants.includes(p._id)
-          )}
+          participants={displayedParticipants.current}
           admins={chat.admins}
           isAdmin={isAdmin}
           onRemove={removeParticipant}

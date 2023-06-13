@@ -128,7 +128,8 @@ const createChat = async (data, io, socket, users) => {
 };
 const updateChat = async (data, io, socket, users) => {
     const Chat = await Dal.chatRep.getById(data._id);
-    Chat.participants.forEach(async (p) => {
+    for (let i = 0; i < Chat.participants.length; i++) {
+        let p = Chat.participants[i];
         if (!data.participants.includes(p._id.toString())) {
             const user = await Dal.userRep.getById(p._id);
             Chat.participants = Chat.participants.filter((p) => p._id.toString() !== user._id.toString());
@@ -139,15 +140,18 @@ const updateChat = async (data, io, socket, users) => {
             userSocket?.leave(Chat._id);
             userSocket?.emit('removeFromRoom', { chat: Chat, user: user });
         }
-    });
-    data.participants?.forEach(async (p) => {
+    }
+    for (let i = 0; i < data.participants.length; i++) {
+        let p = data.participants[i];
         if (!Chat.participants.find(participant => participant._id.toString() === p)) {
             const addedParticipant = await Dal.userRep.getById(p);
             addedParticipant?.chats?.push(Chat);
             Chat.participants?.push(addedParticipant);
             await Dal.userRep.update(addedParticipant._id, addedParticipant);
+            const userSocket = users.get(p);
+            userSocket.join(Chat._id.toString());
         }
-    });
+    }
     if (data.imageUrl) {
         Chat.imageUrl = data.imageUrl;
         io.emit("chatImageUpdated", { chatId: data._id, newImageUrl: data.imageUrl });

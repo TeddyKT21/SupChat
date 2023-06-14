@@ -4,7 +4,11 @@ import {
   createSelector,
 } from "@reduxjs/toolkit";
 import { customFetch } from "../UIkit/utils/customFetch";
-
+const processChat = (chat, joinedDict) =>{
+  chat.typingUsers = [];
+  const joinTime = joinedDict[chat._id];
+  chat.messages = chat.messages.filter(m => Date.parse(m.dateTime) >= joinTime)
+}
 // export const fetchUser = createAsyncThunk(
 //   "userSlice/fetchUser",
 //   async (data) => await customFetch("login", "post", data)
@@ -198,7 +202,7 @@ export const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.user.chats.forEach(chat => chat.typingUsers = []);
+        state.user.chats.forEach(chat => processChat(chat, state.user.joinedDict));
         localStorage.setItem("token", action.payload.token);
         state.token = action.payload.token;
         state.isLoggedIn = true;

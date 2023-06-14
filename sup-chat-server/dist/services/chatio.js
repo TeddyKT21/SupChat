@@ -115,6 +115,7 @@ const createChat = async (data, io, socket, users) => {
         newChat.participants.forEach(async (p) => {
             const user = await Dal.userRep.getById(p._id);
             user.chats.push(newChat);
+            user.joinedDict[newChat._id.toString()] = Date.now();
             await Dal.userRep.update(user._id, user);
         });
         newChat.participants.forEach(async (u) => {
@@ -146,6 +147,7 @@ const updateChat = async (data, io, socket, users) => {
         if (!Chat.participants.find(participant => participant._id.toString() === p)) {
             const addedParticipant = await Dal.userRep.getById(p);
             addedParticipant?.chats?.push(Chat);
+            addedParticipant.joinedDict[Chat._id.toString()] = Date.now();
             Chat.participants?.push(addedParticipant);
             await Dal.userRep.update(addedParticipant._id, addedParticipant);
             const userSocket = users.get(p);

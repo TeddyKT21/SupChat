@@ -18,6 +18,7 @@ export async function signUp(request, response) {
             password: hashedPassword,
             createdAt: Date.now(),
             imageUrl: `/images/chats/${request.file?.filename}`,
+            joinedDict: {}
         });
         const signUpUser = await Dal.userRep.add(newUser);
         response.sendStatus(201);

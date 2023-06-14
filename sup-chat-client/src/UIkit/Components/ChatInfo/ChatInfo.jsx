@@ -17,6 +17,7 @@ import { Badge, Button, Drawer } from "@mui/material";
 import { customFetch } from "../../utils/customFetch";
 import { FileInput } from "../Input/FileInput/FileInput";
 import Select from "react-select";
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 
 export const ChatInfo = ({ chat }) => {
   const dispatch = useDispatch();
@@ -27,15 +28,18 @@ export const ChatInfo = ({ chat }) => {
   if (!displayedParticipants.current.length || !currentParticipants.length) {
     displayedParticipants.current = [...currentParticipants];
   }
-  
+
   const error = useSelector((state) => state.chatDisplaySlice.error);
   const isLoading = useSelector((state) => state.chatDisplaySlice.isLoading);
   const user_id = useSelector((state) => state?.userSlice?.user?._id);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editedChat, saveChat] = useState(chat);
   useEffect(() => saveChat(chat), [chat]);
+
   const [dialogData, setDialogData] = useState({ open: false });
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [doAddP, setDoAddP] = useState(false);
+
   const didChange = useRef(false);
   const fileInput = useRef(null);
   const isAdmin = chat?.admins?.includes(user_id);
@@ -55,13 +59,14 @@ export const ChatInfo = ({ chat }) => {
     const copy = { ...editedChat };
     copy.participants = [...chat.participants, ...selectedValues];
     didChange.current = true;
-    const newParticipants = newParticipantOptions.filter((po) =>
-      selectedValues.includes(po._id)
-    );
+    const addedParticipants = contacts
+    .filter(c => selectedValues.includes(c._id))
+    .map(c => {return {email:c.email, username:c.username, _id:c._id }});
     displayedParticipants.current = [
       ...displayedParticipants.current,
-      ...newParticipants,
+      ...addedParticipants,
     ];
+    setDoAddP(false);
     saveChat(copy);
   };
   const handleDrawerOpen = () => {
@@ -81,8 +86,7 @@ export const ChatInfo = ({ chat }) => {
   };
 
   if (
-    (!currentParticipants ||
-      currentParticipants.length === 0) &&
+    (!currentParticipants || currentParticipants.length === 0) &&
     !error &&
     !isLoading
   ) {
@@ -161,7 +165,12 @@ export const ChatInfo = ({ chat }) => {
           didChange.current = false;
         }}
       />
-
+      {/* <SelectDialog
+        action={(selected) => console.log("selected: ", selected)}
+        startOpen={openSD}
+        close={() => setOpenSD(false)}
+        options={newParticipantOptions}
+      ></SelectDialog> */}
       <Rows>
         <Badge
           color="secondary"
@@ -225,13 +234,18 @@ export const ChatInfo = ({ chat }) => {
           isAdmin={isAdmin}
           onRemove={removeParticipant}
         ></ParticipantList>
-        <Select
+        {isAdmin && !doAddP && (
+          <Button onClick={() => setDoAddP(true)}>
+            <AddCircleOutlineRoundedIcon color="black" />
+          </Button>
+        )}
+        {doAddP && <Select
           placeholder={"Participants"}
           isMulti
           options={newParticipantOptions}
           onChange={handleParticipantsAdd}
           defaultValue={[]}
-        />
+        />}
         <div>created at :{chat.createdAt}</div>
         {didChange.current && (
           <Button onClick={() => setOpenConfirm(true)}> save </Button>

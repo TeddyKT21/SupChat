@@ -107,6 +107,20 @@ export const ChatInfo = ({ chat }) => {
     saveChat(copy);
   };
 
+  const promoteParticipant = (participant) =>{
+    const copy = { ...editedChat };
+    copy.admins = [...copy.admins, participant._id]
+    didChange.current = true;
+    saveChat(copy);
+  }
+
+  const demoteParticipant = (participant) => {
+    const copy = { ...editedChat };
+    copy.admins = copy.admins.filter(p => p !== participant._id);
+    didChange.current = true;
+    saveChat(copy);
+  }
+
   const handleChange = useCallback(
     async (event) => {
       if (event.target.files && event.target.files.length > 0) {
@@ -230,9 +244,10 @@ export const ChatInfo = ({ chat }) => {
         <h3>participants: </h3>
         <ParticipantList
           participants={displayedParticipants.current}
-          admins={chat.admins}
+          admins={editedChat.admins}
           isAdmin={isAdmin}
-          onRemove={removeParticipant}
+          options={["make admin", "remove admin", "remove"]}
+          actions = {[promoteParticipant,demoteParticipant,removeParticipant]}
         ></ParticipantList>
         {isAdmin && !doAddP && (
           <Button onClick={() => setDoAddP(true)}>

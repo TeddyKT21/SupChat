@@ -98,7 +98,7 @@ export const userSlice = createSlice({
         chat.typingUsers = [];
       }
       if (!state.selectedChat || chat._id === state.selectedChat._id) {
-        state.selectedChat = {...chat};
+        state.selectedChat = { ...chat };
       }
     },
     leaveChat(state, action) {
@@ -112,31 +112,36 @@ export const userSlice = createSlice({
       console.log("current chats: ", state.user.chats);
     },
     removeFromChatRoom(state, action) {
-      console.log('in remove from chatroom with: ',action.payload);
-      if(action.payload.user._id === state.user._id){
-        state.user.chats = state.user.chats.filter(c => c._id !== action.payload.chat._id);
+      console.log("in remove from chatroom with: ", action.payload);
+      if (action.payload.user._id === state.user._id) {
+        state.user.chats = state.user.chats.filter(
+          (c) => c._id !== action.payload.chat._id
+        );
         if (action.payload.chat._id === state.selectedChat._id) {
           state.selectedChat = null;
         }
-      }
-      else{
-        const chat = state.user.chats.find(c => c._id === action.payload.chat._id);
-        chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
-        chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
+      } else {
+        const chat = state.user.chats.find(
+          (c) => c._id === action.payload.chat._id
+        );
+        chat.participants = chat.participants.filter(
+          (p) => p !== action.payload.user._id
+        );
+        chat.admins = chat.admins.filter((p) => p !== action.payload.user._id);
       }
     },
-    updateChat(state, action){
-      const id = action.payload._id
-      state.user.chats.forEach(chat => {
-        if (id === chat._id){
+    updateChat(state, action) {
+      const id = action.payload._id;
+      state.user.chats.forEach((chat) => {
+        if (id === chat._id) {
           chat.participants = action.payload.participants;
           chat.admins = action.payload.admins;
           chat.description = action.payload.description;
           chat.name = action.payload.name;
           chat.imageUrl = action.payload.imageUrl;
 
-          if (chat._id === state.selectedChat._id){
-            state.selectedChat = {...chat};
+          if (chat._id === state.selectedChat._id) {
+            state.selectedChat = { ...chat };
           }
         }
       });
@@ -189,12 +194,13 @@ export const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.user.chats.forEach(chat => chat.typingUsers = [])
+        state.user.chats.forEach((chat) => (chat.typingUsers = []));
         localStorage.setItem("token", action.payload.token);
         state.token = action.payload.token;
         state.isLoggedIn = true;
         const lastViewed = JSON.parse(localStorage.getItem("lastViewed")) || {};
         state.lastViewed = lastViewed;
+        state.error = null;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;

@@ -155,12 +155,12 @@ export const ChatInfo = ({ chat }) => {
               className="imageDetails"
             />
           ) : (
-            <GroupsIcon className="imageDetails" />
+            <GroupsIcon className="imageDetails" sx={{height:50,width:50}}/>
           )}
         </Badge>
         <Drawer anchor="bottom" open={drawerOpen} onClose={handleDrawerClose}>
           <div className="cameraDrawer">
-            <CameraAltIcon style={{ fontSize: 40 }} />
+            {/* <CameraAltIcon style={{ fontSize: 40 }} /> */}
             <CollectionsIcon
               style={{ fontSize: 40 }}
               onClick={handleFileInput}

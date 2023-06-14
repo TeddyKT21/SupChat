@@ -80,17 +80,7 @@ export const Profile = ({ user }) => {
   }, [user._id, dispatch]);
 
   return (
-    <div
-      className="profile"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minWidth: "300px",
-        // paddingTop:"100px",
-      }}
-    >
+    <div className="profile">
       <Badge
         color="secondary"
         style={{ fontSize: 40 }}
@@ -133,7 +123,7 @@ export const Profile = ({ user }) => {
           }
         />
       </ListItem>
-      <Divider variant="inset" component="li" />
+      {/* <Divider variant="inset" component="li" /> */}
       <ListItem>
         <ListItemAvatar>
           <EmailIcon />

@@ -19,6 +19,7 @@ import {
   setIsChatVisible,
   setIsInfoVisible,
   fetchUserList,
+  setIsUserInfoVisible,
 } from "../../../store/chatDisplaySlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { setDisplayChat } from "../../../store/displaySlice";

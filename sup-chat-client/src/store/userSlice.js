@@ -127,6 +127,9 @@ export const userSlice = createSlice({
         const chat = state.user.chats.find(c => c._id === action.payload.chat._id);
         chat.participants = chat.participants.filter(p => p !== action.payload.user._id);
         chat.admins = chat.admins.filter(p => p !== action.payload.user._id);
+        if (chat._id === state.selectedChat._id){
+          state.selectedChat = {...chat};
+        }
       }
     },
     updateChat(state, action){

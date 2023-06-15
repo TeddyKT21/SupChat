@@ -22,13 +22,15 @@ export const emitMessage = (message, chat) => {
   }
 };
 
-export const emitNewChat = (chat) => socket.emit("newChat", { chat, token });
+export const emitNewChat = (chat) => socket.emit("newChat", { chat, token:localStorage.getItem("token") });
 
-export const emitUpdateChat = (chat) =>
-  socket.emit("updateChat", { chat, token });
+export const emitUpdateChat = (chat) =>{
+  console.log('token: ', {token,chat})
+  socket.emit("updateChat", { chat, token:localStorage.getItem("token") })
+}
 
 export const emitUpdateUser = (user) =>
-  socket.emit("updateUser", { user, token });
+  socket.emit("updateUser", { user, token:localStorage.getItem("token") });
 
 const listenToMessages = () =>{
   socket.on("message", (data) => {

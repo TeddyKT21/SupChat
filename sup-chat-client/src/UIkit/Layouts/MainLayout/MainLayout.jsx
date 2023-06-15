@@ -9,17 +9,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { AddChat } from "../../../pages/addChat";
 import { connectSocket, disconnectSocket } from "../../../services/socket";
-import { logOut ,fetchUser} from "../../../store/userSlice";
+import { logOut, fetchUser } from "../../../store/userSlice";
 import { Profile } from "../../../pages/profile";
 import { UserInfo } from "../../Components/UserInfo/UserInfo";
 import { Button } from "../../Components/Button/Button";
-import { setViewChat, setIsMobile, setIsChatVisible, setIsInfoVisible } from "../../../store/chatDisplaySlice";
+import {
+  setViewChat,
+  setIsMobile,
+  setIsChatVisible,
+  setIsInfoVisible,
+  fetchUserList,
+} from "../../../store/chatDisplaySlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { setDisplayChat } from "../../../store/displaySlice";
 
 const BackButton = ({ onClick }) => (
   <Button className={"back"} onClick={onClick}>
-    <ArrowBackIcon/>
+    <ArrowBackIcon />
   </Button>
 );
 
@@ -33,8 +39,12 @@ export const MainLayout = () => {
   const selectedChat = useSelector((state) => state.userSlice.selectedChat);
   const viewChat = useSelector((state) => state.chatDisplaySlice.viewChat);
   const isMobile = useSelector((state) => state.chatDisplaySlice.isMobile);
-  const isChatVisible = useSelector((state) => state.chatDisplaySlice.isChatVisible);
-  const isInfoVisible = useSelector((state) => state.chatDisplaySlice.isInfoVisible);
+  const isChatVisible = useSelector(
+    (state) => state.chatDisplaySlice.isChatVisible
+  );
+  const isInfoVisible = useSelector(
+    (state) => state.chatDisplaySlice.isInfoVisible
+  );
 
   useEffect(() => {
     if (user) {
@@ -51,11 +61,17 @@ export const MainLayout = () => {
       console.log("NO Token Found. Redirecting to login page...");
       dispatch(logOut());
       navigate("/login");
-    } else  {
+    } else {
       //console.log("Token Found:", storedToken);
-      dispatch(fetchUser({token: storedToken}));
+      dispatch(fetchUser({ token: storedToken }));
     }
   }, [navigate, dispatch]);
+
+  useEffect(() => {
+    if (selectedChat?.participants){
+      dispatch(fetchUserList(selectedChat.participants));
+    }
+  }, [selectedChat]);
 
   const handleSetView = (view) => {
     dispatch(setViewChat(view));
@@ -65,7 +81,7 @@ export const MainLayout = () => {
     dispatch(setViewChat("sidebar"));
     dispatch(setIsChatVisible(false));
     dispatch(setIsInfoVisible(false));
-  }
+  };
 
   const handleResize = () => {
     const isMobileNow = window.innerWidth <= 768;
@@ -82,7 +98,7 @@ export const MainLayout = () => {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  },[dispatch]);
+  }, [dispatch]);
 
   // console.log(isChatVisible)
   // console.log(isInfoVisible)
@@ -91,7 +107,9 @@ export const MainLayout = () => {
   // console.log(display)
   return (
     <div className="MainLayout">
-      {(isChatVisible || isInfoVisible) && isMobile && (viewChat === "chat" || viewChat === "chatInfo") ? (
+      {(isChatVisible || isInfoVisible) &&
+      isMobile &&
+      (viewChat === "chat" || viewChat === "chatInfo") ? (
         <BackButton onClick={onClickBack} />
       ) : (
         <SpeedDialOptions setView={handleSetView} />
@@ -106,7 +124,9 @@ export const MainLayout = () => {
         {isInfoVisible && display === "chatInfo" && selectedChat && (
           <ChatInfo chat={selectedChat} />
         )}
-        {isChatVisible && display === "chat" && selectedChat && <ChatArea chat={selectedChat}/>}
+        {isChatVisible && display === "chat" && selectedChat && (
+          <ChatArea chat={selectedChat} />
+        )}
         {display === "userInfo" && <UserInfo />}
       </LayoutLine>
     </div>

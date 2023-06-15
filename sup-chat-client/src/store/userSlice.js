@@ -132,6 +132,14 @@ export const userSlice = createSlice({
     updateChat(state, action){
       const id = action.payload._id
       let found = false;
+      if(!action.payload.participants.includes(state.user._id)){
+        state.user.chats = state.user.chats.filter(c => c._id !== id);
+        state.user.chats = [...state.user.chats];
+        if (id === state.selectedChat?._id){
+          state.selectedChat = null;
+        }
+        return;
+      }
       state.user.chats.forEach(chat => {
         if (id === chat._id){
           found = true

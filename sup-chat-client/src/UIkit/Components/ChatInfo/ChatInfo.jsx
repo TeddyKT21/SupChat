@@ -34,7 +34,12 @@ export const ChatInfo = ({ chat }) => {
   const user_id = useSelector((state) => state?.userSlice?.user?._id);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editedChat, saveChat] = useState(chat);
+  
   useEffect(() => saveChat(chat), [chat]);
+  useEffect(()=>{
+    displayedParticipants.current = [...currentParticipants];
+    saveChat({...chat})
+  },[currentParticipants]);
 
   const [dialogData, setDialogData] = useState({ open: false });
   const [openConfirm, setOpenConfirm] = useState(false);

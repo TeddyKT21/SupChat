@@ -184,12 +184,6 @@ export const ChatInfo = ({ chat }) => {
           didChange.current = false;
         }}
       />
-      {/* <SelectDialog
-        action={(selected) => console.log("selected: ", selected)}
-        startOpen={openSD}
-        close={() => setOpenSD(false)}
-        options={newParticipantOptions}
-      ></SelectDialog> */}
       <Rows>
         <Badge
           color="secondary"
@@ -220,7 +214,6 @@ export const ChatInfo = ({ chat }) => {
               forwardedref={fileInput}
               onTextChange={handleChange}
             />
-            {/* <Input type={"file"} className={"file"} forwardedref={fileInput}  onTextChange={handleChange}/> */}
           </div>
         </Drawer>
 

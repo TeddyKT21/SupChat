@@ -5,17 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import { customFetch } from "../UIkit/utils/customFetch";
 
-// export const fetchUser = createAsyncThunk(
-//   "userSlice/fetchUser",
-//   async (data) => await customFetch("login", "post", data)
-// );
-
 export const fetchUser = createAsyncThunk(
   "userSlice/fetchUser",
   async (data) => {
     console.log("Data: ", data);
     if (data.email && data.password) {
       // If email and password are present, use login endpoint
+
       return await customFetch("login", "post", data);
     } else if (data.token) {
       // If token is present, use getUserByToken endpoint
@@ -200,12 +196,11 @@ export const userSlice = createSlice({
         state.isLoggedIn = true;
         const lastViewed = JSON.parse(localStorage.getItem("lastViewed")) || {};
         state.lastViewed = lastViewed;
-        state.error = null;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = "email or password invalid !";
-        console.log("user not found !");
+        state.error = action.error;
+        // state.error = "email or password invalid !";
       });
   },
 });

@@ -142,14 +142,14 @@ const updateChat = async (
       userSocket?.emit('removeFromRoom',{chat:Chat, user:user})
     }
     });
-  data.chat.participants?.forEach(async (p) => {
+    data.chat.participants?.forEach(async (p) => {
     if(!Chat.participants.find(participant => participant._id.toString() === p)){
       const addedParticipant = await Dal.userRep.getById(p);
       addedParticipant?.chats?.push(Chat);
       Chat.participants?.push(addedParticipant);
       await Dal.userRep.update(addedParticipant._id,addedParticipant);
     }
-  });
+    });
     if(data.chat.imageUrl){
       Chat.imageUrl = data.chat.imageUrl;
       io.emit("chatImageUpdated", {chatId: data.chat._id, newImageUrl: data.chat.imageUrl});

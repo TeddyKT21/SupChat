@@ -47,6 +47,34 @@ const addToRoom = async (data: any, io: Server, socket: Socket) => {
   socket.broadcast.to(chat_id).emit("addToRoom", user);
 };
 
+// const removeFromRoom = async (
+//   data: any,
+//   io: Server,
+//   socket: Socket,
+//   users: Map<string, Socket>,
+// ) => {
+//   const isValidToken = await Dal.userRep.isValidToken(data.token);
+
+//   const { chat_id, user_id } = data;
+//     const chat = await Dal.chatRep.getById(chat_id);
+//     const user = await Dal.userRep.getById(user_id);
+  
+//     chat.participants = chat.participants.filter(
+//       (p) => p._id.toString() !== user._id.toString()
+//     );
+//     chat.admins = chat.admins.filter(
+//       (p) => p._id.toString() !== user._id.toString()                  //working(old)
+//     );
+//     user.chats = user.chats.filter(
+//       (c) => c._id.toString() !== chat._id.toString()
+//     );
+  
+//     await Dal.chatRep.update(chat._id, chat);
+//     await Dal.userRep.update(user._id, user);
+//     socket.broadcast.to(chat_id).emit("removeFromRoom", { user, chat });
+//     const userSocket = users.get(user_id);
+//     userSocket?.leave(chat_id);
+// };
 
 const removeFromRoom = async (
   data: any,
@@ -120,10 +148,12 @@ const updateChat = async (
   socket: Socket,
   users: Map<string, Socket>
 ) => {
-  const Chat = await Dal.chatRep.getById(data._id);
+  const isValidToken = await Dal.userRep.isValidToken(data.token);
+  if(!isValidToken) return;
+  const Chat = await Dal.chatRep.getById(data.chat._id);
   for (let i =0; i < Chat.participants.length; i++){
     let p = Chat.participants[i]
-    if (!data.participants.includes(p._id.toString())) {
+    if (!data.chat.participants.includes(p._id.toString())) {
       const user = await Dal.userRep.getById(p._id);
       Chat.participants = Chat.participants.filter(
         (p) => p._id.toString() !== user._id.toString()
@@ -139,9 +169,9 @@ const updateChat = async (
       userSocket?.leave(Chat._id);
       userSocket?.emit('removeFromRoom',{chat:Chat, user:user})
     }
-  }
-  for (let i =0; i < data.participants.length; i++){
-    let p = data.participants[i];
+}
+  for (let i =0; i < data.chat.participants.length; i++){
+    let p = data.chat.participants[i];
     if(!Chat.participants.find(participant => participant._id.toString() === p)){
       const addedParticipant = await Dal.userRep.getById(p);
       addedParticipant?.chats?.push(Chat)
@@ -152,18 +182,18 @@ const updateChat = async (
       userSocket?.join(Chat._id.toString());
     }
   }
-  if(data.imageUrl){
-    Chat.imageUrl = data.imageUrl;
-    io.emit("chatImageUpdated", {chatId: data._id, newImageUrl: data.imageUrl});
-  }
-  
-  Chat.name = data.name
-  Chat.description = data.description;
-  Chat.admins = data.admins;
-  await Dal.chatRep.update(Chat._id, Chat);
 
-  socket.broadcast.to(data._id).emit("updateChat", Chat);
-};
+    if(data.chat.imageUrl){
+      Chat.imageUrl = data.chat.imageUrl;
+      io.emit("chatImageUpdated", {chatId: data.chat._id, newImageUrl: data.chat.imageUrl});
+    }
+    Chat.name = data.chat.name
+    Chat.description = data.chat.description;
+    Chat.admins = data.chat.admins;
+    await Dal.chatRep.update(Chat._id, Chat);
+
+    socket.broadcast.to(data.chat._id).emit("updateChat", Chat);
+  };
 
 const chatEvents = {
   functions: [

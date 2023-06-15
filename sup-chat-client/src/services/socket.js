@@ -24,9 +24,11 @@ export const emitMessage = (message, chat) => {
 
 export const emitNewChat = (chat) => socket.emit("newChat", { chat, token });
 
-export const emitUpdateChat = (chat) => socket.emit("updateChat", chat);
+export const emitUpdateChat = (chat) =>
+  socket.emit("updateChat", { chat, token });
 
-export const emitUpdateUser = (user) => socket.emit("updateUser", user);
+export const emitUpdateUser = (user) =>
+  socket.emit("updateUser", { user, token });
 
 const listenToMessages = () =>{
   socket.on("message", (data) => {

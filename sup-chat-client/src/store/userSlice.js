@@ -189,7 +189,7 @@ export const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.user.chats.forEach(chat => chat.typingUsers = [])
+        state.user.chats.forEach(chat => chat.typingUsers = []);
         localStorage.setItem("token", action.payload.token);
         state.token = action.payload.token;
         state.isLoggedIn = true;

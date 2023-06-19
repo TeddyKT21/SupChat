@@ -78,7 +78,7 @@ export const MainLayout = () => {
   const handleResize = () => {
     const isMobileNow = window.innerWidth <= 768;
     dispatch(setIsMobile(isMobileNow));
-    if (isChatVisible && isMobileNow) {
+    if (isChatVisible && isMobileNow && selectedChat !== null) {
       dispatch(setViewChat("chat"));
     } else {
       dispatch(setViewChat("sidebar"));

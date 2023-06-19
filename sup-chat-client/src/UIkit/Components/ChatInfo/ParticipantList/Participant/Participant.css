@@ -1,8 +1,4 @@
-.participant{
-    border: 1px solid black;
-    padding: 10px;
-    background-color: var(--light-gray);
-}
+
 .adminTag{
     color: rgb(56, 250, 30);
     border: 1px solid rgb(56, 250, 30);

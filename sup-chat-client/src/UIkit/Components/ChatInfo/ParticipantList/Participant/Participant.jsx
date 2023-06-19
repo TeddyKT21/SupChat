@@ -29,11 +29,13 @@ export const Participant = ({
         <Line>
           <div>{participant.username}</div>
           <div>{participant.email}</div>
-          {isParticipantAdmin && <div className="adminTag">Admin</div>}
         </Line>
-        {isUserAdmin && (
-          <DropDown options={displayedOptions} actions={displayedActions} />
-        )}
+        <Line>
+          {isParticipantAdmin && <div className="adminTag">Admin</div>}
+          {isUserAdmin && (
+            <DropDown options={displayedOptions} actions={displayedActions} />
+          )}
+        </Line>
       </Saparate>
     </div>
   );

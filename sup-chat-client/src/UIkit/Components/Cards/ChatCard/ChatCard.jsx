@@ -75,7 +75,7 @@ export const ChatCard = (chat, key) => {
   <ListItem onClick={onClick} key={key} alignItems="flex-start">
     <ListItemAvatar>
       <Avatar>
-        {chat.imageUrl ? (
+        {chat.imageUrl && !chat.imageUrl.toLowerCase().split('/').includes('undefined') ? (
           <img
             src={`http://localhost:8080${chat.imageUrl}`}
             alt="chat"

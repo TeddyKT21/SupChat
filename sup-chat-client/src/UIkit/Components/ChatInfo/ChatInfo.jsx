@@ -192,7 +192,7 @@ export const ChatInfo = ({ chat }) => {
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
           onClick={handleDrawerOpen}
         >
-          {chat.imageUrl ? (
+          {chat.imageUrl &&  !chat.imageUrl.toLowerCase().split('/').includes('undefined') ? (
             <img
               src={`http://localhost:8080${chat.imageUrl}`}
               alt="chat"

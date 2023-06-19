@@ -85,7 +85,7 @@ export const UserCard = (user) => {
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            {user.imageUrl ? (
+            {user.imageUrl && !user.imageUrl.toLowerCase().split('/').includes('undefined') ? (
               <img src={user.imageUrl} alt={user.username} />
             ) : (
               <PersonIcon />

@@ -1,16 +1,13 @@
-import { Line, Saparate, Rows } from "../../../../Layouts/Line/Line";
-import GroupsIcon from "@mui/icons-material/Groups";
 import "./PrivateChatCard.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectNewMessageCount, setSelectedChat, viewChat } from "../../../../../store/userSlice";
+import { selectNewMessageCount, setSelectedChat } from "../../../../../store/userSlice";
 import { useEffect, useState } from "react";
-import { resetParticipants, setDisplay, setIsChatVisible, setIsUserInfoVisible, setViewChat } from "../../../../../store/chatDisplaySlice";
+import { resetParticipants, setIsChatVisible, setIsUserInfoVisible, setViewChat } from "../../../../../store/chatDisplaySlice";
 import { DropDown } from "../../../DropDown/DropDown";
-import { ConfirmDialog } from "../../../ConfirmDialog/ConfirmDialog";
-import { removeSelfFromChatRoom } from "../../../../../services/socket";
 import { Avatar, Badge, Grid, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
-import { viewChatInfo, viewChatMessages } from "../../../../../store/displaySlice";
+import { viewChatMessages } from "../../../../../store/displaySlice";
 import { viewUserInfo } from "../../../../../store/displaySlice";
+import PersonIcon from '@mui/icons-material/Person';
 
 export const PrivateChatCard = ({chat, key}) => {
   const [dots, setDots] = useState(".");
@@ -64,14 +61,14 @@ export const PrivateChatCard = ({chat, key}) => {
     <ListItem onClick={onClick} key={key} alignItems="flex-start">
       <ListItemAvatar>
         <Avatar>
-          {otherUser.imageUrl ? (
+          {otherUser.imageUrl && !otherUser.imageUrl.toLowerCase().split('/').includes('undefined') ? (
             <img
               src={`http://localhost:8080${otherUser.imageUrl}`}
               alt="chat"
               className="image"
             />
           ) : (
-            <GroupsIcon />
+            <PersonIcon />
           )}
         </Avatar>
       </ListItemAvatar>

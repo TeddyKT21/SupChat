@@ -9,22 +9,30 @@ export const Participant = ({
   actions,
 }) => {
   const isParticipantAdmin = admins.includes(participant._id);
-  const filteredOptions = options;
-  const filteredActions = actions.map((action) => () => action(participant));
+  let displayedOptions;
+  let displayedActions;
   if (isParticipantAdmin) {
+    displayedOptions = [...options].slice(1);
+    displayedActions = [
+      ...actions.map((action) => () => action(participant)),
+    ].slice(1);
   } else {
+    displayedOptions = options.filter((_, index) => index !== 1);
+    displayedActions = actions
+      .map((action) => () => action(participant))
+      .filter((_, index) => index !== 1);
   }
 
   return (
     <div className="Participant" key={participant._id}>
       <Saparate>
-          <Line>
-            <div>{participant.username}</div>
-            <div>{participant.email}</div>
-            {isParticipantAdmin && <div className="adminTag">Admin</div>}
-          </Line>
+        <Line>
+          <div>{participant.username}</div>
+          <div>{participant.email}</div>
+          {isParticipantAdmin && <div className="adminTag">Admin</div>}
+        </Line>
         {isUserAdmin && (
-          <DropDown options={filteredOptions} actions={filteredActions} />
+          <DropDown options={displayedOptions} actions={displayedActions} />
         )}
       </Saparate>
     </div>

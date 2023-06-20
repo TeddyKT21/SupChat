@@ -20,6 +20,7 @@ export const fetchUser = createAsyncThunk(
     console.log("Data: ", data);
     if (data.email && data.password) {
       // If email and password are present, use login endpoint
+
       return await customFetch("login", "post", data);
     } else if (data.token) {
       // If token is present, use getUserByToken endpoint
@@ -102,7 +103,7 @@ export const userSlice = createSlice({
         chat.typingUsers = [];
       }
       if (!state.selectedChat || chat._id === state.selectedChat._id) {
-        state.selectedChat = {...chat};
+        state.selectedChat = { ...chat };
       }
     },
     leaveChat(state, action) {
@@ -116,9 +117,11 @@ export const userSlice = createSlice({
       console.log("current chats: ", state.user.chats);
     },
     removeFromChatRoom(state, action) {
-      console.log('in remove from chatroom with: ',action.payload);
-      if(action.payload.user._id === state.user._id){
-        state.user.chats = state.user.chats.filter(c => c._id !== action.payload.chat._id);
+      console.log("in remove from chatroom with: ", action.payload);
+      if (action.payload.user._id === state.user._id) {
+        state.user.chats = state.user.chats.filter(
+          (c) => c._id !== action.payload.chat._id
+        );
         if (action.payload.chat._id === state.selectedChat._id) {
           state.selectedChat = null;
         }
@@ -152,8 +155,8 @@ export const userSlice = createSlice({
           chat.name = action.payload.name;
           chat.imageUrl = action.payload.imageUrl;
 
-          if (chat._id === state.selectedChat._id){
-            state.selectedChat = {...chat};
+          if (chat._id === state.selectedChat._id) {
+            state.selectedChat = { ...chat };
           }
         }
       });
@@ -222,8 +225,8 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = "email or password invalid !";
-        console.log("user not found !");
+        state.error = action.error;
+        // state.error = "email or password invalid !";
       });
   },
 });

@@ -19,22 +19,21 @@ export const emitMessage = (message, chat) => {
   }
 };
 
-export const emitNewChat = (chat) => socket.emit("newChat", { chat, token:localStorage.getItem("token") });
+export const emitNewChat = (chat) =>
+  socket.emit("newChat", { chat, token: localStorage.getItem("token") });
 
-export const emitUpdateChat = (chat) =>{
-  console.log('token: ', {token,chat})
-  socket.emit("updateChat", { chat, token:localStorage.getItem("token") })
-}
+export const emitUpdateChat = (chat) =>
+  socket.emit("updateChat", { chat, token: localStorage.getItem("token") });
 
 export const emitUpdateUser = (user) =>
-  socket.emit("updateUser", { user, token:localStorage.getItem("token") });
+  socket.emit("updateUser", { user, token: localStorage.getItem("token") });
 
-const listenToMessages = () =>{
+const listenToMessages = () => {
   socket.on("message", (data) => {
-    console.log('socket id: ',socket.id );
-    store.dispatch(reciveMessage(data))
+    console.log("socket id: ", socket.id);
+    store.dispatch(reciveMessage(data));
   });
-}
+};
 
 const listenToNewChats = () =>
   socket.on("newChat", (data) => {
@@ -63,7 +62,7 @@ export const connectSocket = (user) => {
     // console.log("connecting to the server...",socket.connect);
     user.chats.forEach((chat) => socket.emit("joinRoom", chat._id));
     socket.emit("subscribe", user._id);
-    if(socket.listeners('message').length === 0){
+    if (socket.listeners("message").length === 0) {
       listenToMessages();
       listenToNewChats();
       listenToUserRemove();

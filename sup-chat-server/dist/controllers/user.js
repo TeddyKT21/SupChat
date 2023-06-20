@@ -57,14 +57,19 @@ export async function login(request, response) {
                 });
                 response.json({ token: newToken, user: foundUser });
             }
+            else {
+                // response.status(404).json({ error: "Password is invalid" });
+                response.status(404).send("Password is invalid");
+            }
         }
         else {
-            response.status(404).send("user not found");
+            // response.status(404).json({ error: "Email is invalid" });
+            response.status(404).send("Email is invalid");
         }
     }
     catch (error) {
         console.log("Login error:", error);
-        response.response.status(500).send("Internal server error");
+        response.status(500).send("Internal server error");
     }
 }
 export async function addContact(request, response) {

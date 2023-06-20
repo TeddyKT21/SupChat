@@ -211,7 +211,7 @@ export const ChatInfo = ({ chat }) => {
             />
             <FileInput
               className={"file"}
-              forwardedref={fileInput}
+              ref={fileInput}
               onTextChange={handleChange}
             />
           </div>

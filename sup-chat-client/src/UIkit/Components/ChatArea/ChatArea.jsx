@@ -89,7 +89,7 @@ export const ChatArea = ({chat}) => {
           "POST",
           formData
         );
-        console.log("upload successful", response);
+        // console.log("upload successful", response);
         if (response && response.message && response.message.image){
           const imageMessage = { ...newMessage, text:'', image: response.message.image, dateTime: Date.now() };
           dispatch(sendMessage(imageMessage));
@@ -129,8 +129,8 @@ export const ChatArea = ({chat}) => {
                 value={text}
                 className="inputForm"
               />
-              <Button onClick={handleFileInput} className="buttonForm"> <CameraAltIcon/> </Button>
-              <Button onClick={sendNewMessage} className="buttonForm"> <SendIcon/> </Button>
+              <Button onClick={handleFileInput} className="buttonForm btnGallery"> <CameraAltIcon/> </Button>
+              <Button onClick={sendNewMessage} className="buttonForm btnSend"> <SendIcon/> </Button>
               <FileInput className={"hidden"} ref={fileInput} onTextChange={handleImageUpload}/>
             </Saparate>
           </form>

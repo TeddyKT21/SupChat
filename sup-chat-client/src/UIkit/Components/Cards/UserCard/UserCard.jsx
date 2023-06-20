@@ -17,9 +17,9 @@ export const UserCard = (user) => {
     const isMobile = useSelector((state) => state.chatDisplaySlice.isMobile);
     //console.log("loggedInUser:", loggedInUser);
     const dispatch = useDispatch()
-    const options = ['message', 'add contact', 'add to chat', 'details'];
     const newChat = useRef({});
     const storedToken = localStorage.getItem("token");
+    const isContact = loggedInUser.friends.find( f => f._id === user._id);
     
     const fetchPrivateChat = async (user1Id, user2Id) => {
       const data = {user1Id, user2Id};
@@ -71,9 +71,6 @@ export const UserCard = (user) => {
     });
         
     };
-    const addToChatAction = () =>{
-        console.log('menu pressed')
-    };
     const detailsAction = () =>{
       dispatch(viewUserInfo(user));
       dispatch(setIsUserInfoVisible(true));
@@ -81,6 +78,8 @@ export const UserCard = (user) => {
         dispatch(setViewChat("userInfo"));
       }
     }
+    const options = !isContact ? ['message', 'add contact', 'details'] : ['message', 'details'];
+    const actions = !isContact ? [messageAction, addContactAction, detailsAction] : [messageAction, detailsAction];
     return (
       <ListItem>
         <ListItemAvatar>
@@ -93,7 +92,7 @@ export const UserCard = (user) => {
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary={user.username} secondary={user.email}/>
-        <DropDown options={options} actions={[messageAction, addContactAction, addToChatAction,detailsAction]}/>
+        <DropDown options={options} actions={actions}/>
       </ListItem>
     );
 }

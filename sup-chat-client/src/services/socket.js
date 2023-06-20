@@ -11,10 +11,7 @@ import {
 } from "../store/userSlice";
 const URL = require("../URL.json").url;
 const token = localStorage.getItem("token");
-const socket = io(URL, {
-  transports: ["websocket"],
-  autoConnect: false,
-});
+let socket = null;
 
 export const emitMessage = (message, chat) => {
   if (message.text.trim !== "") {
@@ -55,6 +52,10 @@ export const listenToUserRemove = () => {
 };
 
 export const connectSocket = (user) => {
+    socket = io(URL, {
+    transports: ["websocket"],
+    autoConnect: false,
+  });
   if (!socket.connected) {
     const username = user.username;
     socket.auth = { username };
@@ -91,7 +92,7 @@ export const addToRoom = (chat, user) =>
   socket.emit("addToRoom", { chat_id: chat._id, user_id: user._id });
 
 export const disconnectSocket = () => {
-  if (socket.connected) {
+  if (socket?.connected) {
     socket.disconnect();
   }
 };

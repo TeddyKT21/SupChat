@@ -57,7 +57,7 @@ export const MainLayout = () => {
     return () => {
       disconnectSocket();
     };
-  }, []);
+  });
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

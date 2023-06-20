@@ -93,7 +93,7 @@ export const Profile = ({ user }) => {
           src={`http://localhost:8080${user.imageUrl}`}
           style={{ height: "100px", width: "100px" }}
         />
-        <FileInput className={"file"} forwardedref={fileInput} onTextChange={handleChange}/>
+        <FileInput className={"file"} ref={fileInput} onTextChange={handleChange}/>
       </Badge>
       {/* <ListItem>
         <CollectionsIcon style={{ fontSize: 40 }} onClick={handleFileInput} />

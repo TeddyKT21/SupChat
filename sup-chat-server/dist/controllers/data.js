@@ -17,7 +17,7 @@ export const fetchAllUsers = async (req, res) => {
 };
 export const fetchNonFriendUsers = async (req, res) => {
     try {
-        const currentUser = req.body.user;
+        const currentUser = await Dal.userRep.getById(req.body.user._id);
         const searchTerm = req.body.text;
         const allUsers = await User.find({
             $or: [

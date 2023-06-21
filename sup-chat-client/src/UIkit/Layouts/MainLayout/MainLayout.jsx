@@ -50,15 +50,14 @@ export const MainLayout = () => {
   const isInfoVisible = useSelector((state) => state.chatDisplaySlice.isInfoVisible);
   const isUserInfoVisible = useSelector((state) => state.chatDisplaySlice.isUserInfoVisible);
 
-  useEffect(() => {
-    
+  useEffect(() => { 
     if (user) {
       connectSocket(user);
     }
     return () =>{
       disconnectSocket();
     }
-  },);
+  });
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

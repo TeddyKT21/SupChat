@@ -24,7 +24,7 @@ export const SideBarDropDown = ({ searchTerm }) => {
 
     const options = ['users', 'chats', 'contacts']
     const actions =[
-        () => dispatch(fetchUsers({user, text:searchTerm || '..................'})),
+        () => dispatch(fetchUsers({user:{_id:user._id}, text:searchTerm || '..................'})),
         () => dispatch(updateDisplayParams(chatDisplayParams)),
         () => dispatch(updateDisplayParams(contactsDisplayParams))
     ];

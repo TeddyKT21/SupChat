@@ -53,7 +53,7 @@ export const Profile = ({ user }) => {
   const saveChanges = () => {
     if (email !== user.email || username !== user.username) {
       dispatch(updateUser({ email, username }));
-      emitUpdateUser({ ...user, email, username });
+      emitUpdateUser({ email, username });
     }
   };
 
